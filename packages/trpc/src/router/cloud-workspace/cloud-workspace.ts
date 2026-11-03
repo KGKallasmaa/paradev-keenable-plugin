@@ -26,6 +26,7 @@ import { z } from "zod";
 import { organizationMachineSizes } from "../../lib/billing/plan";
 import { assertCloudAccess, assertMember } from "../../lib/cloud-guards";
 import { nudge } from "../../lib/realtime";
+import { assertChatCanMove, moveChat } from "../chat-history/utils/moveChat";
 import {
 	deleteSandbox,
 	describeSandbox,
@@ -375,9 +376,8 @@ export const cloudWorkspaceRouter = {
 				/** A size the organization offers (see `machineSizes`); omitted = its default. */
 				machineSize: z.enum(MACHINE_SIZES).optional(),
 				/**
-				 * A Claude session moved from another host, resumed in place of a
-				 * new one. `transcriptFileId` is the session file, uploaded like an
-				 * attachment.
+				 * A chat moved from another host, continued in place of a new one.
+				 * Its history and session bundle must be in `chatHistory` first.
 				 */
 				resume: cloudAgentResumeSchema.optional(),
 			}),
@@ -389,6 +389,14 @@ export const cloudWorkspaceRouter = {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
 					message: "Only a Claude session can be resumed in the cloud",
+				});
+			}
+			if (input.resume) {
+				await assertChatCanMove({
+					chatSessionId: input.resume.chatSessionId,
+					harnessSessionId: input.resume.harnessSessionId,
+					organizationId: input.organizationId,
+					userId: ctx.userId,
 				});
 			}
 			if (input.agent && !isCloudAgentId(input.agent)) {
@@ -426,6 +434,7 @@ export const cloudWorkspaceRouter = {
 						}
 					: {}),
 			});
+			if (input.resume) await moveChat(input.resume.chatSessionId, row.id);
 			// Shaped like a `list` row: clients seed the list with it.
 			const creator = await db.query.users.findFirst({
 				where: eq(users.id, ctx.userId),

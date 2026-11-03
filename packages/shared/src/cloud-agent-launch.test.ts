@@ -113,15 +113,15 @@ describe("cloud agent launch", () => {
 
 	it("reaches the box with a session to resume, and drops a half one", () => {
 		const resume = {
+			chatSessionId: fileId,
 			harnessSessionId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-			transcriptFileId: fileId,
 		};
 		const env = cloudAgentLaunchToEnv({ agent: "claude", prompt: "", resume });
 		expect(readCloudAgentLaunch(env)?.resume).toEqual(resume);
 		expect(
 			readCloudAgentLaunch({
 				...env,
-				SUPERSET_SANDBOX_AGENT_RESUME_TRANSCRIPT_FILE_ID: undefined,
+				SUPERSET_SANDBOX_AGENT_RESUME_CHAT_SESSION_ID: undefined,
 			})?.resume,
 		).toBeUndefined();
 	});

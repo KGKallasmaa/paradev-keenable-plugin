@@ -1,0 +1,53 @@
+import { durableEventSchema } from "@superset/chat/protocol";
+import { MAX_ATTACHMENT_BYTES } from "@superset/shared/attachment-limits";
+import { z } from "zod";
+
+export const MAX_PUSH_EVENTS = 500;
+const MAX_EVENT_BYTES = 512 * 1024;
+
+const pushedEventSchema = z.object({
+	seq: z.number().int().positive(),
+	ts: z.number(),
+	event: durableEventSchema.refine(
+		(event) => JSON.stringify(event).length <= MAX_EVENT_BYTES,
+		{ message: "A chat event is too large; cut its tool output first" },
+	),
+});
+
+export const pushInputSchema = z.object({
+	sessionId: z.string().uuid(),
+	/** The workspace the chat runs in now: a v2 workspace, or a cloud workspace on a box. */
+	workspaceId: z.string().uuid(),
+	harness: z.string().min(1).max(100),
+	harnessSessionId: z.string().min(1).max(200).optional(),
+	epoch: z.string().min(1).max(100),
+	events: z.array(pushedEventSchema).min(1).max(MAX_PUSH_EVENTS),
+});
+
+export const pullInputSchema = z.object({
+	sessionId: z.string().uuid(),
+	afterFirstSeq: z.number().int().nonnegative().default(0),
+	limit: z.number().int().min(1).max(1000).default(500),
+});
+
+export const createTranscriptUploadInputSchema = z.object({
+	sessionId: z.string().uuid(),
+	harness: z.string().min(1).max(100),
+	harnessSessionId: z.string().min(1).max(200),
+	sourceCwd: z.string().min(1).max(4096),
+	sizeBytes: z.number().int().positive().max(MAX_ATTACHMENT_BYTES),
+	sha256: z.string().regex(/^[0-9a-f]{64}$/),
+});
+
+export const transcriptInputSchema = z.object({
+	transcriptId: z.string().uuid(),
+});
+
+export const sessionInputSchema = z.object({
+	sessionId: z.string().uuid(),
+});
+
+export const searchInputSchema = z.object({
+	query: z.string().trim().min(1).max(200),
+	limit: z.number().int().min(1).max(50).default(20),
+});

@@ -25,8 +25,9 @@ export function supportsCloudAgentChat(agent: string | undefined): boolean {
 }
 
 export const cloudAgentResumeSchema = z.object({
-	harnessSessionId: z.string().uuid(),
-	transcriptFileId: z.string().uuid(),
+	/** The chat that moved; the box pulls its history and session bundle by this id. */
+	chatSessionId: z.string().uuid(),
+	harnessSessionId: z.string().min(1).max(200),
 });
 
 export type CloudAgentResume = z.infer<typeof cloudAgentResumeSchema>;
@@ -57,9 +58,9 @@ export const cloudAgentLaunchSchema = z.object({
 	 */
 	automationRunId: z.string().uuid().optional(),
 	/**
-	 * A Claude session moved from another host. The box puts the uploaded
-	 * session file where Claude looks for it and resumes the session instead
-	 * of starting a new one.
+	 * A chat moved from another host. The box pulls its history into its own
+	 * journal, places the agent's session files, and continues the same chat
+	 * instead of starting a new one.
 	 */
 	resume: cloudAgentResumeSchema.optional(),
 });
@@ -105,7 +106,7 @@ const ENV = {
 	surface: "SUPERSET_SANDBOX_AGENT_SURFACE",
 	automationRunId: "SUPERSET_SANDBOX_AGENT_AUTOMATION_RUN_ID",
 	resumeSessionId: "SUPERSET_SANDBOX_AGENT_RESUME_SESSION_ID",
-	resumeTranscriptFileId: "SUPERSET_SANDBOX_AGENT_RESUME_TRANSCRIPT_FILE_ID",
+	resumeChatSessionId: "SUPERSET_SANDBOX_AGENT_RESUME_CHAT_SESSION_ID",
 } as const;
 
 /** Every variable the launch travels in; stripped when a sandbox is promoted. */
@@ -132,7 +133,7 @@ export function cloudAgentLaunchToEnv(
 		...(launch.resume
 			? {
 					[ENV.resumeSessionId]: launch.resume.harnessSessionId,
-					[ENV.resumeTranscriptFileId]: launch.resume.transcriptFileId,
+					[ENV.resumeChatSessionId]: launch.resume.chatSessionId,
 				}
 			: {}),
 	};
@@ -161,7 +162,7 @@ function readResume(
 ): CloudAgentResume | undefined {
 	const parsed = cloudAgentResumeSchema.safeParse({
 		harnessSessionId: env[ENV.resumeSessionId],
-		transcriptFileId: env[ENV.resumeTranscriptFileId],
+		chatSessionId: env[ENV.resumeChatSessionId],
 	});
 	return parsed.success ? parsed.data : undefined;
 }
