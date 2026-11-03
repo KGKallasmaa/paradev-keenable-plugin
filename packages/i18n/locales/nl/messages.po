@@ -1256,6 +1256,9 @@ msgstr "{productName} haalde een seedronde van 11,5 miljoen dollar op onder leid
 msgid "{productName} was called {formerName} until October 2026."
 msgstr "{productName} heette tot oktober 2026 {formerName}."
 
+msgid "{prompt} · # to change project, host, and more"
+msgstr "{prompt} · # om project, host en meer te wijzigen"
+
 msgid "{pullRequestCount, plural, one {# PR} other {# PRs}}"
 msgstr "{pullRequestCount, plural, one {# PR} other {# PR's}}"
 
@@ -3332,6 +3335,9 @@ msgstr "Gesteund door"
 
 msgid "Background"
 msgstr "Achtergrond"
+
+msgid "Background · {count}"
+msgstr "Op de achtergrond · {count}"
 
 msgid "Background processes"
 msgstr "Achtergrondprocessen"
@@ -7648,6 +7654,9 @@ msgstr "Voer URL in..."
 msgid "Enterprise"
 msgstr "Enterprise"
 
+msgid "environment"
+msgstr "Omgeving"
+
 msgid "Environment"
 msgstr "Omgeving"
 
@@ -9436,6 +9445,9 @@ msgctxt "directory"
 msgid "Home"
 msgstr "Home"
 
+msgid "host"
+msgstr "Host"
+
 msgid "Host"
 msgstr "Host"
 
@@ -11098,6 +11110,9 @@ msgstr "Lage ernst"
 
 msgid "Machine resources"
 msgstr "Machineresources"
+
+msgid "Machine size"
+msgstr "Machinegrootte"
 
 msgid "Machine size: {label}"
 msgstr "Machinegrootte: {label}"
@@ -14735,6 +14750,9 @@ msgstr "Voortgang"
 msgid "Progress · Spinner"
 msgstr "Voortgang · Spinner"
 
+msgid "project"
+msgstr "Project"
+
 msgctxt "MCP server scope"
 msgid "project"
 msgstr "project"
@@ -17719,6 +17737,9 @@ msgstr "Zes niveaus van fabrieksautonomie"
 msgid "Six levels of factory autonomy, the gates between them, and our forecast for how far 2026 gets us. Written down now so you can grade us later."
 msgstr "Zes niveaus van fabrieksautonomie, de drempels ertussen, en onze voorspelling van hoe ver 2026 ons brengt. Nu opgeschreven zodat je ons later kunt beoordelen."
 
+msgid "size"
+msgstr "Grootte"
+
 msgid "Size"
 msgstr "Grootte"
 
@@ -18347,6 +18368,9 @@ msgstr "Subagent"
 
 msgid "Subagents"
 msgstr "Subagents"
+
+msgid "Subagents · {count}"
+msgstr "Subagents · {count}"
 
 msgid "Subject contains..."
 msgstr "Onderwerp bevat..."

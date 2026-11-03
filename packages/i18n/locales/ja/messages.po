@@ -1256,6 +1256,9 @@ msgstr "{productName} は、Union Square Ventures がリードし、Y Combinator
 msgid "{productName} was called {formerName} until October 2026."
 msgstr "{productName} は 2026 年 10 月まで {formerName} という名前でした。"
 
+msgid "{prompt} · # to change project, host, and more"
+msgstr "{prompt} · # でプロジェクトやホストなどを変更"
+
 msgid "{pullRequestCount, plural, one {# PR} other {# PRs}}"
 msgstr "{pullRequestCount, plural, other {# 件の PR}}"
 
@@ -3332,6 +3335,9 @@ msgstr "支援者"
 
 msgid "Background"
 msgstr "背景"
+
+msgid "Background · {count}"
+msgstr "バックグラウンド · {count}"
 
 msgid "Background processes"
 msgstr "バックグラウンドプロセス"
@@ -7648,6 +7654,9 @@ msgstr "URLを入力..."
 msgid "Enterprise"
 msgstr "エンタープライズ"
 
+msgid "environment"
+msgstr "環境"
+
 msgid "Environment"
 msgstr "環境"
 
@@ -9436,6 +9445,9 @@ msgctxt "directory"
 msgid "Home"
 msgstr "ホーム"
 
+msgid "host"
+msgstr "ホスト"
+
 msgid "Host"
 msgstr "ホスト"
 
@@ -11098,6 +11110,9 @@ msgstr "重要度: 低"
 
 msgid "Machine resources"
 msgstr "マシンリソース"
+
+msgid "Machine size"
+msgstr "マシンサイズ"
 
 msgid "Machine size: {label}"
 msgstr "マシンサイズ: {label}"
@@ -14735,6 +14750,9 @@ msgstr "進捗"
 msgid "Progress · Spinner"
 msgstr "Progress · Spinner"
 
+msgid "project"
+msgstr "プロジェクト"
+
 msgctxt "MCP server scope"
 msgid "project"
 msgstr "プロジェクト"
@@ -17719,6 +17737,9 @@ msgstr "工場の自律性、6つのレベル"
 msgid "Six levels of factory autonomy, the gates between them, and our forecast for how far 2026 gets us. Written down now so you can grade us later."
 msgstr "工場の自律性を6段階に分け、その間にあるゲートと、2026年にどこまで進むかの予測をまとめました。後から採点できるように、いま書き残しておきます。"
 
+msgid "size"
+msgstr "サイズ"
+
 msgid "Size"
 msgstr "サイズ"
 
@@ -18347,6 +18368,9 @@ msgstr "サブエージェント"
 
 msgid "Subagents"
 msgstr "サブエージェント"
+
+msgid "Subagents · {count}"
+msgstr "サブエージェント · {count}"
 
 msgid "Subject contains..."
 msgstr "件名に含む..."

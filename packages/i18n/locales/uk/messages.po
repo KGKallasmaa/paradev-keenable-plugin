@@ -1250,6 +1250,9 @@ msgstr "{productName} залучив $11,5 млн у seed-раунді на чо
 msgid "{productName} was called {formerName} until October 2026."
 msgstr "До жовтня 2026 року {productName} мав назву {formerName}."
 
+msgid "{prompt} · # to change project, host, and more"
+msgstr "{prompt} · # — змінити проєкт, хост тощо"
+
 msgid "{pullRequestCount, plural, one {# PR} other {# PRs}}"
 msgstr "{pullRequestCount, plural, one {# PR} few {# PR} many {# PR} other {# PR}}"
 
@@ -3326,6 +3329,9 @@ msgstr "Нас підтримують"
 
 msgid "Background"
 msgstr "Фон"
+
+msgid "Background · {count}"
+msgstr "У фоні · {count}"
 
 msgid "Background processes"
 msgstr "Фонові процеси"
@@ -7642,6 +7648,9 @@ msgstr "Введіть URL..."
 msgid "Enterprise"
 msgstr "Enterprise"
 
+msgid "environment"
+msgstr "Середовище"
+
 msgid "Environment"
 msgstr "Середовище"
 
@@ -9430,6 +9439,9 @@ msgctxt "directory"
 msgid "Home"
 msgstr "Домашня папка"
 
+msgid "host"
+msgstr "Хост"
+
 msgid "Host"
 msgstr "Хост"
 
@@ -11092,6 +11104,9 @@ msgstr "Низький рівень серйозності"
 
 msgid "Machine resources"
 msgstr "Ресурси машини"
+
+msgid "Machine size"
+msgstr "Розмір машини"
 
 msgid "Machine size: {label}"
 msgstr "Розмір машини: {label}"
@@ -14729,6 +14744,9 @@ msgstr "Прогрес"
 msgid "Progress · Spinner"
 msgstr "Прогрес · Спінер"
 
+msgid "project"
+msgstr "Проєкт"
+
 msgctxt "MCP server scope"
 msgid "project"
 msgstr "проєкт"
@@ -17713,6 +17731,9 @@ msgstr "Шість рівнів автономності фабрики"
 msgid "Six levels of factory autonomy, the gates between them, and our forecast for how far 2026 gets us. Written down now so you can grade us later."
 msgstr "Шість рівнів автономності фабрики, пороги між ними та наш прогноз того, як далеко ми просунемося у 2026 році. Записуємо зараз, щоб пізніше ви могли нас оцінити."
 
+msgid "size"
+msgstr "Розмір"
+
 msgid "Size"
 msgstr "Розмір"
 
@@ -18341,6 +18362,9 @@ msgstr "Субагент"
 
 msgid "Subagents"
 msgstr "Субагенти"
+
+msgid "Subagents · {count}"
+msgstr "Субагенти · {count}"
 
 msgid "Subject contains..."
 msgstr "Тема містить..."
