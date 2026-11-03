@@ -24,6 +24,13 @@ export function supportsCloudAgentChat(agent: string | undefined): boolean {
 	return agent === "claude" || agent === "pdev";
 }
 
+export const cloudAgentResumeSchema = z.object({
+	harnessSessionId: z.string().uuid(),
+	transcriptFileId: z.string().uuid(),
+});
+
+export type CloudAgentResume = z.infer<typeof cloudAgentResumeSchema>;
+
 /**
  * What a cloud workspace launches on first boot: a built-in agent and its
  * prompt. The API validates it, provisioning hands it to the sandbox as
@@ -49,6 +56,12 @@ export const cloudAgentLaunchSchema = z.object({
 	 * run: the box reports this id, and the API trusts it as the correlation.
 	 */
 	automationRunId: z.string().uuid().optional(),
+	/**
+	 * A Claude session moved from another host. The box puts the uploaded
+	 * session file where Claude looks for it and resumes the session instead
+	 * of starting a new one.
+	 */
+	resume: cloudAgentResumeSchema.optional(),
 });
 
 export type CloudAgentLaunch = z.infer<typeof cloudAgentLaunchSchema>;
@@ -91,6 +104,8 @@ const ENV = {
 	attachments: "SUPERSET_SANDBOX_AGENT_ATTACHMENTS",
 	surface: "SUPERSET_SANDBOX_AGENT_SURFACE",
 	automationRunId: "SUPERSET_SANDBOX_AGENT_AUTOMATION_RUN_ID",
+	resumeSessionId: "SUPERSET_SANDBOX_AGENT_RESUME_SESSION_ID",
+	resumeTranscriptFileId: "SUPERSET_SANDBOX_AGENT_RESUME_TRANSCRIPT_FILE_ID",
 } as const;
 
 /** Every variable the launch travels in; stripped when a sandbox is promoted. */
@@ -114,6 +129,12 @@ export function cloudAgentLaunchToEnv(
 		...(launch.automationRunId
 			? { [ENV.automationRunId]: launch.automationRunId }
 			: {}),
+		...(launch.resume
+			? {
+					[ENV.resumeSessionId]: launch.resume.harnessSessionId,
+					[ENV.resumeTranscriptFileId]: launch.resume.transcriptFileId,
+				}
+			: {}),
 	};
 }
 
@@ -131,7 +152,18 @@ export function readCloudAgentLaunch(
 		attachmentFileIds: splitAttachmentIds(env[ENV.attachments]),
 		surface: env[ENV.surface] === "chat" ? "chat" : undefined,
 		automationRunId: readAutomationRunId(env[ENV.automationRunId]),
+		resume: readResume(env),
 	};
+}
+
+function readResume(
+	env: Record<string, string | undefined>,
+): CloudAgentResume | undefined {
+	const parsed = cloudAgentResumeSchema.safeParse({
+		harnessSessionId: env[ENV.resumeSessionId],
+		transcriptFileId: env[ENV.resumeTranscriptFileId],
+	});
+	return parsed.success ? parsed.data : undefined;
 }
 
 function readAutomationRunId(value: string | undefined): string | undefined {
