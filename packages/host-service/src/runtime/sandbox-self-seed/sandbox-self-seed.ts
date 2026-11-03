@@ -4,6 +4,7 @@ import { existsSync, openSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
+import type { DurableEvent } from "@superset/chat/protocol";
 import {
 	type CloudAgentLaunch,
 	type CloudAgentResume,
@@ -20,7 +21,8 @@ import {
 import { eq } from "drizzle-orm";
 import type { HostDb } from "../../db";
 import { projects, workspaces } from "../../db/schema";
-import { placeClaudeSession } from "../../teleport/place-claude-session";
+import { downloadBundle, withStage } from "../../teleport/bundle";
+import { teleportProviderFor } from "../../teleport/providers";
 import {
 	chatLaunchTarget,
 	runAgentInWorkspace,
@@ -28,6 +30,7 @@ import {
 import { importCloudAttachments } from "../../trpc/router/attachments/attachments";
 import { createChatSessionInWorkspace } from "../../trpc/router/sessions/session-service";
 import { ensurePresetRow } from "../../trpc/router/settings/agent-configs";
+import { resolveDefaultAccountTerminalEnv } from "../../trpc/router/usage/default-account";
 import type { HostServiceContext } from "../../types";
 import {
 	getManagedEnv,
@@ -374,9 +377,16 @@ export async function launchSandboxAgentOnce(
 				console.error("[sandbox] could not import prompt attachments", error);
 			}
 		}
-		const resumeSessionId = resume
-			? await placeResumedSession(ctx, identity.workspaceId, resume)
-			: undefined;
+		const moved = resume
+			? await continueMovedChat(ctx, identity.workspaceId, resume)
+			: null;
+		if (moved) {
+			console.log(
+				`[sandbox] continued the moved chat ${moved.sessionId} in workspace ${identity.workspaceId}`,
+			);
+			await rememberLaunchReport(ctx, identity, moved);
+			return;
+		}
 		const chatTarget =
 			surface === "chat"
 				? chatLaunchTarget(ctx.db, {
@@ -398,7 +408,6 @@ export async function launchSandboxAgentOnce(
 					model,
 					mode,
 					...(attachmentIds?.length ? { attachmentIds } : {}),
-					...(resumeSessionId ? { resumeSessionId } : {}),
 				}).then((session) => ({
 					kind: "chat" as const,
 					sessionId: session.sessionId,
@@ -412,7 +421,6 @@ export async function launchSandboxAgentOnce(
 					effort,
 					mode,
 					...(attachmentIds?.length ? { attachmentIds } : {}),
-					...(resumeSessionId ? { resumeSessionId } : {}),
 				}).then((run) => ({
 					kind: "terminal" as const,
 					terminalId: run.sessionId,
@@ -431,24 +439,95 @@ export async function launchSandboxAgentOnce(
 }
 
 /**
- * The id to resume, once its session file is in place. A file that cannot be
- * placed starts a new session: losing the history must not cost the launch.
+ * Continues a chat moved from another host under its own id: its history
+ * goes into this box's journal, its agent's session files where the agent
+ * looks, and the agent resumes without replaying the history again. Returns
+ * null when any step fails, and the launch starts a new chat instead:
+ * losing the history must not cost the launch.
  */
-async function placeResumedSession(
+async function continueMovedChat(
 	ctx: HostServiceContext,
 	workspaceId: string,
 	resume: CloudAgentResume,
-): Promise<string | undefined> {
+): Promise<{ kind: "chat"; sessionId: string; terminalId: string } | null> {
 	const workspace = ctx.db.query.workspaces
 		.findFirst({ where: eq(workspaces.id, workspaceId) })
 		.sync();
-	if (!workspace?.worktreePath) return undefined;
+	const chat = ctx.runtime.chat?.();
+	if (!workspace?.worktreePath || !chat) return null;
 	try {
-		await placeClaudeSession(ctx, workspace.worktreePath, resume);
-		return resume.harnessSessionId;
+		const history = await pullChatHistory(ctx, resume.chatSessionId);
+		const provider = teleportProviderFor(history.session.harness ?? "");
+		if (!provider || !history.session.epoch) {
+			throw new Error("The moved chat has no agent this box can resume");
+		}
+		const worktreePath = workspace.worktreePath;
+		await withStage(async (stageDir) => {
+			const manifest = await downloadBundle({
+				api: ctx.api,
+				chatSessionId: resume.chatSessionId,
+				stageDir,
+			});
+			if (!manifest) throw new Error("The moved chat has no session files");
+			await provider.place({
+				manifest,
+				worktreePath,
+				env: resolveDefaultAccountTerminalEnv(ctx.db),
+				stageDir,
+			});
+		});
+		chat.journal.importSession({
+			session: {
+				sessionId: resume.chatSessionId,
+				scopeId: workspaceId,
+				harness: history.session.harness ?? "",
+				harnessSessionId: resume.harnessSessionId,
+				title: history.session.title ?? undefined,
+				status: "idle",
+				epoch: history.session.epoch,
+				lastSeq: history.session.lastSeq,
+			},
+			events: history.events,
+		});
+		ctx.runtime.chatSync?.markPushed(
+			resume.chatSessionId,
+			history.session.epoch,
+			history.session.lastSeq,
+		);
+		const terminalId = crypto.randomUUID();
+		chat.commands.continueSession({
+			sessionId: resume.chatSessionId,
+			cwd: worktreePath,
+			harnessSessionId: resume.harnessSessionId,
+			terminalId,
+		});
+		return {
+			kind: "chat",
+			sessionId: resume.chatSessionId,
+			terminalId:
+				chat.live.get(resume.chatSessionId)?.terminalId ?? terminalId,
+		};
 	} catch (error) {
-		console.error("[sandbox] could not place the moved Claude session", error);
-		return undefined;
+		console.error("[sandbox] could not continue the moved chat", error);
+		return null;
+	}
+}
+
+async function pullChatHistory(ctx: HostServiceContext, sessionId: string) {
+	const events: { seq: number; event: DurableEvent }[] = [];
+	let afterFirstSeq = 0;
+	for (;;) {
+		const page = await ctx.api.chatHistory.pull.mutate({
+			sessionId,
+			afterFirstSeq,
+		});
+		events.push(
+			...page.events.map((row) => ({ seq: row.firstSeq, event: row.event })),
+		);
+		if (page.nextAfterFirstSeq === null) {
+			return { session: page.session, events };
+		}
+		afterFirstSeq = page.nextAfterFirstSeq;
 	}
 }
 

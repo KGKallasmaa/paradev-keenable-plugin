@@ -105,3 +105,41 @@ describe("ChatJournal onAppend", () => {
 		expect(seen.map((envelope) => envelope.cursor.seq)).toEqual([1]);
 	});
 });
+
+describe("commands.continueSession", () => {
+	test("brings an imported chat back under the same id, resuming quietly", async () => {
+		const { FakeHarness } = await import("../../harness/fake");
+		const started: unknown[] = [];
+		const runtime = createTestRuntime({
+			harnesses: new Map([
+				[
+					"claude-acp",
+					() => {
+						const adapter = new FakeHarness({ turns: [] });
+						const start = adapter.start.bind(adapter);
+						adapter.start = (options) => {
+							started.push(options.resume);
+							return start(options);
+						};
+						return adapter;
+					},
+				],
+			]),
+		});
+		runtime.journal.importSession(moved());
+
+		const continued = runtime.commands.continueSession({
+			sessionId: SESSION,
+			cwd: "/tmp",
+			harnessSessionId: "claude-session",
+		});
+
+		expect(continued).toEqual({ sessionId: SESSION, epoch: EPOCH });
+		expect(runtime.live.get(SESSION)).not.toBeNull();
+		await Bun.sleep(0);
+		expect(started).toEqual([
+			{ harnessSessionId: "claude-session", quiet: true },
+		]);
+		await runtime.dispose();
+	});
+});

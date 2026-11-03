@@ -1,3 +1,4 @@
+import type { ChatSync } from "./chat-sync";
 import type { Octokit } from "@octokit/rest";
 import type { ChatRuntime } from "@superset/chat-runtime";
 import type { AppRouter } from "@superset/trpc";
@@ -20,6 +21,7 @@ export interface HostServiceRuntime {
 	pullRequests: PullRequestRuntimeManager;
 	pageWatch: PageWatchManager;
 	chat?: () => ChatRuntime;
+	chatSync?: ChatSync;
 	closeChats?: (scopeId: string) => Promise<void>;
 	agentJobs?: AgentJobRunner;
 }
