@@ -1079,6 +1079,9 @@ msgstr "{localHostName} (thiết bị này)"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, other {Đang sao chép cuộc trò chuyện (# tin nhắn)}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "{met} trên {0} mục tiêu đang góp sức cho {nextLabel} — {laggingLabels} tụt lại xa nhất."
@@ -5451,6 +5454,9 @@ msgstr "Sao chép lịch sử duyệt web và thông tin đăng nhập từ trì
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "Hãy sao chép khóa ngay — bạn sẽ không xem lại được nữa."
 
+msgid "Copying the conversation"
+msgstr "Đang sao chép cuộc trò chuyện"
+
 msgid "Copyright or trademark"
 msgstr "Bản quyền hoặc nhãn hiệu"
 
@@ -6024,6 +6030,9 @@ msgstr "Không thể dừng trò chuyện"
 
 msgid "Couldn't take a screenshot"
 msgstr "Không chụp được màn hình"
+
+msgid "Couldn't try the move again"
+msgstr "Không thể thử chuyển lại"
 
 msgid "Couldn't undo the file changes."
 msgstr "Không thể hoàn tác thay đổi tệp."
@@ -11667,6 +11676,9 @@ msgstr "Chuyển sang máy tính này"
 msgid "Moved \"{name}\" to {group}"
 msgstr "Đã chuyển \"{name}\" vào {group}"
 
+msgid "Moving this chat here"
+msgstr "Đang chuyển cuộc trò chuyện này đến đây"
+
 msgid "Moving..."
 msgstr "Đang chuyển..."
 
@@ -16000,8 +16012,8 @@ msgstr "Đã khôi phục \"{workspaceName}\""
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Đang khôi phục \"{workspaceName}\"…"
 
-msgid "Restoring the conversation…"
-msgstr "Đang khôi phục cuộc trò chuyện…"
+msgid "Restoring Claude's session"
+msgstr "Đang khôi phục phiên của Claude"
 
 msgid "Restoring your session"
 msgstr "Đang khôi phục phiên của bạn"
@@ -18193,6 +18205,9 @@ msgstr "Đang khởi động không gian làm việc đám mây…"
 msgid "Starting the simulator…"
 msgstr "Đang khởi động trình giả lập…"
 
+msgid "Starting the workspace"
+msgstr "Đang khởi động workspace"
+
 msgid "Starting up. This should only take a moment."
 msgstr "Đang khởi động. Sẽ chỉ mất một lát."
 
@@ -19401,6 +19416,9 @@ msgstr "Không thể hoàn tác."
 
 msgid "This channel is archived"
 msgstr "Kênh này đã được lưu trữ"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "Không thể chuyển cuộc trò chuyện này đến đây. Nó vẫn ở workspace ban đầu."
 
 msgid "This chat has ended."
 msgstr "Chat này đã kết thúc."

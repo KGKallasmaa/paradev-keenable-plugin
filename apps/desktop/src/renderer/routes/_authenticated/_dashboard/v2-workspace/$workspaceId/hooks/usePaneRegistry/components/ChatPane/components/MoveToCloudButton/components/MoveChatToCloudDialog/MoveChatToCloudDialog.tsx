@@ -40,6 +40,9 @@ interface MoveChatToCloudDialogProps {
 	name: string;
 }
 
+/** The description's text size, so the pickers read as part of it. */
+const PICKER_TRIGGER_CLASS = "h-auto max-w-[240px] text-sm";
+
 export function MoveChatToCloudDialog({
 	open,
 	onOpenChange,
@@ -146,6 +149,7 @@ export function MoveChatToCloudDialog({
 					</DialogHeader>
 					<div className="flex flex-wrap items-center gap-2">
 						<EnvironmentPickerPill
+							triggerClassName={PICKER_TRIGGER_CLASS}
 							selectedEnvironment={environment ?? undefined}
 							linked={selection.linked}
 							other={selection.other}
@@ -161,6 +165,7 @@ export function MoveChatToCloudDialog({
 							isLoading={environmentsQuery.isLoading}
 						/>
 						<MachineSizePickerPill
+							triggerClassName={PICKER_TRIGGER_CLASS}
 							machineSize={selection.machineSize}
 							onSelectMachineSize={(machineSize) =>
 								setCloudChoice(choiceKey, { machineSize })

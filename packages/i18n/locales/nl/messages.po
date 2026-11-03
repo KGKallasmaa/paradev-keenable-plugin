@@ -1079,6 +1079,9 @@ msgstr "{localHostName} (dit apparaat)"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, one {Gesprek kopiëren (# bericht)} other {Gesprek kopiëren (# berichten)}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "{met} van {0} doelen dragen bij voor {nextLabel} — {laggingLabels} lopen het verst achter."
@@ -5451,6 +5454,9 @@ msgstr "Kopieer je browsegeschiedenis en logins uit een andere browser naar Para
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "Kopieer je sleutel nu — je kunt hem later niet meer zien."
 
+msgid "Copying the conversation"
+msgstr "Gesprek kopiëren"
+
 msgid "Copyright or trademark"
 msgstr "Auteursrecht of handelsmerk"
 
@@ -6024,6 +6030,9 @@ msgstr "Kon de chat niet stoppen"
 
 msgid "Couldn't take a screenshot"
 msgstr "Screenshot maken mislukt"
+
+msgid "Couldn't try the move again"
+msgstr "De verplaatsing kon niet opnieuw worden geprobeerd"
 
 msgid "Couldn't undo the file changes."
 msgstr "De bestandswijzigingen konden niet ongedaan worden gemaakt."
@@ -11667,6 +11676,9 @@ msgstr "Naar deze computer verplaatsen"
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\" verplaatst naar {group}"
 
+msgid "Moving this chat here"
+msgstr "Deze chat wordt hierheen verplaatst"
+
 msgid "Moving..."
 msgstr "Verplaatsen..."
 
@@ -16000,8 +16012,8 @@ msgstr "\"{workspaceName}\" hersteld"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "\"{workspaceName}\" wordt hersteld…"
 
-msgid "Restoring the conversation…"
-msgstr "Gesprek wordt hersteld…"
+msgid "Restoring Claude's session"
+msgstr "Sessie van Claude herstellen"
 
 msgid "Restoring your session"
 msgstr "Je sessie wordt hersteld"
@@ -18193,6 +18205,9 @@ msgstr "Cloudwerkruimte wordt gestart…"
 msgid "Starting the simulator…"
 msgstr "Simulator wordt gestart…"
 
+msgid "Starting the workspace"
+msgstr "Workspace starten"
+
 msgid "Starting up. This should only take a moment."
 msgstr "Bezig met starten. Dit duurt maar even."
 
@@ -19401,6 +19416,9 @@ msgstr "Dit kan niet ongedaan worden gemaakt."
 
 msgid "This channel is archived"
 msgstr "Dit kanaal is gearchiveerd"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "Deze chat kon niet hierheen worden verplaatst. Hij staat nog in de workspace waar hij vandaan kwam."
 
 msgid "This chat has ended."
 msgstr "Deze chat is beëindigd."

@@ -37,6 +37,7 @@ import { useForkChat } from "../../hooks/useForkChat";
 import { readSavedChatMode } from "../../utils/savedChatMode";
 import { AcpRecovery } from "./components/AcpRecovery";
 import { DraftChat } from "./components/DraftChat";
+import { MoveProgress } from "./components/MoveProgress";
 import { useChatSessionLiveness } from "./hooks/useChatSessionLiveness";
 import { useReplacementSession } from "./hooks/useReplacementSession";
 import { closeChatForAccountSwitch } from "./utils/closeChatForAccountSwitch";
@@ -465,20 +466,15 @@ export function AcpChatPane({
 				!binding.chatSessionId &&
 				binding.endedAt === undefined,
 		);
-	const waitingForMove =
-		awaitingMove === true && stored !== undefined && !stored?.session;
-	useEffect(() => {
-		if (awaitingMove && stored?.session) onMoveArrived?.();
-	}, [awaitingMove, stored?.session, onMoveArrived]);
-	useEffect(() => {
-		if (!waitingForMove) return;
-		const timer = setInterval(() => {
-			void queryClient.invalidateQueries({
-				queryKey: ["acp-chat-session", sessionId],
-			});
-		}, 2_000);
-		return () => clearInterval(timer);
-	}, [waitingForMove, queryClient, sessionId]);
+	// This host may still hold an older copy of the chat, so only the move
+	// reaching `ready` means it arrived.
+	const waitingForMove = awaitingMove === true;
+	const moveArrived = useCallback(() => {
+		void queryClient.invalidateQueries({
+			queryKey: ["acp-chat-session", sessionId],
+		});
+		onMoveArrived?.();
+	}, [queryClient, sessionId, onMoveArrived]);
 	const recoverable = Boolean(
 		(sessionStopped || sessionDead) &&
 			harness &&
@@ -718,6 +714,16 @@ export function AcpChatPane({
 			workspaceId={workspaceId}
 		/>
 	);
+
+	if (waitingForMove && sessionId) {
+		return (
+			<MoveProgress
+				chatSessionId={sessionId}
+				workspaceId={workspaceId}
+				onArrived={moveArrived}
+			/>
+		);
+	}
 
 	const lost = failure !== null && stored === null;
 	if (

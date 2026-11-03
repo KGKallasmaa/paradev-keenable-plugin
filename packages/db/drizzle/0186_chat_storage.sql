@@ -74,6 +74,33 @@ CREATE INDEX "chat_items_created_by_idx" ON "chat_items" USING btree ("created_b
 CREATE INDEX "chat_items_search_idx" ON "chat_items" USING gin ("search");--> statement-breakpoint
 CREATE INDEX "chat_transcripts_session_created_at_idx" ON "chat_transcripts" USING btree ("session_id","created_at");--> statement-breakpoint
 CREATE INDEX "chat_sessions_org_harness_session_idx" ON "chat_sessions" USING btree ("organization_id","harness_session_id");--> statement-breakpoint
+CREATE TYPE "public"."chat_move_status" AS ENUM('pending', 'copying', 'restoring', 'ready', 'failed');--> statement-breakpoint
+CREATE TABLE "chat_moves" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"session_id" uuid NOT NULL,
+	"organization_id" uuid NOT NULL,
+	"created_by" uuid NOT NULL,
+	"from_workspace_id" uuid,
+	"from_host_id" text,
+	"to_workspace_id" uuid NOT NULL,
+	"to_host_id" text,
+	"source_turn_seq" integer,
+	"transcript_id" uuid NOT NULL,
+	"harness_session_id" text NOT NULL,
+	"status" "chat_move_status" DEFAULT 'pending' NOT NULL,
+	"error" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"finished_at" timestamp with time zone
+);
+--> statement-breakpoint
+ALTER TABLE "chat_moves" ADD CONSTRAINT "chat_moves_session_id_chat_sessions_id_fk" FOREIGN KEY ("session_id") REFERENCES "public"."chat_sessions"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "chat_moves" ADD CONSTRAINT "chat_moves_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "auth"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "chat_moves" ADD CONSTRAINT "chat_moves_created_by_users_id_fk" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "chat_moves" ADD CONSTRAINT "chat_moves_transcript_id_chat_transcripts_id_fk" FOREIGN KEY ("transcript_id") REFERENCES "public"."chat_transcripts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "chat_moves_session_created_at_idx" ON "chat_moves" USING btree ("session_id","created_at");--> statement-breakpoint
+CREATE INDEX "chat_moves_to_workspace_idx" ON "chat_moves" USING btree ("to_workspace_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "chat_moves_one_in_flight_idx" ON "chat_moves" USING btree ("session_id") WHERE "chat_moves"."status" in ('pending', 'copying', 'restoring');--> statement-breakpoint
 -- BM25 ranking for chat search through Neon's lakebase_text. Only Neon
 -- projects with Lakebase Search have the extension; plain Postgres (local
 -- docker, CI) and other Neon projects skip this, and chat search falls back

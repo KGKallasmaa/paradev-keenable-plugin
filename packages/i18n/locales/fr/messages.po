@@ -1079,6 +1079,9 @@ msgstr "{localHostName} (cet appareil)"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, one {Copie de la conversation (# message)} many {Copie de la conversation (# messages)} other {Copie de la conversation (# messages)}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "{met} objectifs sur {0} tirent leur poids pour {nextLabel} — {laggingLabels} sont les plus en retard."
@@ -5451,6 +5454,9 @@ msgstr "Copiez votre historique de navigation et vos identifiants depuis un autr
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "Copiez votre clé maintenant — vous ne pourrez plus la voir ensuite."
 
+msgid "Copying the conversation"
+msgstr "Copie de la conversation"
+
 msgid "Copyright or trademark"
 msgstr "Droit d'auteur ou marque"
 
@@ -6024,6 +6030,9 @@ msgstr "Impossible d'arrêter la discussion"
 
 msgid "Couldn't take a screenshot"
 msgstr "Impossible de faire la capture d’écran"
+
+msgid "Couldn't try the move again"
+msgstr "Impossible de relancer le déplacement"
 
 msgid "Couldn't undo the file changes."
 msgstr "Impossible d'annuler les modifications de fichiers."
@@ -11667,6 +11676,9 @@ msgstr "Déplacer vers cet ordinateur"
 msgid "Moved \"{name}\" to {group}"
 msgstr "« {name} » déplacée vers {group}"
 
+msgid "Moving this chat here"
+msgstr "Déplacement de ce chat ici"
+
 msgid "Moving..."
 msgstr "Déplacement..."
 
@@ -16000,8 +16012,8 @@ msgstr "« {workspaceName} » restauré"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Restauration de « {workspaceName} »…"
 
-msgid "Restoring the conversation…"
-msgstr "Restauration de la conversation…"
+msgid "Restoring Claude's session"
+msgstr "Restauration de la session de Claude"
 
 msgid "Restoring your session"
 msgstr "Restauration de votre session"
@@ -18193,6 +18205,9 @@ msgstr "Démarrage de l'espace de travail cloud…"
 msgid "Starting the simulator…"
 msgstr "Démarrage du simulateur…"
 
+msgid "Starting the workspace"
+msgstr "Démarrage du workspace"
+
 msgid "Starting up. This should only take a moment."
 msgstr "Démarrage en cours. Cela ne devrait prendre qu’un instant."
 
@@ -19401,6 +19416,9 @@ msgstr "Cette action est irréversible."
 
 msgid "This channel is archived"
 msgstr "Ce canal est archivé"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "Ce chat n'a pas pu être déplacé ici. Il est toujours dans le workspace d'où il vient."
 
 msgid "This chat has ended."
 msgstr "Ce chat est terminé."

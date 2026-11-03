@@ -1079,6 +1079,9 @@ msgstr "{localHostName} (perangkat ini)"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, other {Menyalin percakapan (# pesan)}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "{met} dari {0} sasaran menopang untuk {nextLabel} — {laggingLabels} paling tertinggal."
@@ -5451,6 +5454,9 @@ msgstr "Salin riwayat penjelajahan dan login Anda dari browser lain ke Paradev. 
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "Salin kunci Anda sekarang — Anda tidak akan bisa melihatnya lagi."
 
+msgid "Copying the conversation"
+msgstr "Menyalin percakapan"
+
 msgid "Copyright or trademark"
 msgstr "Hak cipta atau merek dagang"
 
@@ -6024,6 +6030,9 @@ msgstr "Tidak dapat menghentikan obrolan"
 
 msgid "Couldn't take a screenshot"
 msgstr "Gagal mengambil tangkapan layar"
+
+msgid "Couldn't try the move again"
+msgstr "Tidak dapat mencoba memindahkan lagi"
 
 msgid "Couldn't undo the file changes."
 msgstr "Perubahan file tidak bisa dibatalkan."
@@ -11667,6 +11676,9 @@ msgstr "Pindahkan ke komputer ini"
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\" dipindahkan ke {group}"
 
+msgid "Moving this chat here"
+msgstr "Memindahkan chat ini ke sini"
+
 msgid "Moving..."
 msgstr "Memindahkan..."
 
@@ -16000,8 +16012,8 @@ msgstr "\"{workspaceName}\" dipulihkan"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Memulihkan \"{workspaceName}\"…"
 
-msgid "Restoring the conversation…"
-msgstr "Memulihkan percakapan…"
+msgid "Restoring Claude's session"
+msgstr "Memulihkan sesi Claude"
 
 msgid "Restoring your session"
 msgstr "Memulihkan sesi Anda"
@@ -18193,6 +18205,9 @@ msgstr "Memulai ruang kerja cloud…"
 msgid "Starting the simulator…"
 msgstr "Memulai simulator…"
 
+msgid "Starting the workspace"
+msgstr "Memulai workspace"
+
 msgid "Starting up. This should only take a moment."
 msgstr "Sedang memulai. Ini hanya perlu sebentar."
 
@@ -19401,6 +19416,9 @@ msgstr "Ini tidak bisa dibatalkan."
 
 msgid "This channel is archived"
 msgstr "Kanal ini diarsipkan"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "Chat ini tidak dapat dipindahkan ke sini. Chat masih berada di workspace asalnya."
 
 msgid "This chat has ended."
 msgstr "Chat ini telah berakhir."

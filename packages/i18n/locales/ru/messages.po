@@ -1079,6 +1079,9 @@ msgstr "{localHostName} (это устройство)"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} few {{1}} many {{1}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, one {Копирование разговора (# сообщение)} few {Копирование разговора (# сообщения)} many {Копирование разговора (# сообщений)} other {Копирование разговора (# сообщения)}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "На {nextLabel} работают {met} из {0} целей — дальше всего отстают {laggingLabels}."
@@ -5451,6 +5454,9 @@ msgstr "Скопируйте историю просмотров и логины
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "Скопируйте ключ сейчас — увидеть его снова не получится."
 
+msgid "Copying the conversation"
+msgstr "Копирование разговора"
+
 msgid "Copyright or trademark"
 msgstr "Авторские права или товарный знак"
 
@@ -6024,6 +6030,9 @@ msgstr "Не удалось остановить чат"
 
 msgid "Couldn't take a screenshot"
 msgstr "Не удалось сделать снимок экрана"
+
+msgid "Couldn't try the move again"
+msgstr "Не удалось повторить перенос"
 
 msgid "Couldn't undo the file changes."
 msgstr "Не удалось отменить изменения файлов."
@@ -11667,6 +11676,9 @@ msgstr "Перенести на этот компьютер"
 msgid "Moved \"{name}\" to {group}"
 msgstr "«{name}» перемещена в {group}"
 
+msgid "Moving this chat here"
+msgstr "Перенос этого чата сюда"
+
 msgid "Moving..."
 msgstr "Перенос..."
 
@@ -16000,8 +16012,8 @@ msgstr "Восстановлено: «{workspaceName}»"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Восстановление «{workspaceName}»…"
 
-msgid "Restoring the conversation…"
-msgstr "Восстановление разговора…"
+msgid "Restoring Claude's session"
+msgstr "Восстановление сеанса Claude"
 
 msgid "Restoring your session"
 msgstr "Восстановление сессии"
@@ -18193,6 +18205,9 @@ msgstr "Запуск облачного рабочего пространств�
 msgid "Starting the simulator…"
 msgstr "Запуск симулятора…"
 
+msgid "Starting the workspace"
+msgstr "Запуск рабочего пространства"
+
 msgid "Starting up. This should only take a moment."
 msgstr "Запускается. Это займёт всего несколько мгновений."
 
@@ -19401,6 +19416,9 @@ msgstr "Это нельзя отменить."
 
 msgid "This channel is archived"
 msgstr "Этот канал архивирован"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "Не удалось перенести этот чат сюда. Он по-прежнему в рабочем пространстве, откуда пришёл."
 
 msgid "This chat has ended."
 msgstr "Этот чат завершён."

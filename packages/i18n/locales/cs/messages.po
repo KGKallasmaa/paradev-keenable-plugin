@@ -1079,6 +1079,9 @@ msgstr "{localHostName} (toto zařízení)"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} few {{1}} many {{1}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, one {Kopírování konverzace (# zpráva)} few {Kopírování konverzace (# zprávy)} many {Kopírování konverzace (# zprávy)} other {Kopírování konverzace (# zpráv)}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "Na {nextLabel} táhne {met} z {0} cílů — nejvíc zaostává {laggingLabels}."
@@ -5451,6 +5454,9 @@ msgstr "Zkopírujte historii prohlížení a přihlášení z jiného prohlíže
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "Zkopírujte si klíč teď — už ho znovu neuvidíte."
 
+msgid "Copying the conversation"
+msgstr "Kopírování konverzace"
+
 msgid "Copyright or trademark"
 msgstr "Autorská práva nebo ochranná známka"
 
@@ -6024,6 +6030,9 @@ msgstr "Chat se nepodařilo zastavit"
 
 msgid "Couldn't take a screenshot"
 msgstr "Snímek obrazovky se nepodařilo pořídit"
+
+msgid "Couldn't try the move again"
+msgstr "Přesun se nepodařilo zkusit znovu"
 
 msgid "Couldn't undo the file changes."
 msgstr "Změny souborů se nepodařilo vrátit."
@@ -11667,6 +11676,9 @@ msgstr "Přesunout na tento počítač"
 msgid "Moved \"{name}\" to {group}"
 msgstr "„{name}“ přesunuto do skupiny {group}"
 
+msgid "Moving this chat here"
+msgstr "Tento chat se přesouvá sem"
+
 msgid "Moving..."
 msgstr "Přesouvání..."
 
@@ -16000,8 +16012,8 @@ msgstr "„{workspaceName}“ obnoven"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Obnovuji „{workspaceName}“…"
 
-msgid "Restoring the conversation…"
-msgstr "Obnovuje se konverzace…"
+msgid "Restoring Claude's session"
+msgstr "Obnovování relace Claude"
 
 msgid "Restoring your session"
 msgstr "Obnovuji vaši relaci"
@@ -18193,6 +18205,9 @@ msgstr "Spouští se cloudový pracovní prostor…"
 msgid "Starting the simulator…"
 msgstr "Spouštění simulátoru…"
 
+msgid "Starting the workspace"
+msgstr "Spouštění pracovního prostoru"
+
 msgid "Starting up. This should only take a moment."
 msgstr "Spouští se. Mělo by to trvat jen chvilku."
 
@@ -19401,6 +19416,9 @@ msgstr "Nelze vrátit zpět."
 
 msgid "This channel is archived"
 msgstr "Tento kanál je archivovaný"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "Tento chat se sem nepodařilo přesunout. Zůstává v pracovním prostoru, ze kterého přišel."
 
 msgid "This chat has ended."
 msgstr "Tento chat skončil."

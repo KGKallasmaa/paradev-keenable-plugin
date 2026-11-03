@@ -1,7 +1,8 @@
-import type { DurableEvent, Item, Turn } from "@superset/chat/protocol";
 import { db, dbWs } from "@superset/db/client";
 import {
+	CHAT_MOVE_IN_FLIGHT,
 	chatItems,
+	chatMoves,
 	chatSessions,
 	chatTranscripts,
 	chatTurns,
@@ -10,18 +11,16 @@ import {
 import { fileOriginalKey } from "@superset/shared/usercontent";
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
-import { and, asc, desc, eq, gt, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, sql } from "drizzle-orm";
 import { anchorAttachments } from "../../lib/attachments";
-import { presignedGetUrl, presignedPutUrl } from "../../lib/r2";
+import { presignedPutUrl } from "../../lib/r2";
 import { protectedProcedure, userError } from "../../trpc";
+import { staleBefore } from "../chat-move/utils/findMovableChat";
 import { requireActiveOrgMembership } from "../utils/active-org";
 import {
 	createTranscriptUploadInputSchema,
-	moveToInputSchema,
-	pullInputSchema,
 	pushInputSchema,
 	searchInputSchema,
-	sessionInputSchema,
 	transcriptInputSchema,
 } from "./schema";
 import {
@@ -31,7 +30,6 @@ import {
 	loadAccessibleSession,
 } from "./utils/access";
 import { foldEvents } from "./utils/foldEvents";
-import { moveChat } from "./utils/moveChat";
 import { searchChats } from "./utils/searchChats";
 
 type ProtectedCtx = Parameters<typeof requireActiveOrgMembership>[0] & {
@@ -53,11 +51,18 @@ function movedAway(): TRPCError {
 	});
 }
 
+/** Not a conflict: the chat's home switches here once its move is ready. */
+function stillMovingHere(): TRPCError {
+	return new TRPCError({
+		code: "PRECONDITION_FAILED",
+		message: "This chat is still moving to this workspace",
+	});
+}
+
 /**
  * Chats kept off the machine they run on: the latest state of each item and
- * turn, and the agent's own session files. A host pushes as it goes; a chat
- * that moves is pulled into the new host's journal, and its session bundle
- * is placed where the agent looks for it.
+ * turn, and the agent's own session files. A host pushes as it goes; when a
+ * chat moves, `chatMove` hands both to the host it moves to.
  */
 export const chatHistoryRouter = {
 	push: protectedProcedure
@@ -87,6 +92,25 @@ export const chatHistoryRouter = {
 						lastSeq: 0,
 					});
 				} else {
+					if (
+						existing.v2WorkspaceId !== input.workspaceId &&
+						existing.organizationId === caller.organizationId &&
+						existing.createdBy === caller.userId
+					) {
+						const [moving] = await tx
+							.select({ id: chatMoves.id })
+							.from(chatMoves)
+							.where(
+								and(
+									eq(chatMoves.sessionId, input.sessionId),
+									eq(chatMoves.toWorkspaceId, input.workspaceId),
+									inArray(chatMoves.status, CHAT_MOVE_IN_FLIGHT),
+									gt(chatMoves.updatedAt, staleBefore()),
+								),
+							)
+							.limit(1);
+						if (moving) throw stillMovingHere();
+					}
 					if (!canAccess(caller, existing)) {
 						throw userError({
 							code: "NOT_FOUND",
@@ -179,83 +203,6 @@ export const chatHistoryRouter = {
 			return { ackedSeq: folded.lastSeq };
 		}),
 
-	/** The chat in the order it shows: each item and turn where it first appeared. */
-	pull: protectedProcedure
-		.input(pullInputSchema)
-		.mutation(async ({ ctx, input }) => {
-			const session = await loadAccessibleSession(
-				await callerOf(ctx),
-				input.sessionId,
-			);
-			const [items, turns] = await Promise.all([
-				db
-					.select({
-						firstSeq: chatItems.firstSeq,
-						seq: chatItems.seq,
-						turnId: chatItems.turnId,
-						body: chatItems.body,
-					})
-					.from(chatItems)
-					.where(
-						and(
-							eq(chatItems.sessionId, input.sessionId),
-							gt(chatItems.firstSeq, input.afterFirstSeq),
-						),
-					)
-					.orderBy(asc(chatItems.firstSeq))
-					.limit(input.limit + 1),
-				db
-					.select({
-						firstSeq: chatTurns.firstSeq,
-						seq: chatTurns.seq,
-						body: chatTurns.body,
-					})
-					.from(chatTurns)
-					.where(
-						and(
-							eq(chatTurns.sessionId, input.sessionId),
-							gt(chatTurns.firstSeq, input.afterFirstSeq),
-						),
-					)
-					.orderBy(asc(chatTurns.firstSeq))
-					.limit(input.limit + 1),
-			]);
-
-			const merged: { firstSeq: number; seq: number; event: DurableEvent }[] = [
-				...items.map((row) => ({
-					firstSeq: row.firstSeq,
-					seq: row.seq,
-					event: {
-						type: "item" as const,
-						item: row.body as Item,
-						turnId: row.turnId,
-					},
-				})),
-				...turns.map((row) => ({
-					firstSeq: row.firstSeq,
-					seq: row.seq,
-					event: { type: "turn" as const, turn: row.body as Turn },
-				})),
-			].sort((a, b) => a.firstSeq - b.firstSeq);
-			const events = merged.slice(0, input.limit);
-			const last = events.at(-1);
-
-			return {
-				session: {
-					id: session.id,
-					epoch: session.epoch,
-					lastSeq: session.lastSeq ?? 0,
-					harness: session.harness,
-					harnessSessionId: session.harnessSessionId,
-					status: session.status,
-					title: session.title,
-				},
-				events,
-				nextAfterFirstSeq:
-					merged.length > input.limit && last ? last.firstSeq : null,
-			};
-		}),
-
 	createTranscriptUpload: protectedProcedure
 		.input(createTranscriptUploadInputSchema)
 		.mutation(async ({ ctx, input }) => {
@@ -327,53 +274,6 @@ export const chatHistoryRouter = {
 				});
 			}
 			return { transcriptId: transcript.id };
-		}),
-
-	/** The newest kept session bundle of a chat, or null when it has none. */
-	resolveTranscript: protectedProcedure
-		.input(sessionInputSchema)
-		.mutation(async ({ ctx, input }) => {
-			await loadAccessibleSession(await callerOf(ctx), input.sessionId);
-			const [newest] = await db
-				.select({
-					id: chatTranscripts.id,
-					fileId: chatTranscripts.fileId,
-					harness: chatTranscripts.harness,
-					harnessSessionId: chatTranscripts.harnessSessionId,
-					sourceCwd: chatTranscripts.sourceCwd,
-					byteLength: chatTranscripts.byteLength,
-					sha256: chatTranscripts.sha256,
-					createdAt: chatTranscripts.createdAt,
-				})
-				.from(chatTranscripts)
-				.innerJoin(files, eq(files.id, chatTranscripts.fileId))
-				.where(
-					and(
-						eq(chatTranscripts.sessionId, input.sessionId),
-						eq(files.status, "ready"),
-					),
-				)
-				.orderBy(desc(chatTranscripts.createdAt))
-				.limit(1);
-			if (!newest) return null;
-			const { fileId, ...transcript } = newest;
-			return {
-				...transcript,
-				url: await presignedGetUrl(fileOriginalKey(fileId), 60 * 60),
-			};
-		}),
-
-	/**
-	 * Moves a chat to a workspace on the caller's own computer. A box cannot:
-	 * a chat moves to a cloud workspace when that workspace is created.
-	 */
-	moveTo: protectedProcedure
-		.input(moveToInputSchema)
-		.mutation(async ({ ctx, input }) => {
-			const caller = await callerOf(ctx);
-			await loadAccessibleSession(caller, input.sessionId);
-			await moveChat(input.sessionId, input.workspaceId);
-			return { sessionId: input.sessionId, workspaceId: input.workspaceId };
 		}),
 
 	search: protectedProcedure

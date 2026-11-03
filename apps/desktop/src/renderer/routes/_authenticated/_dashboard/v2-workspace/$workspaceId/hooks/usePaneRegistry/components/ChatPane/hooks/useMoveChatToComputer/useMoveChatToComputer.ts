@@ -3,13 +3,22 @@ import { useWorkspaceClient } from "@superset/workspace-client";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { useHostProjects } from "renderer/hooks/host-projects/useHostProjects";
+import { cloudTrpcClient } from "renderer/lib/cloud-trpc";
 import { getHostServiceClientByUrl } from "renderer/lib/host-service-client";
+import { useWorkspace } from "renderer/routes/_authenticated/_dashboard/v2-workspace/providers/WorkspaceProvider";
+import { useCollections } from "renderer/routes/_authenticated/providers/CollectionsProvider";
 import { useLocalHostService } from "renderer/routes/_authenticated/providers/LocalHostServiceProvider";
 import { useWorkspaceCreates } from "renderer/stores/workspace-creates";
+import { seedMovedChat } from "renderer/stores/workspace-creates/seedMovedChat";
+import { runMoveOnThisComputer } from "../../utils/runMoveOnThisComputer";
 
-export type MoveToComputerStage = "saving" | "creating" | "restoring";
+export type MoveToComputerStage = "saving" | "creating";
 
-/** Moves a chat from a workspace on another host into a new workspace here. */
+/**
+ * Moves a chat from a workspace on another host into a new workspace here.
+ * The control plane records the move; this computer carries it out, since
+ * the control plane cannot reach it.
+ */
 export function useMoveChatToComputer(workspaceId: string) {
 	const { t } = useLingui();
 	const navigate = useNavigate();
@@ -17,6 +26,8 @@ export function useMoveChatToComputer(workspaceId: string) {
 	const { activeHostUrl, machineId } = useLocalHostService();
 	const { projects } = useHostProjects();
 	const { submit } = useWorkspaceCreates();
+	const collections = useCollections();
+	const sourceHostId = useWorkspace().workspace.hostId;
 
 	return useCallback(
 		async ({
@@ -66,25 +77,30 @@ export function useMoveChatToComputer(workspaceId: string) {
 			const created = await handle.completed;
 			if (!created.ok) throw new Error(created.error);
 
-			onStage("restoring");
-			await local.teleport.receive.mutate({
+			const { moveId } = await cloudTrpcClient.chatMove.start.mutate({
+				chatSessionId,
+				toWorkspaceId: created.workspaceId,
+				toHostId: machineId,
+				...(sourceHostId ? { fromHostId: sourceHostId } : {}),
+			});
+			seedMovedChat({
+				collections,
 				workspaceId: created.workspaceId,
 				chatSessionId,
 				harnessSessionId: prepared.harnessSessionId,
+				agentId: "claude",
+				title: prepared.title,
 			});
-			await remote.teleport.markMoved
-				.mutate({ workspaceId, chatSessionId, destination: "computer" })
-				.catch((error: unknown) => {
-					console.warn("[teleport] could not mark the cloud copy moved", error);
-				});
 			await navigate({
 				to: "/v2-workspace/$workspaceId",
 				params: { workspaceId: created.workspaceId },
-				search: {
-					sessionId: chatSessionId,
-					focusRequestId: crypto.randomUUID(),
-				},
 			});
+			// The new workspace's pane shows how far this got, and a retry.
+			void runMoveOnThisComputer({ moveId, host: local }).catch(
+				(error: unknown) => {
+					console.warn("[chat-move] the move to this computer failed", error);
+				},
+			);
 		},
 		[
 			t,
@@ -95,6 +111,8 @@ export function useMoveChatToComputer(workspaceId: string) {
 			projects,
 			submit,
 			navigate,
+			collections,
+			sourceHostId,
 		],
 	);
 }

@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { useActiveOrganizationId } from "renderer/hooks/useActiveOrganizationId";
 import { cloudTrpc, cloudTrpcClient } from "renderer/lib/cloud-trpc";
+import { useWorkspace } from "renderer/routes/_authenticated/_dashboard/v2-workspace/providers/WorkspaceProvider";
 import { useCollections } from "renderer/routes/_authenticated/providers/CollectionsProvider";
 import { seedMovedChat } from "renderer/stores/workspace-creates/seedMovedChat";
 
@@ -17,6 +18,7 @@ export function useMoveChatToCloud(workspaceId: string) {
 	const organizationId = useActiveOrganizationId();
 	const collections = useCollections();
 	const utils = cloudTrpc.useUtils();
+	const sourceHostId = useWorkspace().workspace.hostId;
 
 	return useCallback(
 		async ({
@@ -56,10 +58,9 @@ export function useMoveChatToCloud(workspaceId: string) {
 				machineSize,
 				name,
 				branch: prepared.branch,
-				agent: "claude",
-				resume: {
+				move: {
 					chatSessionId,
-					harnessSessionId: prepared.harnessSessionId,
+					...(sourceHostId ? { fromHostId: sourceHostId } : {}),
 				},
 			});
 			seedMovedChat({
@@ -70,11 +71,6 @@ export function useMoveChatToCloud(workspaceId: string) {
 				agentId: "claude",
 				title: prepared.title ?? name,
 			});
-			await trpcClient.teleport.markMoved
-				.mutate({ workspaceId, chatSessionId, destination: "cloud" })
-				.catch((error: unknown) => {
-					console.warn("[teleport] could not mark the local copy moved", error);
-				});
 			const listInput = { organizationId };
 			await utils.cloudWorkspace.list.cancel(listInput);
 			utils.cloudWorkspace.list.setData(listInput, (rows) =>
@@ -86,6 +82,15 @@ export function useMoveChatToCloud(workspaceId: string) {
 				params: { workspaceId: created.id },
 			});
 		},
-		[organizationId, t, trpcClient, workspaceId, utils, navigate, collections],
+		[
+			organizationId,
+			t,
+			trpcClient,
+			workspaceId,
+			utils,
+			navigate,
+			collections,
+			sourceHostId,
+		],
 	);
 }

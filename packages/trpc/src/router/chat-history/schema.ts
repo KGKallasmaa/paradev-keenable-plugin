@@ -24,12 +24,6 @@ export const pushInputSchema = z.object({
 	events: z.array(pushedEventSchema).min(1).max(MAX_PUSH_EVENTS),
 });
 
-export const pullInputSchema = z.object({
-	sessionId: z.string().uuid(),
-	afterFirstSeq: z.number().int().nonnegative().default(0),
-	limit: z.number().int().min(1).max(1000).default(500),
-});
-
 export const createTranscriptUploadInputSchema = z.object({
 	sessionId: z.string().uuid(),
 	harness: z.string().min(1).max(100),
@@ -41,16 +35,6 @@ export const createTranscriptUploadInputSchema = z.object({
 
 export const transcriptInputSchema = z.object({
 	transcriptId: z.string().uuid(),
-});
-
-export const sessionInputSchema = z.object({
-	sessionId: z.string().uuid(),
-});
-
-export const moveToInputSchema = z.object({
-	sessionId: z.string().uuid(),
-	/** The workspace on this computer that continues the chat. */
-	workspaceId: z.string().uuid(),
 });
 
 export const searchInputSchema = z.object({

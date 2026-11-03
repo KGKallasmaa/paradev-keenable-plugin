@@ -6,7 +6,6 @@ import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import {
 	type CloudAgentLaunch,
-	type CloudAgentResume,
 	readCloudAgentLaunch,
 } from "@superset/shared/cloud-agent-launch";
 import { parseGitHubRemote } from "@superset/shared/github-remote";
@@ -20,7 +19,6 @@ import {
 import { eq } from "drizzle-orm";
 import type { HostDb } from "../../db";
 import { projects, workspaces } from "../../db/schema";
-import { continueMovedChat } from "../../teleport/continueMovedChat";
 import {
 	chatLaunchTarget,
 	runAgentInWorkspace,
@@ -332,16 +330,8 @@ export async function launchSandboxAgentOnce(
 		return;
 	}
 	if (!identity.launch) return;
-	const {
-		agent,
-		prompt,
-		model,
-		effort,
-		mode,
-		attachmentFileIds,
-		surface,
-		resume,
-	} = identity.launch;
+	const { agent, prompt, model, effort, mode, attachmentFileIds, surface } =
+		identity.launch;
 	// The agent needs the environment the control plane pushes after boot and
 	// the branch the boot runner is checking out beside us; both are seconds.
 	const [pushed, checkedOut] = await Promise.all([
@@ -373,16 +363,6 @@ export async function launchSandboxAgentOnce(
 			} catch (error) {
 				console.error("[sandbox] could not import prompt attachments", error);
 			}
-		}
-		const moved = resume
-			? await continueMovedChatOnBox(ctx, identity.workspaceId, resume)
-			: null;
-		if (moved) {
-			console.log(
-				`[sandbox] continued the moved chat ${moved.sessionId} in workspace ${identity.workspaceId}`,
-			);
-			await rememberLaunchReport(ctx, identity, moved);
-			return;
 		}
 		const chatTarget =
 			surface === "chat"
@@ -432,34 +412,6 @@ export async function launchSandboxAgentOnce(
 			`[sandbox] could not launch ${agent} for workspace ${identity.workspaceId}`,
 			error,
 		);
-	}
-}
-
-/**
- * The moved chat, continued under its own id, or null when that fails and
- * the launch starts a new chat instead: losing the history must not cost the
- * launch.
- */
-async function continueMovedChatOnBox(
-	ctx: HostServiceContext,
-	workspaceId: string,
-	resume: CloudAgentResume,
-): Promise<{ kind: "chat"; sessionId: string; terminalId: string } | null> {
-	const workspace = ctx.db.query.workspaces
-		.findFirst({ where: eq(workspaces.id, workspaceId) })
-		.sync();
-	if (!workspace?.worktreePath) return null;
-	try {
-		const continued = await continueMovedChat(ctx, {
-			workspaceId,
-			worktreePath: workspace.worktreePath,
-			chatSessionId: resume.chatSessionId,
-			harnessSessionId: resume.harnessSessionId,
-		});
-		return { kind: "chat", ...continued };
-	} catch (error) {
-		console.error("[sandbox] could not continue the moved chat", error);
-		return null;
 	}
 }
 

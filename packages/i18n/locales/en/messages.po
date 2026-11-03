@@ -1079,6 +1079,9 @@ msgstr "{localHostName} (this device)"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
@@ -5451,6 +5454,9 @@ msgstr "Copy your browsing history and logins from another browser into Paradev.
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "Copy your key now — you won't be able to see it again."
 
+msgid "Copying the conversation"
+msgstr "Copying the conversation"
+
 msgid "Copyright or trademark"
 msgstr "Copyright or trademark"
 
@@ -6024,6 +6030,9 @@ msgstr "Couldn't stop the chat"
 
 msgid "Couldn't take a screenshot"
 msgstr "Couldn't take a screenshot"
+
+msgid "Couldn't try the move again"
+msgstr "Couldn't try the move again"
 
 msgid "Couldn't undo the file changes."
 msgstr "Couldn't undo the file changes."
@@ -11667,6 +11676,9 @@ msgstr "Move to this computer"
 msgid "Moved \"{name}\" to {group}"
 msgstr "Moved \"{name}\" to {group}"
 
+msgid "Moving this chat here"
+msgstr "Moving this chat here"
+
 msgid "Moving..."
 msgstr "Moving..."
 
@@ -16000,8 +16012,8 @@ msgstr "Restored \"{workspaceName}\""
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Restoring \"{workspaceName}\"…"
 
-msgid "Restoring the conversation…"
-msgstr "Restoring the conversation…"
+msgid "Restoring Claude's session"
+msgstr "Restoring Claude's session"
 
 msgid "Restoring your session"
 msgstr "Restoring your session"
@@ -18193,6 +18205,9 @@ msgstr "Starting the cloud workspace…"
 msgid "Starting the simulator…"
 msgstr "Starting the simulator…"
 
+msgid "Starting the workspace"
+msgstr "Starting the workspace"
+
 msgid "Starting up. This should only take a moment."
 msgstr "Starting up. This should only take a moment."
 
@@ -19401,6 +19416,9 @@ msgstr "This cannot be undone."
 
 msgid "This channel is archived"
 msgstr "This channel is archived"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "This chat couldn't move here. It is still in the workspace it came from."
 
 msgid "This chat has ended."
 msgstr "This chat has ended."

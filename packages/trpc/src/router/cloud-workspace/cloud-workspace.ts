@@ -12,7 +12,6 @@ import { MAX_ATTACHMENTS } from "@superset/shared/attachment-limits";
 import { MACHINE_SIZES, machineSpec } from "@superset/shared/billing";
 import {
 	CLOUD_AGENT_PROMPT_MAX_LENGTH,
-	cloudAgentResumeSchema,
 	isCloudAgentId,
 } from "@superset/shared/cloud-agent-launch";
 import {
@@ -43,7 +42,8 @@ import { acpChatEnabled } from "../../lib/user-settings";
 import { pushWorkspaceAccess } from "../../lib/workspace-access";
 import { jwtProcedure, userError } from "../../trpc";
 import { hostServiceMutation } from "../automation/relay-client";
-import { assertChatCanMove, moveChat } from "../chat-history/utils/moveChat";
+import { createChatMove } from "../chat-move/utils/createChatMove";
+import { failChatMovesTo } from "../chat-move/utils/queueChatMove";
 import {
 	canOpenWorkspace,
 	isListed,
@@ -376,27 +376,32 @@ export const cloudWorkspaceRouter = {
 				/** A size the organization offers (see `machineSizes`); omitted = its default. */
 				machineSize: z.enum(MACHINE_SIZES).optional(),
 				/**
-				 * A chat moved from another host, continued in place of a new one.
-				 * Its history and session bundle must be in `chatHistory` first.
+				 * A chat to move into the new workspace once its host answers, in
+				 * place of an agent. Its history and session bundle must be in
+				 * `chatHistory` first; `chatMove.latest` tracks the move.
 				 */
-				resume: cloudAgentResumeSchema.optional(),
+				move: z
+					.object({
+						chatSessionId: z.string().uuid(),
+						/** The computer the chat leaves; omitted when it leaves a cloud workspace. */
+						fromHostId: z.string().min(1).max(200).optional(),
+					})
+					.optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
 			assertMember(ctx.organizationIds, input.organizationId);
 			await assertCloudAccess(ctx, input.organizationId);
-			if (input.resume && input.agent !== "claude") {
+			if (input.move && input.agent) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
-					message: "Only a Claude session can be resumed in the cloud",
+					message: "A workspace a chat moves into starts no agent of its own",
 				});
 			}
-			if (input.resume) {
-				await assertChatCanMove({
-					chatSessionId: input.resume.chatSessionId,
-					harnessSessionId: input.resume.harnessSessionId,
-					organizationId: input.organizationId,
-					userId: ctx.userId,
+			if (input.move && ctx.sandboxCaller) {
+				throw new TRPCError({
+					code: "FORBIDDEN",
+					message: "A cloud workspace cannot move chats",
 				});
 			}
 			if (input.agent && !isCloudAgentId(input.agent)) {
@@ -429,12 +434,24 @@ export const cloudWorkspaceRouter = {
 								effort: input.effort,
 								mode: input.mode,
 								attachmentFileIds: input.attachmentFileIds,
-								...(input.resume ? { resume: input.resume } : {}),
+							},
+						}
+					: {}),
+				...(input.move
+					? {
+							beforeProvision: async (workspaceId: string) => {
+								const move = input.move as NonNullable<typeof input.move>;
+								await createChatMove({
+									chatSessionId: move.chatSessionId,
+									...(move.fromHostId ? { fromHostId: move.fromHostId } : {}),
+									toWorkspaceId: workspaceId,
+									organizationId: input.organizationId,
+									userId: ctx.userId,
+								});
 							},
 						}
 					: {}),
 			});
-			if (input.resume) await moveChat(input.resume.chatSessionId, row.id);
 			// Shaped like a `list` row: clients seed the list with it.
 			const creator = await db.query.users.findFirst({
 				where: eq(users.id, ctx.userId),
@@ -696,6 +713,7 @@ export const cloudWorkspaceRouter = {
 				set: { sandboxUrl: null, deletedAt: archivedAt },
 			});
 			if (archived) {
+				await failChatMovesTo(row.id, "The cloud workspace was deleted");
 				// A row from a retired provider has no sandbox left to keep.
 				if (row.provider === "vercel") {
 					await queueReap(

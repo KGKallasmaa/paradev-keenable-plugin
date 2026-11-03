@@ -1,1 +1,6 @@
-export { downloadBundle, uploadBundle, withStage } from "./bundle";
+export {
+	type BundleSource,
+	downloadBundle,
+	uploadBundle,
+	withStage,
+} from "./bundle";

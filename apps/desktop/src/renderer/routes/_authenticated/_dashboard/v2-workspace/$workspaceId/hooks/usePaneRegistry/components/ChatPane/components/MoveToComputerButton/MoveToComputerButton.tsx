@@ -109,10 +109,8 @@ export function MoveToComputerButton({
 								<Trans>
 									Saving the cloud workspace's work and this conversation…
 								</Trans>
-							) : stage === "creating" ? (
-								<Trans>Creating a workspace on this computer…</Trans>
 							) : (
-								<Trans>Restoring the conversation…</Trans>
+								<Trans>Creating a workspace on this computer…</Trans>
 							)}
 						</p>
 					)}

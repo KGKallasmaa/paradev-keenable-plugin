@@ -1,13 +1,17 @@
 import { execFile } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { promisify } from "node:util";
+import type { DurableEvent } from "@superset/chat/protocol";
 import type { ChatRuntime } from "@superset/chat-runtime";
 import { parseGitHubRemote } from "@superset/shared/github-remote";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createGitEnvResolver } from "../../../runtime/git";
-import { uploadBundle, withStage } from "../../../teleport/bundle";
-import { continueMovedChat } from "../../../teleport/continueMovedChat";
+import {
+	downloadBundle,
+	uploadBundle,
+	withStage,
+} from "../../../teleport/bundle";
 import { teleportProviderFor } from "../../../teleport/providers";
 import { getHostWorkerPool } from "../../../workers/host-worker-pool";
 import { gitPushSnapshotTask } from "../../../workers/tasks/git";
@@ -228,12 +232,86 @@ export const teleportRouter = router({
 		}),
 
 	/**
-	 * Continues a chat from a cloud workspace in a workspace on this computer:
-	 * the chat moves here, and its history and session files replace this
-	 * host's copy.
+	 * Brings in a chat moving here from another host, under its own id: its
+	 * history replaces whatever this host had of it, and its agent's session
+	 * files go where the agent looks. The control plane calls this with
+	 * everything the chat needs; `continueChat` then starts it.
 	 */
-	receive: machineOnlyProcedure
+	importChat: protectedProcedure
 		.meta({ timeoutMs: 180_000 })
+		.input(
+			z.object({
+				workspaceId: z.string(),
+				chatSessionId: z.string().uuid(),
+				session: z.object({
+					harness: z.string().min(1),
+					harnessSessionId: z.string().min(1),
+					title: z.string().nullable(),
+					epoch: z.string().min(1),
+					lastSeq: z.number().int().nonnegative(),
+				}),
+				events: z.array(
+					z.object({ seq: z.number().int().positive(), event: z.unknown() }),
+				),
+				bundle: z.object({
+					url: z.string().url(),
+					sha256: z.string().min(1),
+					byteLength: z.number().int().nonnegative(),
+				}),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const chat = requireChatRuntime(ctx);
+			const provider = teleportProviderFor(input.session.harness);
+			if (!provider) {
+				throw new TRPCError({
+					code: "PRECONDITION_FAILED",
+					message: "This host cannot continue the moved chat's agent",
+				});
+			}
+			const worktreePath = resolveWorktreePath(ctx, input.workspaceId);
+			await withStage(async (stageDir) => {
+				const manifest = await downloadBundle({
+					bundle: {
+						...input.bundle,
+						harnessSessionId: input.session.harnessSessionId,
+					},
+					stageDir,
+				});
+				await provider.place({
+					manifest,
+					worktreePath,
+					env: resolveDefaultAccountTerminalEnv(ctx.db),
+					stageDir,
+				});
+			});
+			if (chat.live.get(input.chatSessionId)) {
+				await chat.commands.closeSession({ sessionId: input.chatSessionId });
+			}
+			chat.journal.importSession({
+				session: {
+					sessionId: input.chatSessionId,
+					scopeId: input.workspaceId,
+					harness: input.session.harness,
+					harnessSessionId: input.session.harnessSessionId,
+					title: input.session.title ?? undefined,
+					status: "idle",
+					epoch: input.session.epoch,
+					lastSeq: input.session.lastSeq,
+				},
+				events: input.events as { seq: number; event: DurableEvent }[],
+				replace: true,
+			});
+			ctx.runtime.chatSync?.markPushed(
+				input.chatSessionId,
+				input.session.epoch,
+				input.session.lastSeq,
+			);
+			return { sessionId: input.chatSessionId };
+		}),
+
+	/** Starts an imported chat's agent again without replaying its history. */
+	continueChat: protectedProcedure
 		.input(
 			z.object({
 				workspaceId: z.string(),
@@ -241,17 +319,19 @@ export const teleportRouter = router({
 				harnessSessionId: z.string().min(1),
 			}),
 		)
-		.mutation(async ({ ctx, input }) => {
-			const worktreePath = resolveWorktreePath(ctx, input.workspaceId);
-			await ctx.api.chatHistory.moveTo.mutate({
+		.mutation(({ ctx, input }) => {
+			const chat = requireChatRuntime(ctx);
+			requireChat(chat, input.workspaceId, input.chatSessionId);
+			chat.commands.continueSession({
 				sessionId: input.chatSessionId,
-				workspaceId: input.workspaceId,
-			});
-			return continueMovedChat(ctx, {
-				workspaceId: input.workspaceId,
-				worktreePath,
-				chatSessionId: input.chatSessionId,
+				cwd: resolveWorktreePath(ctx, input.workspaceId),
 				harnessSessionId: input.harnessSessionId,
+				terminalId: input.chatSessionId,
 			});
+			return {
+				sessionId: input.chatSessionId,
+				terminalId:
+					chat.live.get(input.chatSessionId)?.terminalId ?? input.chatSessionId,
+			};
 		}),
 });

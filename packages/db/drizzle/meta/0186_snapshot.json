@@ -4242,6 +4242,228 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.chat_moves": {
+      "name": "chat_moves",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organization_id": {
+          "name": "organization_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "from_workspace_id": {
+          "name": "from_workspace_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "from_host_id": {
+          "name": "from_host_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "to_workspace_id": {
+          "name": "to_workspace_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to_host_id": {
+          "name": "to_host_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_turn_seq": {
+          "name": "source_turn_seq",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transcript_id": {
+          "name": "transcript_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "harness_session_id": {
+          "name": "harness_session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "chat_move_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "error": {
+          "name": "error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "finished_at": {
+          "name": "finished_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "chat_moves_session_created_at_idx": {
+          "name": "chat_moves_session_created_at_idx",
+          "columns": [
+            {
+              "expression": "session_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "chat_moves_to_workspace_idx": {
+          "name": "chat_moves_to_workspace_idx",
+          "columns": [
+            {
+              "expression": "to_workspace_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "chat_moves_one_in_flight_idx": {
+          "name": "chat_moves_one_in_flight_idx",
+          "columns": [
+            {
+              "expression": "session_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"chat_moves\".\"status\" in ('pending', 'copying', 'restoring')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chat_moves_session_id_chat_sessions_id_fk": {
+          "name": "chat_moves_session_id_chat_sessions_id_fk",
+          "tableFrom": "chat_moves",
+          "tableTo": "chat_sessions",
+          "columnsFrom": [
+            "session_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_moves_organization_id_organizations_id_fk": {
+          "name": "chat_moves_organization_id_organizations_id_fk",
+          "tableFrom": "chat_moves",
+          "tableTo": "organizations",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "organization_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_moves_created_by_users_id_fk": {
+          "name": "chat_moves_created_by_users_id_fk",
+          "tableFrom": "chat_moves",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chat_moves_transcript_id_chat_transcripts_id_fk": {
+          "name": "chat_moves_transcript_id_chat_transcripts_id_fk",
+          "tableFrom": "chat_moves",
+          "tableTo": "chat_transcripts",
+          "columnsFrom": [
+            "transcript_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.chat_transcripts": {
       "name": "chat_transcripts",
       "schema": "",
@@ -17338,6 +17560,17 @@
         "off",
         "once",
         "until_focused"
+      ]
+    },
+    "public.chat_move_status": {
+      "name": "chat_move_status",
+      "schema": "public",
+      "values": [
+        "pending",
+        "copying",
+        "restoring",
+        "ready",
+        "failed"
       ]
     },
     "public.handle_owner_type": {

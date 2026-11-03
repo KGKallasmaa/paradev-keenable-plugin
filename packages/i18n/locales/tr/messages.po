@@ -1079,6 +1079,9 @@ msgstr "{localHostName} (bu cihaz)"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, one {Konuşma kopyalanıyor (# mesaj)} other {Konuşma kopyalanıyor (# mesaj)}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "{0} hedeften {met} tanesi {nextLabel} için üzerine düşeni yapıyor — en geride {laggingLabels} var."
@@ -5451,6 +5454,9 @@ msgstr "Tarama geçmişinizi ve oturum bilgilerinizi başka bir tarayıcıdan Pa
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "Anahtarınızı şimdi kopyalayın — bir daha göremezsiniz."
 
+msgid "Copying the conversation"
+msgstr "Konuşma kopyalanıyor"
+
 msgid "Copyright or trademark"
 msgstr "Telif hakkı veya ticari marka"
 
@@ -6024,6 +6030,9 @@ msgstr "Sohbet durdurulamadı"
 
 msgid "Couldn't take a screenshot"
 msgstr "Ekran görüntüsü alınamadı"
+
+msgid "Couldn't try the move again"
+msgstr "Taşıma yeniden denenemedi"
 
 msgid "Couldn't undo the file changes."
 msgstr "Dosya değişiklikleri geri alınamadı."
@@ -11667,6 +11676,9 @@ msgstr "Bu bilgisayara taşı"
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\", {group} grubuna taşındı"
 
+msgid "Moving this chat here"
+msgstr "Bu sohbet buraya taşınıyor"
+
 msgid "Moving..."
 msgstr "Taşınıyor..."
 
@@ -16000,8 +16012,8 @@ msgstr "\"{workspaceName}\" geri yüklendi"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "\"{workspaceName}\" geri yükleniyor…"
 
-msgid "Restoring the conversation…"
-msgstr "Konuşma geri yükleniyor…"
+msgid "Restoring Claude's session"
+msgstr "Claude oturumu geri yükleniyor"
 
 msgid "Restoring your session"
 msgstr "Oturumunuz geri yükleniyor"
@@ -18193,6 +18205,9 @@ msgstr "Bulut çalışma alanı başlatılıyor…"
 msgid "Starting the simulator…"
 msgstr "Simülatör başlatılıyor…"
 
+msgid "Starting the workspace"
+msgstr "Workspace başlatılıyor"
+
 msgid "Starting up. This should only take a moment."
 msgstr "Başlatılıyor. Yalnızca kısa bir süre alacaktır."
 
@@ -19401,6 +19416,9 @@ msgstr "Bu geri alınamaz."
 
 msgid "This channel is archived"
 msgstr "Bu kanal arşivlendi"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "Bu sohbet buraya taşınamadı. Geldiği workspace'te duruyor."
 
 msgid "This chat has ended."
 msgstr "Bu sohbet sona erdi."

@@ -74,21 +74,24 @@ export async function uploadBundle(args: {
 	}
 }
 
-/** Downloads a chat's newest bundle into `stageDir`, or returns null when it has none. */
+export type BundleSource = {
+	url: string;
+	sha256: string;
+	byteLength: number;
+	harnessSessionId: string;
+};
+
+/** Downloads a bundle into `stageDir` and checks it arrived whole. */
 export async function downloadBundle(args: {
-	api: ApiClient;
-	chatSessionId: string;
+	bundle: BundleSource;
 	stageDir: string;
-}): Promise<BundleManifest | null> {
-	const bundle = await args.api.chatHistory.resolveTranscript.mutate({
-		sessionId: args.chatSessionId,
-	});
-	if (!bundle) return null;
+}): Promise<BundleManifest> {
+	const { bundle } = args;
 	const archive = `${args.stageDir}.tar.gz`;
 	try {
 		await downloadAttachment(
 			{
-				fileId: bundle.id,
+				fileId: bundle.harnessSessionId,
 				name: `${bundle.harnessSessionId}.tar.gz`,
 				contentType: "application/gzip",
 				sizeBytes: bundle.byteLength,

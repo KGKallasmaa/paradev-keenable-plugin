@@ -1079,6 +1079,9 @@ msgstr "{localHostName}（このデバイス）"
 msgid "{matchCount, plural, one {{0}} other {{1}}}"
 msgstr "{matchCount, plural, one {{0}} other {{1}}}"
 
+msgid "{messageCount, plural, one {Copying the conversation (# message)} other {Copying the conversation (# messages)}}"
+msgstr "{messageCount, plural, other {会話をコピーしています（#件のメッセージ）}}"
+
 #. placeholder {0}: gaps.length
 msgid "{met} of {0} objectives carrying for {nextLabel} — {laggingLabels} furthest behind."
 msgstr "{nextLabel} に向けて {0} 個中 {met} 個の目標が働いています — {laggingLabels} が最も遅れています。"
@@ -5451,6 +5454,9 @@ msgstr "別のブラウザから閲覧履歴とログイン情報をParadevに�
 msgid "Copy your key now — you won't be able to see it again."
 msgstr "キーを今すぐコピーしてください — 後で再表示することはできません。"
 
+msgid "Copying the conversation"
+msgstr "会話をコピーしています"
+
 msgid "Copyright or trademark"
 msgstr "著作権または商標"
 
@@ -6024,6 +6030,9 @@ msgstr "チャットを停止できませんでした"
 
 msgid "Couldn't take a screenshot"
 msgstr "スクリーンショットを撮れませんでした"
+
+msgid "Couldn't try the move again"
+msgstr "移動を再試行できませんでした"
 
 msgid "Couldn't undo the file changes."
 msgstr "ファイルの変更を取り消せませんでした。"
@@ -11667,6 +11676,9 @@ msgstr "このコンピューターに移動"
 msgid "Moved \"{name}\" to {group}"
 msgstr "「{name}」を {group} へ移動しました"
 
+msgid "Moving this chat here"
+msgstr "このチャットをここに移動しています"
+
 msgid "Moving..."
 msgstr "移動中..."
 
@@ -16000,8 +16012,8 @@ msgstr "「{workspaceName}」を復元しました"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "「{workspaceName}」を復元中…"
 
-msgid "Restoring the conversation…"
-msgstr "会話を復元しています…"
+msgid "Restoring Claude's session"
+msgstr "Claude のセッションを復元しています"
 
 msgid "Restoring your session"
 msgstr "セッションを復元中"
@@ -18193,6 +18205,9 @@ msgstr "クラウドワークスペースを起動しています…"
 msgid "Starting the simulator…"
 msgstr "シミュレーターを起動しています…"
 
+msgid "Starting the workspace"
+msgstr "ワークスペースを起動しています"
+
 msgid "Starting up. This should only take a moment."
 msgstr "起動中です。まもなく準備が整います。"
 
@@ -19401,6 +19416,9 @@ msgstr "この操作は元に戻せません。"
 
 msgid "This channel is archived"
 msgstr "このチャンネルはアーカイブされています"
+
+msgid "This chat couldn't move here. It is still in the workspace it came from."
+msgstr "このチャットをここに移動できませんでした。チャットは移動元のワークスペースに残っています。"
 
 msgid "This chat has ended."
 msgstr "このチャットは終了しました。"

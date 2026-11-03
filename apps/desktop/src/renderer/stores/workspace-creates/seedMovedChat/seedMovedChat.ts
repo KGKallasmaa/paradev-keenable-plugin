@@ -7,8 +7,9 @@ import type { AppCollections } from "renderer/routes/_authenticated/providers/Co
 import { writeWorkspacePaneLayout } from "../writeWorkspacePaneLayout";
 
 /**
- * Opens a moved chat in the workspace it moved to. The chat keeps its id
- * across the move, so the pane can name it before the new host has it.
+ * Opens a moved chat in the workspace it moves to, in a tab of its own. The
+ * chat keeps its id across the move, so the pane can name it before the new
+ * host has it, and shows the move's progress until it arrives.
  */
 export function seedMovedChat({
 	collections,
@@ -25,15 +26,23 @@ export function seedMovedChat({
 	agentId: string;
 	title: string | null;
 }): void {
+	if (!collections.v2WorkspaceLocalState.get(workspaceId)) {
+		writeWorkspacePaneLayout(
+			collections,
+			{ id: workspaceId, projectId: null },
+			[],
+			[],
+		);
+	}
 	const existing = collections.v2WorkspaceLocalState.get(workspaceId)
 		?.paneLayout as WorkspaceState<PaneViewerData> | undefined;
-	if (existing?.tabs.length) return;
-	writeWorkspacePaneLayout(
-		collections,
-		{ id: workspaceId, projectId: null },
-		[],
-		[],
+	const alreadyOpen = existing?.tabs.some((tab) =>
+		Object.values(tab.panes).some(
+			(pane) =>
+				(pane.data as Partial<ChatPaneData>).sessionId === chatSessionId,
+		),
 	);
+	if (alreadyOpen) return;
 	const store = createWorkspaceStore<PaneViewerData>({
 		initialState: existing,
 	});
