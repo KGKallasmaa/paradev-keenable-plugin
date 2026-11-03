@@ -339,6 +339,7 @@ export const agentTurnStatusValues = [
 	"completed",
 	"failed",
 	"interrupted",
+	"queued",
 ] as const;
 export const agentTurnStatusEnum = z.enum(agentTurnStatusValues);
 export type AgentTurnStatus = z.infer<typeof agentTurnStatusEnum>;

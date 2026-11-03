@@ -15,7 +15,7 @@ import { and, eq, gt, inArray, sql } from "drizzle-orm";
 import { anchorAttachments } from "../../lib/attachments";
 import { detachAll, reapOrphanFiles } from "../../lib/files";
 import { presignedPutUrl } from "../../lib/r2";
-import { protectedProcedure, userError } from "../../trpc";
+import { personProcedure, userError } from "../../trpc";
 import { staleBefore } from "../chat-move/utils/findMovableChat";
 import { requireActiveOrgMembership } from "../utils/active-org";
 import {
@@ -66,7 +66,7 @@ function stillMovingHere(): TRPCError {
  * chat moves, `chatMove` hands both to the host it moves to.
  */
 export const chatHistoryRouter = {
-	push: protectedProcedure
+	push: personProcedure
 		.input(pushInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const caller = await callerOf(ctx);
@@ -213,7 +213,7 @@ export const chatHistoryRouter = {
 			return { ackedSeq: folded.lastSeq };
 		}),
 
-	createTranscriptUpload: protectedProcedure
+	createTranscriptUpload: personProcedure
 		.input(createTranscriptUploadInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const caller = await callerOf(ctx);
@@ -259,7 +259,7 @@ export const chatHistoryRouter = {
 		}),
 
 	/** Keeps an uploaded bundle: without this the file sweep reclaims it a day later. */
-	completeTranscriptUpload: protectedProcedure
+	completeTranscriptUpload: personProcedure
 		.input(transcriptInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const caller = await callerOf(ctx);
@@ -303,7 +303,7 @@ export const chatHistoryRouter = {
 			return { transcriptId: transcript.id };
 		}),
 
-	search: protectedProcedure
+	search: personProcedure
 		.input(searchInputSchema)
 		.query(async ({ ctx, input }) => {
 			const caller = await callerOf(ctx);

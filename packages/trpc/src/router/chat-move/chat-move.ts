@@ -8,7 +8,7 @@ import {
 import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { and, count, desc, eq, inArray } from "drizzle-orm";
-import { protectedProcedure } from "../../trpc";
+import { personProcedure } from "../../trpc";
 import { loadChatHistory } from "../chat-history/utils/loadChatHistory";
 import { requireActiveOrgMembership } from "../utils/active-org";
 import {
@@ -90,7 +90,7 @@ async function startMove(move: { id: string; toHostId: string | null }) {
  */
 export const chatMoveRouter = {
 	/** The chat's newest move, or null when it never moved. */
-	latest: protectedProcedure
+	latest: personProcedure
 		.input(chatMoveOfChatInputSchema)
 		.query(async ({ ctx, input }) => {
 			const mover = await moverOf(ctx);
@@ -126,7 +126,7 @@ export const chatMoveRouter = {
 		}),
 
 	/** Moves a chat to a workspace that already exists, such as one on this computer. */
-	start: protectedProcedure
+	start: personProcedure
 		.input(startChatMoveInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const mover = await moverOf(ctx);
@@ -134,7 +134,7 @@ export const chatMoveRouter = {
 		}),
 
 	/** Tries a failed move again, to the same workspace. */
-	retry: protectedProcedure
+	retry: personProcedure
 		.input(retryChatMoveInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const mover = await moverOf(ctx);
@@ -169,7 +169,7 @@ export const chatMoveRouter = {
 	 * what its host's `teleport.importChat` takes, without the events, which
 	 * `events` pages through.
 	 */
-	claim: protectedProcedure
+	claim: personProcedure
 		.input(chatMoveInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const mover = await moverOf(ctx);
@@ -191,7 +191,7 @@ export const chatMoveRouter = {
 		}),
 
 	/** A page of the moving chat's history, in the order it shows. */
-	events: protectedProcedure
+	events: personProcedure
 		.input(chatMoveEventsInputSchema)
 		.query(async ({ ctx, input }) => {
 			const mover = await moverOf(ctx);
@@ -218,7 +218,7 @@ export const chatMoveRouter = {
 	 * The desktop's host holds the chat: switches the chat to it and stops
 	 * the copy left behind. The desktop starts the agent afterwards.
 	 */
-	complete: protectedProcedure
+	complete: personProcedure
 		.input(chatMoveInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const mover = await moverOf(ctx);
@@ -233,7 +233,7 @@ export const chatMoveRouter = {
 		}),
 
 	/** The desktop could not bring the chat in; the chat stays where it was. */
-	fail: protectedProcedure
+	fail: personProcedure
 		.input(failChatMoveInputSchema)
 		.mutation(async ({ ctx, input }) => {
 			const mover = await moverOf(ctx);

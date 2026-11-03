@@ -3586,6 +3586,9 @@ msgstr "Hangi ajanı isterseniz getirin"
 msgid "Bring Claude Code, Codex, OpenCode, or any coding agent into one workspace. Run tasks in parallel on separate branches, and review everything in one place."
 msgstr "Claude Code, Codex, OpenCode veya herhangi bir kodlama ajanını tek bir çalışma alanında toplayın. Görevleri ayrı dallarda paralel çalıştırın ve her şeyi tek bir yerden inceleyin."
 
+msgid "Bring in an agent"
+msgstr "Bir ajan getir"
+
 msgid "Bring over your projects"
 msgstr "Projelerinizi aktarın"
 
@@ -3607,11 +3610,14 @@ msgstr "Toplulukça paylaşılan becerilere, MCP sunucularına ve ajan yapıland
 msgid "Browse for directory"
 msgstr "Dizine gözat"
 
+msgid "Browse Paradev plugins, shared themes, and future agent configs."
+msgstr "Paradev eklentilerine, paylaşılan temalara ve gelecekteki ajan yapılandırmalarına göz atın."
+
 msgid "Browse Paradev theme files shared by the community, including GitHub Dark Colorblind, Catppuccin, Ember, and One Dark Pro."
 msgstr "GitHub Dark Colorblind, Catppuccin, Ember ve One Dark Pro dahil olmak üzere toplulukça paylaşılan Paradev tema dosyalarına göz atın."
 
-msgid "Browse shared themes and future agent configs for Paradev."
-msgstr "Paradev için paylaşılan temalara ve gelecekteki ajan yapılandırmalarına göz atın."
+msgid "Browse the plugins every Paradev agent can use, and submit your own."
+msgstr "Her Paradev ajanının kullanabileceği eklentilere göz atın ve kendi eklentinizi gönderin."
 
 msgid "Browse the repo ↗"
 msgstr "Depoya göz atın ↗"
@@ -3660,6 +3666,9 @@ msgstr "Son yazılım parçasını inşa etmek"
 
 msgid "Building the last piece of software."
 msgstr "Son yazılım parçasını inşa ediyoruz."
+
+msgid "Built a plugin? Submit it here."
+msgstr "Bir eklenti mi geliştirdiniz? Buradan gönderin."
 
 msgid "Built in Paradev"
 msgstr "Paradev ile geliştirildi"
@@ -7154,6 +7163,9 @@ msgstr "Mobil kenar çubuğunu gösterir."
 msgid "Do anything"
 msgstr "Ne isterseniz"
 
+msgid "Do anything in Paradev"
+msgstr "Paradev'de ne isterseniz"
+
 msgid "Do I need my own coding agent subscriptions?"
 msgstr "Kendi kodlama ajanı aboneliklerime ihtiyacım var mı?"
 
@@ -9971,6 +9983,9 @@ msgstr "Kur ve yeniden başlat"
 
 msgid "Install & Restart"
 msgstr "Kur ve yeniden başlat"
+
+msgid "Install a plugin in the Paradev app and every agent can use it."
+msgstr "Paradev uygulamasında bir eklenti yükleyin, her ajan onu kullanabilsin."
 
 msgid "Install failed"
 msgstr "Kurulum başarısız"
@@ -13236,6 +13251,9 @@ msgstr "Etkin terminal için çok satırlı istem düzenleyicisini aç"
 msgid "Open a new {label} chat?"
 msgstr "Yeni bir {label} sohbeti açılsın mı?"
 
+msgid "Open a pull request that adds it to the Paradev repository. We review it and add it to the marketplace."
+msgstr "Eklentinizi Paradev deposuna ekleyen bir pull request açın. İnceleyip pazar yerine ekleyelim."
+
 msgid "Open a pull request to view review status, checks, and comments."
 msgstr "İnceleme durumunu, kontrolleri ve yorumları görmek için bir pull request açın."
 
@@ -14471,6 +14489,9 @@ msgstr "Eklenti pazar yeri"
 
 msgid "Plugins"
 msgstr "Eklentiler"
+
+msgid "Plugins, themes, and agents"
+msgstr "Eklentiler, temalar ve ajanlar"
 
 msgid "Point at the page. Your agent makes the change."
 msgstr "Sayfayı işaret edin. Ajanınız değişikliği yapar."
@@ -17755,6 +17776,9 @@ msgstr "Beceri"
 msgid "Skills"
 msgstr "Beceriler"
 
+msgid "Skills and MCP tools for your agents. Submit your own."
+msgstr "Ajanlarınız için beceriler ve MCP araçları. Kendi eklentinizi gönderin."
+
 msgid "Skills ship with the Paradev plugin and are kept up to date automatically in every agent you use. Click one to preview it."
 msgstr "Beceriler Paradev eklentisiyle gelir ve kullandığınız her ajanda otomatik olarak güncel tutulur. Önizlemek için birine tıklayın."
 
@@ -18392,6 +18416,9 @@ msgstr "İstemi gönder"
 
 msgid "Submit prompt rate limiting is not configured"
 msgstr "İstem gönderme hız sınırlaması yapılandırılmamış"
+
+msgid "Submit your plugin"
+msgstr "Eklentinizi gönderin"
 
 msgid "Submitting…"
 msgstr "Gönderiliyor…"
@@ -19367,9 +19394,6 @@ msgstr "Tema önizleme kartı"
 
 msgid "Themes"
 msgstr "Temalar"
-
-msgid "Themes and agents"
-msgstr "Temalar ve ajanlar"
 
 msgid "These commands run automatically when a workspace is created. <0>Read our docs<1/></0>"
 msgstr "Bu komutlar bir çalışma alanı oluşturulduğunda otomatik olarak çalışır. <0>Belgelerimizi okuyun<1/></0>"

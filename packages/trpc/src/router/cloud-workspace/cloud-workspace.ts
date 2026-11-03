@@ -23,7 +23,12 @@ import { TRPCError } from "@trpc/server";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import { organizationMachineSizes } from "../../lib/billing/plan";
-import { assertCloudAccess, assertMember } from "../../lib/cloud-guards";
+import {
+	assertCloudAccess,
+	assertMember,
+	type MemberContext,
+	organizationOrFirst,
+} from "../../lib/cloud-guards";
 import { nudge } from "../../lib/realtime";
 import {
 	deleteSandbox,
@@ -40,7 +45,7 @@ import {
 } from "../../lib/sandbox";
 import { acpChatEnabled } from "../../lib/user-settings";
 import { pushWorkspaceAccess } from "../../lib/workspace-access";
-import { jwtProcedure, userError } from "../../trpc";
+import { personProcedure, userError } from "../../trpc";
 import { hostServiceMutation } from "../automation/relay-client";
 import { createChatMove } from "../chat-move/utils/createChatMove";
 import { failChatMovesTo } from "../chat-move/utils/queueChatMove";
@@ -76,7 +81,7 @@ const DESCRIPTION_PROMPT = [
 
 /** The caller's cloud workspace, refused unless it exists, they may use it, and it is ready. */
 async function loadReadyWorkspace(
-	ctx: Parameters<typeof assertCloudAccess>[0] & { organizationIds: string[] },
+	ctx: Parameters<typeof assertCloudAccess>[0] & MemberContext,
 	id: string,
 ) {
 	const row = await db.query.cloudWorkspaces.findFirst({
@@ -89,9 +94,9 @@ async function loadReadyWorkspace(
 			i18nKey: "serverError.cloudWorkspace.notFound",
 		});
 	}
-	assertMember(ctx.organizationIds, row.organizationId);
+	await assertMember(ctx, row.organizationId);
 	await assertCloudAccess(ctx, row.organizationId);
-	if (!(await canOpenWorkspace(row, ctx.userId))) throw notFound();
+	if (!(await canOpenWorkspace(row, ctx.principal.userId))) throw notFound();
 	if (row.status !== "ready") {
 		throw new TRPCError({
 			code: "PRECONDITION_FAILED",
@@ -196,16 +201,16 @@ export const cloudWorkspaceRouter = {
 	 * default location from it: a workspace command defaults to the cloud only
 	 * for an account that can use it, so nobody else's commands change.
 	 */
-	available: jwtProcedure.query(async ({ ctx }) => {
+	available: personProcedure.query(async ({ ctx }) => {
 		try {
-			await assertCloudAccess(ctx, ctx.activeOrganizationId ?? null);
+			await assertCloudAccess(ctx, organizationOrFirst(ctx));
 			return { available: true };
 		} catch {
 			return { available: false };
 		}
 	}),
 
-	list: jwtProcedure
+	list: personProcedure
 		.input(
 			z.object({
 				organizationId: z.string().uuid(),
@@ -213,7 +218,7 @@ export const cloudWorkspaceRouter = {
 			}),
 		)
 		.query(async ({ ctx, input }) => {
-			assertMember(ctx.organizationIds, input.organizationId);
+			await assertMember(ctx, input.organizationId);
 			await assertCloudAccess(ctx, input.organizationId);
 			const rows = await db
 				.select({
@@ -225,14 +230,14 @@ export const cloudWorkspaceRouter = {
 				.where(
 					and(
 						eq(cloudWorkspaces.organizationId, input.organizationId),
-						visibleTo(ctx.userId),
+						visibleTo(ctx.principal.userId),
 						isListed(input.archived),
 					),
 				)
 				.orderBy(desc(cloudWorkspaces.createdAt));
 			const tagsByWorkspaceId = await loadCallerTags(
 				rows.map(({ workspace }) => workspace.id),
-				ctx.userId,
+				ctx.principal.userId,
 			);
 			return rows.map(({ workspace, createdBy }) => ({
 				...workspace,
@@ -246,10 +251,10 @@ export const cloudWorkspaceRouter = {
 	 * The repositories each listed workspace checked out, by name, the one it
 	 * opens on marked primary.
 	 */
-	repositories: jwtProcedure
+	repositories: personProcedure
 		.input(z.object({ organizationId: z.string().uuid() }))
 		.query(async ({ ctx, input }) => {
-			assertMember(ctx.organizationIds, input.organizationId);
+			await assertMember(ctx, input.organizationId);
 			await assertCloudAccess(ctx, input.organizationId);
 			const rows = await db
 				.select({
@@ -275,7 +280,7 @@ export const cloudWorkspaceRouter = {
 				.where(
 					and(
 						eq(cloudWorkspaces.organizationId, input.organizationId),
-						visibleTo(ctx.userId),
+						visibleTo(ctx.principal.userId),
 					),
 				)
 				.orderBy(asc(githubRepositories.fullName));
@@ -295,7 +300,7 @@ export const cloudWorkspaceRouter = {
 			}));
 		}),
 
-	pullRequests: jwtProcedure
+	pullRequests: personProcedure
 		.input(
 			z.object({
 				organizationId: z.string().uuid(),
@@ -303,15 +308,19 @@ export const cloudWorkspaceRouter = {
 			}),
 		)
 		.query(async ({ ctx, input }) => {
-			assertMember(ctx.organizationIds, input.organizationId);
+			await assertMember(ctx, input.organizationId);
 			await assertCloudAccess(ctx, input.organizationId);
-			return listPullRequests(input.organizationId, ctx.userId, input.archived);
+			return listPullRequests(
+				input.organizationId,
+				ctx.principal.userId,
+				input.archived,
+			);
 		}),
 
-	machineSizes: jwtProcedure
+	machineSizes: personProcedure
 		.input(z.object({ organizationId: z.string().uuid() }))
 		.query(async ({ ctx, input }) => {
-			assertMember(ctx.organizationIds, input.organizationId);
+			await assertMember(ctx, input.organizationId);
 			const { sizes, defaultSize } = await organizationMachineSizes(
 				input.organizationId,
 			);
@@ -321,7 +330,7 @@ export const cloudWorkspaceRouter = {
 			};
 		}),
 
-	listBranches: jwtProcedure
+	listBranches: personProcedure
 		.input(
 			z.object({
 				organizationId: z.string().uuid(),
@@ -330,7 +339,7 @@ export const cloudWorkspaceRouter = {
 			}),
 		)
 		.query(async ({ ctx, input }) => {
-			assertMember(ctx.organizationIds, input.organizationId);
+			await assertMember(ctx, input.organizationId);
 			await assertCloudAccess(ctx, input.organizationId);
 			const [repo] = await loadRepositories({
 				organizationId: input.organizationId,
@@ -341,7 +350,7 @@ export const cloudWorkspaceRouter = {
 		}),
 
 	/** See {@link startCloudWorkspace}. */
-	create: jwtProcedure
+	create: personProcedure
 		.input(
 			z.object({
 				organizationId: z.string().uuid(),
@@ -390,7 +399,7 @@ export const cloudWorkspaceRouter = {
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			assertMember(ctx.organizationIds, input.organizationId);
+			await assertMember(ctx, input.organizationId);
 			await assertCloudAccess(ctx, input.organizationId);
 			if (input.move && input.agent) {
 				throw new TRPCError({
@@ -415,7 +424,7 @@ export const cloudWorkspaceRouter = {
 
 			const row = await startCloudWorkspace({
 				organizationId: input.organizationId,
-				userId: ctx.userId,
+				userId: ctx.principal.userId,
 				environmentId: input.environmentId,
 				name: input.name,
 				prompt: input.prompt,
@@ -424,7 +433,7 @@ export const cloudWorkspaceRouter = {
 				taskIds: input.taskIds,
 				attachmentFileIds: input.attachmentFileIds,
 				machineSize: input.machineSize,
-				chat: !!input.agent && (await acpChatEnabled(ctx.userId)),
+				chat: !!input.agent && (await acpChatEnabled(ctx.principal.userId)),
 				...(input.agent
 					? {
 							launch: {
@@ -446,7 +455,7 @@ export const cloudWorkspaceRouter = {
 									...(move.fromHostId ? { fromHostId: move.fromHostId } : {}),
 									toWorkspaceId: workspaceId,
 									organizationId: input.organizationId,
-									userId: ctx.userId,
+									userId: ctx.principal.userId,
 								});
 							},
 						}
@@ -454,7 +463,7 @@ export const cloudWorkspaceRouter = {
 			});
 			// Shaped like a `list` row: clients seed the list with it.
 			const creator = await db.query.users.findFirst({
-				where: eq(users.id, ctx.userId),
+				where: eq(users.id, ctx.principal.userId),
 				columns: { id: true, name: true, image: true },
 			});
 			return {
@@ -472,7 +481,7 @@ export const cloudWorkspaceRouter = {
 	 * is created, named and listed by this API; the row inside the sandbox
 	 * exists only so host-service has something to serve panes against.
 	 */
-	rename: jwtProcedure
+	rename: personProcedure
 		.input(
 			z.object({ id: z.string().uuid(), name: z.string().min(1).max(200) }),
 		)
@@ -487,7 +496,7 @@ export const cloudWorkspaceRouter = {
 				await recordCloudWorkspaceActivity(
 					db,
 					row.id,
-					{ kind: "user", userId: ctx.userId },
+					{ kind: "user", userId: ctx.principal.userId },
 					{ fromName: row.name, toName: input.name },
 				);
 			}
@@ -501,7 +510,7 @@ export const cloudWorkspaceRouter = {
 	 * are personal, so anyone who can see the workspace may file it, and only
 	 * their own rows move.
 	 */
-	setTags: jwtProcedure
+	setTags: personProcedure
 		.input(z.object({ id: z.string().uuid(), tags: workspaceTagsInputSchema }))
 		.mutation(async ({ ctx, input }) => {
 			const row = await loadVisibleWorkspace(ctx, input.id);
@@ -510,14 +519,14 @@ export const cloudWorkspaceRouter = {
 				// that overlap would each delete past the other's insert and
 				// leave the union of both sets.
 				await tx.execute(
-					sql`select pg_advisory_xact_lock(hashtext(${`${row.id}:${ctx.userId}`}))`,
+					sql`select pg_advisory_xact_lock(hashtext(${`${row.id}:${ctx.principal.userId}`}))`,
 				);
 				await tx
 					.delete(cloudWorkspaceTags)
 					.where(
 						and(
 							eq(cloudWorkspaceTags.cloudWorkspaceId, row.id),
-							eq(cloudWorkspaceTags.createdByUserId, ctx.userId),
+							eq(cloudWorkspaceTags.createdByUserId, ctx.principal.userId),
 						),
 					);
 				if (input.tags.length > 0) {
@@ -525,7 +534,7 @@ export const cloudWorkspaceRouter = {
 						input.tags.map((tag) => ({
 							cloudWorkspaceId: row.id,
 							tag,
-							createdByUserId: ctx.userId,
+							createdByUserId: ctx.principal.userId,
 						})),
 					);
 				}
@@ -550,7 +559,7 @@ export const cloudWorkspaceRouter = {
 	 * which resumes a stopped session, re-applies the credential rules,
 	 * extends a running session, and pushes the managed environment again.
 	 */
-	access: jwtProcedure
+	access: personProcedure
 		.input(
 			z.object({ id: z.string().uuid(), wake: z.boolean().default(false) }),
 		)
@@ -562,7 +571,7 @@ export const cloudWorkspaceRouter = {
 			);
 			const host = await mintSandboxGateAccess({
 				workspaceId: row.id,
-				userId: ctx.userId,
+				userId: ctx.principal.userId,
 				port: HOST_SERVICE_PORT,
 				target: address.hostTarget,
 			});
@@ -579,7 +588,7 @@ export const cloudWorkspaceRouter = {
 		}),
 
 	/** Ends every terminal and agent on the box so they start again with the current agent sign-ins. */
-	restart: jwtProcedure
+	restart: personProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.mutation(async ({ ctx, input }) => {
 			const row = await loadReadyWorkspace(ctx, input.id);
@@ -588,7 +597,7 @@ export const cloudWorkspaceRouter = {
 		}),
 
 	/** Stops the sandbox so it costs storage only; the next `access` with `wake` boots it again. */
-	sleep: jwtProcedure
+	sleep: personProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.mutation(async ({ ctx, input }) => {
 			const row = await loadReadyWorkspace(ctx, input.id);
@@ -611,7 +620,7 @@ export const cloudWorkspaceRouter = {
 	 * Asks an agent in the box to write the workspace's description; it saves it
 	 * with `superset workspaces description set`, which lands as `setDescription`.
 	 */
-	generateDescription: jwtProcedure
+	generateDescription: personProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -623,7 +632,7 @@ export const cloudWorkspaceRouter = {
 			const address = await addressSandbox(row, "wake");
 			const host = await mintSandboxGateAccess({
 				workspaceId: row.id,
-				userId: ctx.userId,
+				userId: ctx.principal.userId,
 				port: HOST_SERVICE_PORT,
 				target: address.hostTarget,
 			});
@@ -639,7 +648,7 @@ export const cloudWorkspaceRouter = {
 			return { requestedAt: new Date(), previous: row.description };
 		}),
 
-	hostTicket: jwtProcedure
+	hostTicket: personProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.mutation(async ({ ctx, input }) => {
 			const row = await loadReadyWorkspace(ctx, input.id);
@@ -648,14 +657,14 @@ export const cloudWorkspaceRouter = {
 				(await describeSandbox(row.providerSandboxId)).hostTarget;
 			const host = await mintSandboxGateAccess({
 				workspaceId: row.id,
-				userId: ctx.userId,
+				userId: ctx.principal.userId,
 				port: HOST_SERVICE_PORT,
 				target,
 			});
 			return { url: host.url, token: host.token, expiresAt: host.expiresAt };
 		}),
 
-	setVisibility: jwtProcedure
+	setVisibility: personProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -664,7 +673,7 @@ export const cloudWorkspaceRouter = {
 		)
 		.mutation(async ({ ctx, input }) => {
 			const row = await loadVisibleWorkspace(ctx, input.id);
-			if (row.createdByUserId !== ctx.userId) {
+			if (row.createdByUserId !== ctx.principal.userId) {
 				throw new TRPCError({
 					code: "FORBIDDEN",
 					message: "Only the creator can change who sees a cloud workspace",
@@ -678,7 +687,7 @@ export const cloudWorkspaceRouter = {
 				await recordCloudWorkspaceActivity(
 					db,
 					row.id,
-					{ kind: "user", userId: ctx.userId },
+					{ kind: "user", userId: ctx.principal.userId },
 					{ fromVisibility: row.visibility, toVisibility: input.visibility },
 				);
 			}
@@ -689,16 +698,16 @@ export const cloudWorkspaceRouter = {
 			return { visibility: input.visibility };
 		}),
 
-	delete: jwtProcedure
+	delete: personProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.mutation(async ({ ctx, input }) => {
 			const row = await db.query.cloudWorkspaces.findFirst({
 				where: eq(cloudWorkspaces.id, input.id),
 			});
 			if (!row) return { deleted: false };
-			assertMember(ctx.organizationIds, row.organizationId);
+			await assertMember(ctx, row.organizationId);
 			await assertCloudAccess(ctx, row.organizationId);
-			if (!(await canOpenWorkspace(row, ctx.userId))) {
+			if (!(await canOpenWorkspace(row, ctx.principal.userId))) {
 				return { deleted: false };
 			}
 
@@ -737,7 +746,7 @@ export const cloudWorkspaceRouter = {
 				await recordCloudWorkspaceActivity(
 					db,
 					row.id,
-					{ kind: "user", userId: ctx.userId },
+					{ kind: "user", userId: ctx.principal.userId },
 					{ event: "archived" },
 				).catch((error) => {
 					console.error(
@@ -750,7 +759,7 @@ export const cloudWorkspaceRouter = {
 			return { deleted: true };
 		}),
 
-	unarchive: jwtProcedure
+	unarchive: personProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.mutation(async ({ ctx, input }) => {
 			const row = await loadVisibleWorkspace(ctx, input.id);
@@ -785,7 +794,7 @@ export const cloudWorkspaceRouter = {
 			await recordCloudWorkspaceActivity(
 				db,
 				row.id,
-				{ kind: "user", userId: ctx.userId },
+				{ kind: "user", userId: ctx.principal.userId },
 				{ event: "unarchived" },
 			);
 			nudge(row.organizationId, "cloud_workspaces");
