@@ -20,6 +20,7 @@ export function MoveToCloudButton({
 }: MoveToCloudButtonProps) {
 	const { t } = useLingui();
 	const [open, setOpen] = useState(false);
+	const [openCount, setOpenCount] = useState(0);
 	const cloudEnabled = useFeatureFlagEnabled(FEATURE_FLAGS.CLOUD_WORKSPACES);
 	const { workspace } = useWorkspace();
 	const { machineId } = useLocalHostService();
@@ -44,12 +45,14 @@ export function MoveToCloudButton({
 				onClick={(event) => {
 					event.stopPropagation();
 					setOpen(true);
+					setOpenCount((count) => count + 1);
 				}}
 			>
 				<CloudUpload className="size-3.5" />
 			</Button>
-			{open && (
+			{openCount > 0 && (
 				<MoveChatToCloudDialog
+					key={openCount}
 					open={open}
 					onOpenChange={setOpen}
 					workspaceId={workspaceId}

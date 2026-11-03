@@ -10,6 +10,31 @@ export type BundleManifest = {
 	sourceDir: string;
 };
 
+const PLAIN_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,199}$/;
+
+/** An id safe to name a file with: no separators, dots or `..`. */
+export function isPlainSessionId(id: unknown): id is string {
+	return typeof id === "string" && PLAIN_ID.test(id);
+}
+
+/** A manifest read from a bundle, or null when it is not one this host reads. */
+export function parseBundleManifest(value: unknown): BundleManifest | null {
+	if (typeof value !== "object" || value === null) return null;
+	const manifest = value as Record<string, unknown>;
+	if (manifest.version !== 1) return null;
+	if (!isPlainSessionId(manifest.harnessSessionId)) return null;
+	if (typeof manifest.sourceCwd !== "string" || !manifest.sourceCwd)
+		return null;
+	if (typeof manifest.sourceDir !== "string" || !manifest.sourceDir)
+		return null;
+	return {
+		version: 1,
+		harnessSessionId: manifest.harnessSessionId,
+		sourceCwd: manifest.sourceCwd,
+		sourceDir: manifest.sourceDir,
+	};
+}
+
 /**
  * Moves one agent's own session files between hosts. The rest of a move
  * (history, git, the new workspace) is the same for every agent.

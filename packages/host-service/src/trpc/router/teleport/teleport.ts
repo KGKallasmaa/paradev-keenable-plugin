@@ -14,8 +14,14 @@ import {
 } from "../../../teleport/bundle";
 import { teleportProviderFor } from "../../../teleport/providers";
 import { getHostWorkerPool } from "../../../workers/host-worker-pool";
-import { gitPushSnapshotTask } from "../../../workers/tasks/git";
-import { harnessSessionFileTask } from "../../../workers/tasks/harness";
+import {
+	gitPushSnapshotTask,
+	gitSnapshotRemoteTask,
+} from "../../../workers/tasks/git";
+import {
+	harnessPlaceSessionTask,
+	harnessSessionFileTask,
+} from "../../../workers/tasks/harness";
 import { machineOnlyProcedure, protectedProcedure, router } from "../../index";
 import { rethrowEnvironmentalGitError } from "../git/utils/classify-git-error";
 import { resolveWorktreePath } from "../git/utils/resolve-worktree";
@@ -44,6 +50,13 @@ function requireChat(
 		});
 	}
 	return session;
+}
+
+function busyError() {
+	return new TRPCError({
+		code: "PRECONDITION_FAILED",
+		message: "Wait for the agent to finish, or stop it, before moving",
+	});
 }
 
 /** Cancels the running turn and waits until the chat is idle. */
@@ -98,15 +111,6 @@ export const teleportRouter = router({
 					message: "This chat's agent cannot move yet",
 				});
 			}
-			if (BUSY_STATUSES.has(session.status)) {
-				if (!input.stopIfBusy) {
-					throw new TRPCError({
-						code: "PRECONDITION_FAILED",
-						message: "Wait for the agent to finish, or stop it, before moving",
-					});
-				}
-				await stopRunningTurn(chat, input.chatSessionId);
-			}
 			const chatSync = ctx.runtime.chatSync;
 			if (!chatSync) {
 				throw new TRPCError({
@@ -114,31 +118,55 @@ export const teleportRouter = router({
 					message: "Chat sync is not available on this host",
 				});
 			}
+			if (BUSY_STATUSES.has(session.status) && !input.stopIfBusy) {
+				throw busyError();
+			}
 
 			const worktreePath = resolveWorktreePath(ctx, input.workspaceId);
 			const env = resolveDefaultAccountTerminalEnv(ctx.db);
 			const pool = getHostWorkerPool();
-
-			const branch = `superset/teleport-${randomUUID().slice(0, 8)}`;
 			const gitEnv = await createGitEnvResolver(ctx.credentials)(worktreePath);
-			const { remoteUrl } = await pool
-				.run(
-					gitPushSnapshotTask,
-					{ worktreePath, branch, gitEnv },
-					{ timeoutMs: 150_000 },
-				)
+			const target = await pool
+				.run(gitSnapshotRemoteTask, { worktreePath, gitEnv })
 				.catch((error: unknown) => {
 					rethrowEnvironmentalGitError(error);
 					throw error;
 				});
-			const repository = parseGitHubRemote(remoteUrl);
-			if (!repository) {
+			const repositories = (target?.pushUrls ?? []).map(parseGitHubRemote);
+			const repository = repositories[0];
+			if (!target || !repository || repositories.some((repo) => !repo)) {
 				throw new TRPCError({
 					code: "PRECONDITION_FAILED",
 					message: "Moving a chat needs a GitHub repository",
 				});
 			}
 
+			if (input.stopIfBusy) {
+				await stopRunningTurn(chat, input.chatSessionId);
+			}
+			const assertIdle = () => {
+				const { status } = requireChat(
+					chat,
+					input.workspaceId,
+					input.chatSessionId,
+				);
+				if (BUSY_STATUSES.has(status)) throw busyError();
+			};
+			assertIdle();
+
+			const branch = `superset/teleport-${randomUUID().slice(0, 8)}`;
+			await pool
+				.run(
+					gitPushSnapshotTask,
+					{ worktreePath, remote: target.remote, branch, gitEnv },
+					{ timeoutMs: 150_000 },
+				)
+				.catch((error: unknown) => {
+					rethrowEnvironmentalGitError(error);
+					throw error;
+				});
+
+			assertIdle();
 			await chatSync.syncSession(input.chatSessionId);
 			await withStage(async (stageDir) => {
 				const manifest = await provider.collect({
@@ -278,12 +306,17 @@ export const teleportRouter = router({
 					},
 					stageDir,
 				});
-				await provider.place({
-					manifest,
-					worktreePath,
-					env: resolveDefaultAccountTerminalEnv(ctx.db),
-					stageDir,
-				});
+				await getHostWorkerPool().run(
+					harnessPlaceSessionTask,
+					{
+						harness: input.session.harness,
+						manifest,
+						worktreePath,
+						env: resolveDefaultAccountTerminalEnv(ctx.db),
+						stageDir,
+					},
+					{ timeoutMs: 120_000 },
+				);
 			});
 			if (chat.live.get(input.chatSessionId)) {
 				await chat.commands.closeSession({ sessionId: input.chatSessionId });
@@ -296,17 +329,11 @@ export const teleportRouter = router({
 					harnessSessionId: input.session.harnessSessionId,
 					title: input.session.title ?? undefined,
 					status: "idle",
-					epoch: input.session.epoch,
 					lastSeq: input.session.lastSeq,
 				},
 				events: input.events as { seq: number; event: DurableEvent }[],
 				replace: true,
 			});
-			ctx.runtime.chatSync?.markPushed(
-				input.chatSessionId,
-				input.session.epoch,
-				input.session.lastSeq,
-			);
 			return { sessionId: input.chatSessionId };
 		}),
 

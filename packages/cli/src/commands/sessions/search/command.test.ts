@@ -15,7 +15,7 @@ describe("sessions search", () => {
 									sessionId: "s1",
 									itemId: "i1",
 									kind: "agent_message",
-									title: "Fix uploads",
+									title: "Fix \u001b[31muploads",
 									harness: "claude-acp",
 									harnessSessionId: "h1",
 									workspaceId: "w1",
@@ -44,7 +44,7 @@ describe("sessions search", () => {
 		expect((result as { data: unknown }).data).toEqual([
 			{
 				sessionId: "s1",
-				title: "Fix uploads",
+				title: "Fix \u001b[31muploads",
 				workspaceId: "w1",
 				harness: "claude-acp",
 				snippet: "Fixed «acpAdapter» .ts",
@@ -52,5 +52,14 @@ describe("sessions search", () => {
 				lastActiveAt: "2026-11-02T00:00:00.000Z",
 			},
 		]);
+	});
+
+	test("shows control characters in chat text as escapes", () => {
+		const output = searchCommand.display?.([
+			{ sessionId: "s1", title: "a\u001b[2Jb", snippet: "c\u0007d" },
+		] as never);
+		expect(output).toContain("a\\x1b[2Jb");
+		expect(output).toContain("c\\x07d");
+		expect(output).not.toContain("\u001b");
 	});
 });

@@ -8,13 +8,14 @@ import {
 } from "@superset/chat-runtime";
 import { and, asc, eq, gt } from "drizzle-orm";
 import type { ApiClient } from "../types";
-import { prepareEventForCloud } from "./prepareEvent";
+import { eventBytes, prepareEventForCloud } from "./prepareEvent";
 
 const SETTLE_MS = 1_000;
 const MIN_RETRY_MS = 5_000;
 const MAX_RETRY_MS = 5 * 60 * 1000;
 const BATCH_EVENTS = 500;
-const BATCH_CHARS = 1024 * 1024;
+const BATCH_BYTES = 1024 * 1024;
+const REJECTED_CODES = new Set(["BAD_REQUEST", "PAYLOAD_TOO_LARGE"]);
 
 export type ChatSync = {
 	/** Pushes everything not yet pushed for one chat, and resolves once it is acked. */
@@ -23,8 +24,6 @@ export type ChatSync = {
 	noteAppend(envelope: DurableEnvelope): void;
 	/** Keeps pushing every chat that changes, retrying with backoff. */
 	start(): () => void;
-	/** Marks a chat as already pushed up to `seq`, as after an import. */
-	markPushed(sessionId: string, epoch: string, seq: number): void;
 };
 
 type Schedule = (run: () => void, ms: number) => () => void;
@@ -60,13 +59,11 @@ function writePushed(
 		.run();
 }
 
-function isMovedAway(error: unknown): boolean {
-	return (
-		typeof error === "object" &&
-		error !== null &&
-		"data" in error &&
-		(error as { data?: { code?: string } }).data?.code === "CONFLICT"
-	);
+function errorCode(error: unknown): string | undefined {
+	if (typeof error !== "object" || error === null || !("data" in error)) {
+		return undefined;
+	}
+	return (error as { data?: { code?: string } }).data?.code;
 }
 
 export function createChatSync(args: {
@@ -84,6 +81,7 @@ export function createChatSync(args: {
 
 	const pushOnce = async (sessionId: string) => {
 		const { db } = args.runtime();
+		let batchEvents = BATCH_EVENTS;
 		for (;;) {
 			const session = readSessionRow(db, sessionId);
 			if (!session) return;
@@ -99,28 +97,47 @@ export function createChatSync(args: {
 					),
 				)
 				.orderBy(asc(chatJournal.seq))
-				.limit(BATCH_EVENTS)
+				.limit(batchEvents)
 				.all();
 			if (rows.length === 0) return;
 
 			const events = [];
-			let chars = 0;
+			let bytes = 0;
 			for (const row of rows) {
 				const event = prepareEventForCloud(JSON.parse(row.eventJson));
-				chars += JSON.stringify(event).length;
-				if (events.length > 0 && chars > BATCH_CHARS) break;
+				bytes += eventBytes(event);
+				if (events.length > 0 && bytes > BATCH_BYTES) break;
 				events.push({ seq: row.seq, ts: row.ts, event });
 			}
 
-			const { ackedSeq } = await args.api.chatHistory.push.mutate({
-				sessionId,
-				workspaceId: session.scopeId,
-				harness: session.harness,
-				harnessSessionId: session.harnessSessionId ?? undefined,
-				epoch: session.epoch,
-				events,
-			});
-			writePushed(db, sessionId, session.epoch, ackedSeq);
+			try {
+				const { ackedSeq } = await args.api.chatHistory.push.mutate({
+					sessionId,
+					workspaceId: session.scopeId,
+					harness: session.harness,
+					harnessSessionId: session.harnessSessionId ?? undefined,
+					epoch: session.epoch,
+					events,
+				});
+				writePushed(db, sessionId, session.epoch, ackedSeq);
+			} catch (error) {
+				const code = errorCode(error);
+				if (!code || !REJECTED_CODES.has(code)) throw error;
+				// The API rejects this batch every time: halve it until one event is
+				// left, then skip that event so the events after it still go.
+				if (events.length > 1) {
+					batchEvents = Math.ceil(events.length / 2);
+					continue;
+				}
+				const skipped = events[0];
+				if (!skipped) throw error;
+				console.warn(
+					`[chat-sync] skipped event ${skipped.seq} of ${sessionId}:`,
+					error instanceof Error ? error.message : error,
+				);
+				writePushed(db, sessionId, session.epoch, skipped.seq);
+				batchEvents = BATCH_EVENTS;
+			}
 		}
 	};
 
@@ -135,19 +152,43 @@ export function createChatSync(args: {
 	};
 
 	let started = false;
+	let catchUp = false;
+
+	/** Chats a previous run left unpushed; `pushOnce` skips the ones already pushed. */
+	const markAllDirty = () => {
+		const sessions = args
+			.runtime()
+			.db.selectDistinct({ sessionId: chatJournal.sessionId })
+			.from(chatJournal)
+			.all();
+		for (const { sessionId } of sessions) dirty.add(sessionId);
+		catchUp = false;
+	};
 
 	const drain = async () => {
 		cancelTimer = null;
 		if (running) return;
 		running = true;
 		let failed = false;
+		if (catchUp) {
+			try {
+				markAllDirty();
+			} catch (error) {
+				failed = true;
+				console.warn(
+					"[chat-sync] reading unpushed chats failed:",
+					error instanceof Error ? error.message : error,
+				);
+			}
+		}
 		for (const sessionId of [...dirty]) {
+			if (!started) break;
 			dirty.delete(sessionId);
 			if (moved.has(sessionId)) continue;
 			try {
 				await syncSession(sessionId);
 			} catch (error) {
-				if (isMovedAway(error)) {
+				if (errorCode(error) === "CONFLICT") {
 					moved.add(sessionId);
 					continue;
 				}
@@ -188,11 +229,10 @@ export function createChatSync(args: {
 			}
 			wake(turnEnded ? 0 : SETTLE_MS);
 		},
-		markPushed(sessionId, epoch, seq) {
-			writePushed(args.runtime().db, sessionId, epoch, seq);
-		},
 		start() {
 			started = true;
+			catchUp = true;
+			wake(0);
 			return () => {
 				started = false;
 				cancelTimer?.();

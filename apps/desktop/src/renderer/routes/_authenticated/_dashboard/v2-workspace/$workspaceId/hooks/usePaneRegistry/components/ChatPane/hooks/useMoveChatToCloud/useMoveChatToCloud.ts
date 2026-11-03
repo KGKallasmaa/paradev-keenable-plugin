@@ -3,6 +3,7 @@ import type { MachineSize } from "@superset/shared/billing";
 import { useWorkspaceClient } from "@superset/workspace-client";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
+import { useHostProjects } from "renderer/hooks/host-projects/useHostProjects";
 import { useActiveOrganizationId } from "renderer/hooks/useActiveOrganizationId";
 import { cloudTrpc, cloudTrpcClient } from "renderer/lib/cloud-trpc";
 import { useWorkspace } from "renderer/routes/_authenticated/_dashboard/v2-workspace/providers/WorkspaceProvider";
@@ -18,7 +19,16 @@ export function useMoveChatToCloud(workspaceId: string) {
 	const organizationId = useActiveOrganizationId();
 	const collections = useCollections();
 	const utils = cloudTrpc.useUtils();
-	const sourceHostId = useWorkspace().workspace.hostId;
+	const { workspace } = useWorkspace();
+	const sourceHostId = workspace.hostId;
+	const { projects } = useHostProjects();
+	const sourceProject = projects.find(
+		(row) => row.projectKey === workspace.projectId,
+	);
+	const sourceRepository =
+		sourceProject?.repoOwner && sourceProject.repoName
+			? `${sourceProject.repoOwner}/${sourceProject.repoName}`
+			: null;
 
 	return useCallback(
 		async ({
@@ -35,22 +45,25 @@ export function useMoveChatToCloud(workspaceId: string) {
 			onStage: (stage: MoveToCloudStage) => void;
 		}) => {
 			if (!organizationId) throw new Error(t`No active organization`);
+			const assertEnvironmentOpens = (chatRepository: string) => {
+				const environmentRepository = environment.repositoryFullName;
+				if (
+					environmentRepository &&
+					environmentRepository.toLowerCase() !== chatRepository.toLowerCase()
+				) {
+					throw new Error(
+						t`This environment opens ${environmentRepository}, not ${chatRepository}`,
+					);
+				}
+			};
+			if (sourceRepository) assertEnvironmentOpens(sourceRepository);
 			onStage("saving");
 			const prepared = await trpcClient.teleport.prepare.mutate({
 				workspaceId,
 				chatSessionId,
 				stopIfBusy: true,
 			});
-			const environmentRepository = environment.repositoryFullName;
-			const chatRepository = prepared.repositoryFullName;
-			if (
-				environmentRepository &&
-				environmentRepository.toLowerCase() !== chatRepository.toLowerCase()
-			) {
-				throw new Error(
-					t`This environment opens ${environmentRepository}, not ${chatRepository}`,
-				);
-			}
+			assertEnvironmentOpens(prepared.repositoryFullName);
 			onStage("starting");
 			const created = await cloudTrpcClient.cloudWorkspace.create.mutate({
 				organizationId,
@@ -80,6 +93,8 @@ export function useMoveChatToCloud(workspaceId: string) {
 			await navigate({
 				to: "/v2-workspace/$workspaceId",
 				params: { workspaceId: created.id },
+			}).catch((error: unknown) => {
+				console.warn("[chat-move] could not open the cloud workspace", error);
 			});
 		},
 		[
@@ -91,6 +106,7 @@ export function useMoveChatToCloud(workspaceId: string) {
 			navigate,
 			collections,
 			sourceHostId,
+			sourceRepository,
 		],
 	);
 }

@@ -17,7 +17,7 @@ import {
 } from "../../projection";
 import { readSince } from "../../replay";
 import type { ChatSessionInit } from "../epoch";
-import { openEpoch } from "../epoch";
+import { mintEpoch, openEpoch } from "../epoch";
 
 export type OpenedSession = {
 	sessionId: string;
@@ -34,13 +34,13 @@ export type ChatSessionChange = {
 
 export type ChatJournalOptions = {
 	onSessionChanged?: (change: ChatSessionChange) => void | Promise<void>;
-	/** Every durable event, once it is written. */
+	/** Every durable event appended on this host, once it is written. Imported events are not reported. */
 	onAppend?: (envelope: DurableEnvelope) => void;
 };
 
 /** A chat recorded elsewhere, with each event at the seq it first appeared at. */
 export type ImportedSession = {
-	session: ChatSessionInit & { epoch: string; lastSeq: number };
+	session: ChatSessionInit & { lastSeq: number };
 	events: readonly { seq: number; event: DurableEvent }[];
 	/** Overwrites a journal this host already has, as when a chat moves back. */
 	replace?: boolean;
@@ -147,12 +147,13 @@ export class ChatJournal {
 	}
 
 	/**
-	 * Writes a chat recorded on another host, keeping its epoch and seqs so
-	 * cursors from there still mean the same here. Each event sits at the seq
-	 * it first appeared at, which keeps the order a chat shows; the session
-	 * state goes at the source's last seq, so the next append continues
-	 * after it. Returns false, writing nothing, when the session already has
-	 * a journal and `replace` is not set.
+	 * Writes a chat recorded on another host under a new epoch. Each event
+	 * sits at the seq it first appeared at with its latest body, which keeps
+	 * the order a chat shows but not the source's cursors, so a client that
+	 * read the chat before reads it again in full. The session state goes at
+	 * the source's last seq, so the next append continues after it. Returns
+	 * false, writing nothing, when the session already has a journal and
+	 * `replace` is not set.
 	 */
 	importSession({ session, events, replace }: ImportedSession): boolean {
 		const existing = readSessionRow(this.db, session.sessionId);
@@ -164,6 +165,7 @@ export class ChatJournal {
 			return false;
 		}
 
+		const epoch = mintEpoch();
 		const now = Date.now();
 		const status = session.status ?? "idle";
 		const sessionEvent = durableEventSchema.parse({
@@ -187,6 +189,15 @@ export class ChatJournal {
 				? [{ seq: session.lastSeq, event: sessionEvent }]
 				: []),
 		];
+		const queued = new Set<string>();
+		for (const { event } of rows) {
+			if (event.type !== "item" || event.item.kind !== "user_message") continue;
+			if ("queued" in event.item && event.item.queued === true) {
+				queued.add(event.item.id);
+			} else {
+				queued.delete(event.item.id);
+			}
+		}
 
 		this.db.transaction(() => {
 			if (existing) removeSessionRow(this.db, session.sessionId);
@@ -199,10 +210,10 @@ export class ChatJournal {
 				scopeId: session.scopeId,
 				harness: session.harness,
 				harnessSessionId: session.harnessSessionId ?? null,
-				epoch: session.epoch,
+				epoch,
 				status,
 				title: session.title ?? null,
-				queuedCount: 0,
+				queuedCount: queued.size,
 				updatedAt: now,
 				closedAt: null,
 			});
@@ -211,7 +222,7 @@ export class ChatJournal {
 					.insert(chatJournal)
 					.values({
 						sessionId: session.sessionId,
-						epoch: session.epoch,
+						epoch,
 						seq: row.seq,
 						ts: now,
 						eventJson: JSON.stringify(row.event),

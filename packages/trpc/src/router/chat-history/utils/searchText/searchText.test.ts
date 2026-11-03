@@ -33,6 +33,14 @@ describe("searchTextForItem", () => {
 		} as Item;
 		expect(searchTextForItem(item)).toBe("Read acpAdapter.ts");
 	});
+
+	test("reads nothing from a known kind with the wrong shape", () => {
+		for (const kind of ["user_message", "agent_message", "tool_call"]) {
+			expect(searchTextForItem({ id: "x", kind, startedAtMs: 0 } as Item)).toBe(
+				"",
+			);
+		}
+	});
 });
 
 describe("splitSearchQuery", () => {

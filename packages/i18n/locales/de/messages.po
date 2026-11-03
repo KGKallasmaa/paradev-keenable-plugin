@@ -5977,6 +5977,9 @@ msgstr "Der Dev konnte nicht gespeichert werden"
 msgid "Couldn't save the routine"
 msgstr "Die Routine konnte nicht gespeichert werden"
 
+msgid "Couldn't search your chats"
+msgstr "Deine Chats konnten nicht durchsucht werden"
+
 msgid "Couldn't send comment"
 msgstr "Kommentar konnte nicht gesendet werden"
 
@@ -6311,7 +6314,7 @@ msgid "Creating a workspace"
 msgstr "Arbeitsbereich wird erstellt"
 
 msgid "Creating a workspace on this computer…"
-msgstr "Workspace auf diesem Computer wird erstellt…"
+msgstr "Arbeitsbereich auf diesem Computer wird erstellt…"
 
 msgid "Creating PR..."
 msgstr "PR wird erstellt…"
@@ -16517,7 +16520,7 @@ msgid "Saving as an environment..."
 msgstr "Wird als Umgebung gespeichert..."
 
 msgid "Saving the cloud workspace's work and this conversation…"
-msgstr "Arbeit des Cloud-Workspace und diese Unterhaltung werden gespeichert…"
+msgstr "Arbeit des Cloud-Arbeitsbereichs und diese Unterhaltung werden gespeichert…"
 
 msgid "Saving your work and this conversation…"
 msgstr "Deine Arbeit und diese Unterhaltung werden gespeichert…"
@@ -18221,13 +18224,13 @@ msgid "Starting the agent…"
 msgstr "Agent wird gestartet…"
 
 msgid "Starting the cloud workspace…"
-msgstr "Cloud-Workspace wird gestartet…"
+msgstr "Cloud-Arbeitsbereich wird gestartet…"
 
 msgid "Starting the simulator…"
 msgstr "Simulator wird gestartet…"
 
 msgid "Starting the workspace"
-msgstr "Workspace wird gestartet"
+msgstr "Arbeitsbereich wird gestartet"
 
 msgid "Starting up. This should only take a moment."
 msgstr "Wird gestartet. Das dauert nur einen Moment."
@@ -19025,7 +19028,7 @@ msgid "The cloud workspace should have started but didn't answer in time. The ne
 msgstr "Der Cloud-Arbeitsbereich hätte starten sollen, hat aber nicht rechtzeitig geantwortet. Der nächste Lauf versucht es erneut."
 
 msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
-msgstr "Die Arbeit des Cloud-Workspace, einschließlich nicht committeter Änderungen, wird auf einen neuen Branch gepusht. Ein Workspace auf diesem Computer startet von diesem Branch, und diese Unterhaltung wird dort fortgesetzt. Wenn der Agent arbeitet, wird er zuerst gestoppt."
+msgstr "Die Arbeit des Cloud-Arbeitsbereichs, einschließlich nicht committeter Änderungen, wird auf einen neuen Branch gepusht. Ein Arbeitsbereich auf diesem Computer startet von diesem Branch, und diese Unterhaltung wird dort fortgesetzt. Wenn der Agent arbeitet, wird er zuerst gestoppt."
 
 msgid "The code expired. Start again."
 msgstr "Der Code ist abgelaufen. Starte erneut."
@@ -19442,7 +19445,7 @@ msgid "This channel is archived"
 msgstr "Dieser Kanal ist archiviert"
 
 msgid "This chat couldn't move here. It is still in the workspace it came from."
-msgstr "Dieser Chat konnte nicht hierher verschoben werden. Er ist noch im Workspace, aus dem er kam."
+msgstr "Dieser Chat konnte nicht hierher verschoben werden. Er ist noch im Arbeitsbereich, aus dem er kam."
 
 msgid "This chat has ended."
 msgstr "Dieser Chat ist beendet."
@@ -21824,7 +21827,7 @@ msgid "Your code stays local by default, with explicit control over connected se
 msgstr "Dein Code bleibt standardmäßig lokal, mit ausdrücklicher Kontrolle über verbundene Dienste."
 
 msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
-msgstr "Deine aktuelle Arbeit, einschließlich nicht committeter Änderungen, wird auf einen neuen Branch im Remote gepusht. Ein Cloud-Workspace startet von diesem Branch in der Umgebung, die du auswählst, und diese Unterhaltung wird dort fortgesetzt. Wenn der Agent arbeitet, wird er zuerst gestoppt."
+msgstr "Deine aktuelle Arbeit, einschließlich nicht committeter Änderungen, wird auf einen neuen Branch im Remote gepusht. Ein Cloud-Arbeitsbereich startet von diesem Branch in der Umgebung, die du auswählst, und diese Unterhaltung wird dort fortgesetzt. Wenn der Agent arbeitet, wird er zuerst gestoppt."
 
 msgid "Your download starts automatically."
 msgstr "Dein Download startet automatisch."

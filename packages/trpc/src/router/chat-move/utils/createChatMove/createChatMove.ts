@@ -17,6 +17,8 @@ export async function createChatMove(
 		toWorkspaceId: string;
 		toHostId?: string;
 		fromHostId?: string;
+		/** A retry keeps its failed move's turn while it hands on the same bundle. */
+		retryOf?: { transcriptId: string; sourceTurnSeq: number | null };
 	},
 ): Promise<{ id: string; toHostId: string | null }> {
 	const { session, transcript } = await findMovableChat(args);
@@ -49,7 +51,11 @@ export async function createChatMove(
 			fromHostId: fromHostId ?? null,
 			toWorkspaceId: args.toWorkspaceId,
 			toHostId,
-			sourceTurnSeq: await lastTurnSeq(session.id),
+			sourceTurnSeq:
+				args.retryOf?.transcriptId === transcript.id &&
+				args.retryOf.sourceTurnSeq !== null
+					? args.retryOf.sourceTurnSeq
+					: await lastTurnSeq(session.id),
 			transcriptId: transcript.id,
 			harnessSessionId: transcript.harnessSessionId,
 		})

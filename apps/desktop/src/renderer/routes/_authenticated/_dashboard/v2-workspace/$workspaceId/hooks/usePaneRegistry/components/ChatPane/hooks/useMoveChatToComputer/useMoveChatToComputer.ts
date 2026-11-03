@@ -27,7 +27,9 @@ export function useMoveChatToComputer(workspaceId: string) {
 	const { projects } = useHostProjects();
 	const { submit } = useWorkspaceCreates();
 	const collections = useCollections();
-	const sourceHostId = useWorkspace().workspace.hostId;
+	const { workspace } = useWorkspace();
+	const sourceHostId = workspace.hostId;
+	const sourceProjectId = workspace.projectId;
 
 	return useCallback(
 		async ({
@@ -39,24 +41,33 @@ export function useMoveChatToComputer(workspaceId: string) {
 		}) => {
 			if (!activeHostUrl)
 				throw new Error(t`This computer's host is not running`);
+			const requireLocalProject = (repositoryName: string) => {
+				const repository = repositoryName.toLowerCase();
+				const found = projects.find(
+					(row) =>
+						row.hostIds.includes(machineId) &&
+						`${row.repoOwner}/${row.repoName}`.toLowerCase() === repository,
+				);
+				if (!found) {
+					throw new Error(
+						t`Add ${repositoryName} as a project on this computer first`,
+					);
+				}
+				return found;
+			};
+			const sourceProject = projects.find((row) => row.id === sourceProjectId);
+			if (sourceProject?.repoOwner && sourceProject.repoName) {
+				requireLocalProject(
+					`${sourceProject.repoOwner}/${sourceProject.repoName}`,
+				);
+			}
 			onStage("saving");
 			const prepared = await remote.teleport.prepare.mutate({
 				workspaceId,
 				chatSessionId,
 				stopIfBusy: true,
 			});
-			const repository = prepared.repositoryFullName.toLowerCase();
-			const project = projects.find(
-				(row) =>
-					row.hostIds.includes(machineId) &&
-					`${row.repoOwner}/${row.repoName}`.toLowerCase() === repository,
-			);
-			if (!project) {
-				const repositoryName = prepared.repositoryFullName;
-				throw new Error(
-					t`Add ${repositoryName} as a project on this computer first`,
-				);
-			}
+			const project = requireLocalProject(prepared.repositoryFullName);
 
 			onStage("creating");
 			const local = getHostServiceClientByUrl(activeHostUrl);
@@ -94,6 +105,8 @@ export function useMoveChatToComputer(workspaceId: string) {
 			await navigate({
 				to: "/v2-workspace/$workspaceId",
 				params: { workspaceId: created.workspaceId },
+			}).catch((error: unknown) => {
+				console.warn("[chat-move] could not open the new workspace", error);
 			});
 			// The new workspace's pane shows how far this got, and a retry.
 			void runMoveOnThisComputer({ moveId, host: local }).catch(
@@ -113,6 +126,7 @@ export function useMoveChatToComputer(workspaceId: string) {
 			navigate,
 			collections,
 			sourceHostId,
+			sourceProjectId,
 		],
 	);
 }

@@ -1,4 +1,4 @@
-import { claudeTeleportProvider } from "./claude";
+import { claudeTeleportProvider } from "./claude/claude";
 import type { TeleportProvider } from "./types";
 
 const PROVIDERS: readonly TeleportProvider[] = [claudeTeleportProvider];
@@ -10,4 +10,9 @@ export function teleportProviderFor(harness: string): TeleportProvider | null {
 	);
 }
 
-export type { BundleManifest, TeleportProvider } from "./types";
+export {
+	type BundleManifest,
+	isPlainSessionId,
+	parseBundleManifest,
+	type TeleportProvider,
+} from "./types";

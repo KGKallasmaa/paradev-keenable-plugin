@@ -5977,6 +5977,9 @@ msgstr "Dev kaydedilemedi"
 msgid "Couldn't save the routine"
 msgstr "Rutin kaydedilemedi"
 
+msgid "Couldn't search your chats"
+msgstr "Sohbetleriniz aranamadı"
+
 msgid "Couldn't send comment"
 msgstr "Yorum gönderilemedi"
 
@@ -18227,7 +18230,7 @@ msgid "Starting the simulator…"
 msgstr "Simülatör başlatılıyor…"
 
 msgid "Starting the workspace"
-msgstr "Workspace başlatılıyor"
+msgstr "Çalışma alanı başlatılıyor"
 
 msgid "Starting up. This should only take a moment."
 msgstr "Başlatılıyor. Yalnızca kısa bir süre alacaktır."
@@ -19442,7 +19445,7 @@ msgid "This channel is archived"
 msgstr "Bu kanal arşivlendi"
 
 msgid "This chat couldn't move here. It is still in the workspace it came from."
-msgstr "Bu sohbet buraya taşınamadı. Geldiği workspace'te duruyor."
+msgstr "Bu sohbet buraya taşınamadı. Geldiği çalışma alanında duruyor."
 
 msgid "This chat has ended."
 msgstr "Bu sohbet sona erdi."
@@ -19478,7 +19481,7 @@ msgid "This cloud workspace is waking up, which can take up to 30 seconds after 
 msgstr "Bu bulut çalışma alanı uyandırılıyor; bir süre kullanılmadıysa bu işlem 30 saniyeye kadar sürebilir."
 
 msgid "This computer's host is not running"
-msgstr "Bu bilgisayarın ana bilgisayar hizmeti çalışmıyor"
+msgstr "Bu bilgisayarın host hizmeti çalışmıyor"
 
 msgid "This conversation is too long for the model"
 msgstr "Bu konuşma model için fazla uzun"

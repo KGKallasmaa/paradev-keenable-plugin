@@ -1666,10 +1666,6 @@ export const chatSessions = pgTable(
 		index("chat_sessions_org_idx").on(table.organizationId),
 		index("chat_sessions_created_by_idx").on(table.createdBy),
 		index("chat_sessions_last_active_idx").on(table.lastActiveAt),
-		index("chat_sessions_org_harness_session_idx").on(
-			table.organizationId,
-			table.harnessSessionId,
-		),
 	],
 );
 

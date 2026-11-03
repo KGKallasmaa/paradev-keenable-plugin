@@ -1,1 +1,1 @@
-export { prepareEventForCloud } from "./prepareEvent";
+export { eventBytes, prepareEventForCloud } from "./prepareEvent";

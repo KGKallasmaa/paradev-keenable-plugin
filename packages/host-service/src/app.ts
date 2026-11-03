@@ -377,7 +377,8 @@ export function createApp(options: CreateAppOptions): CreateAppResult {
 	});
 	// A box keeps its chats in the cloud as they happen; a machine someone
 	// owns pushes a chat only when it moves.
-	if (process.env.SUPERSET_HOST_RUN_MODE === "sandbox") chatSync.start();
+	const stopChatSync =
+		process.env.SUPERSET_HOST_RUN_MODE === "sandbox" ? chatSync.start() : null;
 	try {
 		chatV3.resumeAfterUpdate();
 	} catch (error) {
@@ -595,6 +596,7 @@ export function createApp(options: CreateAppOptions): CreateAppResult {
 
 	const ownsDb = options.db === undefined;
 	const dispose = async (): Promise<void> => {
+		stopChatSync?.();
 		agentJobs.stopAll();
 		if (projectPurgeTimer) clearInterval(projectPurgeTimer);
 		if (attachmentSweepTimer) clearInterval(attachmentSweepTimer);

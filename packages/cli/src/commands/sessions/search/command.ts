@@ -1,6 +1,16 @@
 import { number, positional, table } from "@superset/cli-framework";
 import { command } from "../../../lib/command";
 
+const CONTROL_CHARS = /\p{Cc}/gu;
+
+/** Control characters shown as escapes, so stored chat text cannot drive the terminal. */
+function printable(value: unknown): string {
+	return String(value ?? "").replace(
+		CONTROL_CHARS,
+		(char) => `\\x${char.charCodeAt(0).toString(16).padStart(2, "0")}`,
+	);
+}
+
 export default command({
 	description:
 		"Search your chat sessions stored in the cloud (chats on cloud workspaces, and chats moved there)",
@@ -14,7 +24,11 @@ export default command({
 	},
 	display: (data) =>
 		table(
-			(data ?? []) as unknown as Record<string, unknown>[],
+			((data ?? []) as unknown as Record<string, unknown>[]).map((row) => ({
+				...row,
+				title: printable(row.title),
+				snippet: printable(row.snippet),
+			})),
 			["sessionId", "title", "workspaceId", "snippet", "lastActiveAt"],
 			["SESSION", "TITLE", "WORKSPACE", "MATCH", "UPDATED"],
 		),

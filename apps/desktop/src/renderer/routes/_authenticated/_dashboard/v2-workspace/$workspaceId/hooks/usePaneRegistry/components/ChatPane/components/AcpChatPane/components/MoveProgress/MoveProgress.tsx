@@ -4,14 +4,16 @@ import { Button } from "@superset/ui/button";
 import { toast } from "@superset/ui/sonner";
 import { cn } from "@superset/ui/utils";
 import { Check, Circle, Loader2 } from "lucide-react";
-import { type ReactNode, useEffect, useRef } from "react";
+import type { ReactNode } from "react";
 import { cloudTrpc } from "renderer/lib/cloud-trpc";
 import { getHostServiceClientByUrl } from "renderer/lib/host-service-client";
 import { useLocalHostService } from "renderer/routes/_authenticated/providers/LocalHostServiceProvider";
 import { runMoveOnThisComputer } from "../../../../utils/runMoveOnThisComputer";
+import { useMoveArrival } from "./hooks/useMoveArrival";
 
 const STEPS = ["pending", "copying", "restoring"] as const;
 const POLL_MS = 1_000;
+const ARRIVAL_GRACE_MS = 15_000;
 
 /**
  * Where a chat moving into this workspace has got to, as the control plane
@@ -21,11 +23,17 @@ const POLL_MS = 1_000;
 export function MoveProgress({
 	chatSessionId,
 	workspaceId,
+	sessionLive,
+	onCheckSession,
 	onArrived,
+	arrivalGraceMs = ARRIVAL_GRACE_MS,
 }: {
 	chatSessionId: string;
 	workspaceId: string;
+	sessionLive: boolean;
+	onCheckSession: () => void;
 	onArrived: () => void;
+	arrivalGraceMs?: number;
 }) {
 	const { t } = useLingui();
 	const utils = cloudTrpc.useUtils();
@@ -37,12 +45,14 @@ export function MoveProgress({
 	const move = latest?.toWorkspaceId === workspaceId ? latest : null;
 	const messageCount = move?.messageCount ?? 0;
 	const ready = move?.status === "ready";
-	const arrived = useRef(false);
-	useEffect(() => {
-		if (!ready || arrived.current) return;
-		arrived.current = true;
-		onArrived();
-	}, [ready, onArrived]);
+	useMoveArrival({
+		ready,
+		live: sessionLive,
+		graceMs: arrivalGraceMs,
+		pollMs: POLL_MS,
+		onCheck: onCheckSession,
+		onArrived,
+	});
 	const { activeHostUrl } = useLocalHostService();
 	const retry = cloudTrpc.chatMove.retry.useMutation({
 		onSuccess: ({ moveId, runsOnThisComputer }) => {

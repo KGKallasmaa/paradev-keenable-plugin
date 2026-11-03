@@ -82,4 +82,22 @@ describe("claudeTeleportProvider", () => {
 		);
 		expect(JSON.parse(subagent).cwd).toBe(box);
 	});
+
+	test("refuses a session id that would leave Claude's session directory", async () => {
+		const stageDir = join(root, "stage");
+		mkdirSync(join(stageDir, "session"), { recursive: true });
+		await expect(
+			claudeTeleportProvider.place({
+				manifest: {
+					version: 1,
+					harnessSessionId: "../../escape",
+					sourceCwd: root,
+					sourceDir: root,
+				},
+				worktreePath: root,
+				env: { CLAUDE_CONFIG_DIR: join(root, "claude") },
+				stageDir,
+			}),
+		).rejects.toThrow("invalid session id");
+	});
 });

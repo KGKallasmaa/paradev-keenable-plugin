@@ -10,7 +10,7 @@ type PushInput = {
 	events: { seq: number }[];
 };
 
-function setup() {
+function setup(reject: (input: PushInput) => boolean = () => false) {
 	const appended: DurableEnvelope[] = [];
 	const runtime = createTestRuntime({ onAppend: (e) => appended.push(e) });
 	const pushes: PushInput[] = [];
@@ -18,6 +18,11 @@ function setup() {
 		chatHistory: {
 			push: {
 				mutate: async (input: PushInput) => {
+					if (reject(input)) {
+						throw Object.assign(new Error("bad event"), {
+							data: { code: "BAD_REQUEST" },
+						});
+					}
 					pushes.push(input);
 					return { ackedSeq: input.events.at(-1)?.seq ?? 0 };
 				},
@@ -72,6 +77,29 @@ describe("createChatSync", () => {
 		await Promise.resolve();
 		expect(pushes.flatMap((push) => push.events.map((e) => e.seq))).toEqual([
 			1,
+		]);
+	});
+
+	test("a started sync pushes chats a previous run left unpushed", () => {
+		const { sync, pushes, say, timers } = setup();
+		say("a");
+		sync.start();
+		timers.shift()?.();
+		expect(pushes.flatMap((push) => push.events.map((e) => e.seq))).toEqual([
+			1,
+		]);
+	});
+
+	test("skips an event the API always rejects and pushes the rest", async () => {
+		const { sync, pushes, say } = setup((input) =>
+			input.events.some((e) => e.seq === 2),
+		);
+		say("a");
+		say("b");
+		say("c");
+		await sync.syncSession("s");
+		expect(pushes.flatMap((push) => push.events.map((e) => e.seq))).toEqual([
+			1, 3,
 		]);
 	});
 });

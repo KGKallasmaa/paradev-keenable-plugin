@@ -7,10 +7,10 @@ import {
 	realpath,
 	writeFile,
 } from "node:fs/promises";
-import { basename, dirname, join } from "node:path";
+import { basename, dirname, join, sep } from "node:path";
 import { claudeSessionPath } from "../../../terminal-agents/harness-sessions/claude";
-import type { TeleportProvider } from "../types";
-import { rehomeClaudeLines } from "./rehomeClaudeLines";
+import { isPlainSessionId, type TeleportProvider } from "../types";
+import { rehomeClaudeLines } from "./rehomeClaudeLines/rehomeClaudeLines";
 
 const SESSION_DIR = "session";
 
@@ -44,14 +44,19 @@ export const claudeTeleportProvider: TeleportProvider = {
 	},
 
 	async place({ manifest, worktreePath, env, stageDir }) {
+		const id = manifest.harnessSessionId;
+		if (!isPlainSessionId(id)) {
+			throw new Error("The moved conversation has an invalid session id");
+		}
 		const cwd = await realpath(worktreePath);
-		const destination = dirname(
-			claudeSessionPath(env, cwd, manifest.harnessSessionId),
-		);
+		const destination = dirname(claudeSessionPath(env, cwd, id));
 		const from = { cwd: manifest.sourceCwd, dir: manifest.sourceDir };
 		const to = { cwd, dir: destination };
 		const source = join(stageDir, SESSION_DIR);
 		for (const relative of await listFiles(source)) {
+			if (relative !== `${id}.jsonl` && !relative.startsWith(`${id}${sep}`)) {
+				continue;
+			}
 			const target = join(destination, relative);
 			await mkdir(dirname(target), { recursive: true });
 			const content = await readFile(join(source, relative));

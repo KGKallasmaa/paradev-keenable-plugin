@@ -101,16 +101,28 @@ function toolCall(id: string, status: string, title: string): DurableEvent {
 	} as DurableEvent;
 }
 
+function sessionEvent(status: string, title: string): DurableEvent {
+	return {
+		type: "session",
+		session: { status, title, harness: "claude-acp" },
+	} as DurableEvent;
+}
+
 function push(
 	sessionId: string,
 	events: { seq: number; event: DurableEvent }[],
-	options: { epoch?: string; workspaceId?: string; as?: typeof owner } = {},
+	options: {
+		epoch?: string;
+		workspaceId?: string;
+		as?: typeof owner;
+		harnessSessionId?: string;
+	} = {},
 ) {
 	return (options.as ?? owner).push({
 		sessionId,
 		workspaceId: options.workspaceId ?? WORKSPACE,
 		harness: "claude-acp",
-		harnessSessionId: "harness-1",
+		harnessSessionId: options.harnessSessionId ?? "harness-1",
 		epoch: options.epoch ?? "epoch-1",
 		events: events.map((event) => ({ ...event, ts: 1 })),
 	});
@@ -264,6 +276,19 @@ describe("chatHistory.push", () => {
 			}),
 		).rejects.toThrow("moved to another workspace");
 	});
+
+	test("a late retry of an older batch keeps the newer title and status", async () => {
+		const sessionId = newSession();
+		await push(sessionId, [
+			{ seq: 1, event: sessionEvent("running", "Old title") },
+			{ seq: 2, event: sessionEvent("idle", "New title") },
+		]);
+		await push(sessionId, [
+			{ seq: 1, event: sessionEvent("running", "Old title") },
+		]);
+		const { session } = await history(sessionId);
+		expect(session).toMatchObject({ title: "New title", status: "idle" });
+	});
 });
 
 describe("chatHistory.search", () => {
@@ -287,6 +312,30 @@ describe("chatHistory.search", () => {
 		expect(await callerFor(OTHER_USER).search({ query: "acpAdapter" })).toEqual(
 			[],
 		);
+	});
+
+	test("one long chat does not crowd out the others", async () => {
+		const word = `zebracorn${suffix}`;
+		const long = newSession();
+		const short = newSession();
+		const many = Array.from({ length: 501 }, (_, index) => ({
+			seq: index + 1,
+			event: agentMessage(`m${index}`, `${word} ${word} ${word}`),
+		}));
+		const own = { harnessSessionId: long };
+		await push(long, many.slice(0, 500), own);
+		await push(long, many.slice(500), own);
+		await push(
+			short,
+			[{ seq: 1, event: agentMessage("s", `${word} once, among other words`) }],
+			{ harnessSessionId: short },
+		);
+
+		const ids = (await owner.search({ query: word })).map(
+			(row) => row.sessionId,
+		);
+		expect(ids).toContain(long);
+		expect(ids).toContain(short);
 	});
 });
 
@@ -515,6 +564,60 @@ describe("chat moves", () => {
 		const retried = await mover.retry({ moveId: toDesktop.moveId });
 		expect(retried).toMatchObject({ runsOnThisComputer: true });
 		expect(retried.moveId).not.toBe(toDesktop.moveId);
+	});
+
+	test("the box a chat left is told the chat moved", async () => {
+		const sessionId = newSession();
+		const box = callerFor(USER, MY_CLOUD);
+		await push(sessionId, [{ seq: 1, event: agentMessage("a", "a") }], {
+			as: box,
+			workspaceId: MY_CLOUD,
+		});
+		await storeBundle(sessionId);
+		const move = await createChatMove({
+			chatSessionId: sessionId,
+			toWorkspaceId: DESKTOP_WORKSPACE,
+			toHostId: DESKTOP,
+			organizationId: ORG,
+			userId: USER,
+		});
+		await routerFor(USER).chatMove.claim({ moveId: move.id });
+		await completeChatMove(await moveOf(move.id), fakeHosts(), {
+			kind: "computer",
+		});
+
+		await expect(
+			push(sessionId, [{ seq: 2, event: agentMessage("b", "b") }], {
+				as: box,
+				workspaceId: MY_CLOUD,
+			}),
+		).rejects.toMatchObject({ code: "CONFLICT" });
+	});
+
+	test("a retry refuses a chat that went on after the failed move began", async () => {
+		const sessionId = await chatOnLaptop();
+		const mover = routerFor(USER).chatMove;
+		const first = await mover.start({
+			chatSessionId: sessionId,
+			toWorkspaceId: DESKTOP_WORKSPACE,
+			toHostId: DESKTOP,
+		});
+		await mover.claim({ moveId: first.moveId });
+		await mover.fail({ moveId: first.moveId, error: "import failed" });
+		await push(sessionId, [
+			{
+				seq: 3,
+				event: {
+					type: "turn",
+					turn: { id: "turn-2", status: "running", startedAtMs: 2 },
+				} as DurableEvent,
+			},
+		]);
+
+		const retried = await mover.retry({ moveId: first.moveId });
+		await expect(mover.claim({ moveId: retried.moveId })).rejects.toThrow(
+			"went on in its old workspace",
+		);
 	});
 
 	test("refuses a chat that went on in its old workspace after the move began", async () => {

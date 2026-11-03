@@ -5894,7 +5894,7 @@ msgid "Couldn't move this chat to the cloud"
 msgstr "Impossible de déplacer cette discussion vers le cloud"
 
 msgid "Couldn't move this chat to this computer"
-msgstr "Impossible de déplacer ce chat vers cet ordinateur"
+msgstr "Impossible de déplacer cette discussion vers cet ordinateur"
 
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Impossible de nommer « {name} » automatiquement"
@@ -5976,6 +5976,9 @@ msgstr "Impossible d'enregistrer le Dev"
 
 msgid "Couldn't save the routine"
 msgstr "Impossible d'enregistrer la routine"
+
+msgid "Couldn't search your chats"
+msgstr "Impossible de rechercher dans vos discussions"
 
 msgid "Couldn't send comment"
 msgstr "Impossible d'envoyer le commentaire"
@@ -11665,7 +11668,7 @@ msgid "Move this chat to the cloud?"
 msgstr "Déplacer cette discussion vers le cloud ?"
 
 msgid "Move this chat to this computer?"
-msgstr "Déplacer ce chat vers cet ordinateur ?"
+msgstr "Déplacer cette discussion vers cet ordinateur ?"
 
 msgid "Move to background"
 msgstr "Passer en arrière-plan"
@@ -11692,7 +11695,7 @@ msgid "Moved \"{name}\" to {group}"
 msgstr "« {name} » déplacée vers {group}"
 
 msgid "Moving this chat here"
-msgstr "Déplacement de ce chat ici"
+msgstr "Déplacement de cette discussion ici"
 
 msgid "Moving..."
 msgstr "Déplacement..."
@@ -18227,7 +18230,7 @@ msgid "Starting the simulator…"
 msgstr "Démarrage du simulateur…"
 
 msgid "Starting the workspace"
-msgstr "Démarrage du workspace"
+msgstr "Démarrage de l'espace de travail"
 
 msgid "Starting up. This should only take a moment."
 msgstr "Démarrage en cours. Cela ne devrait prendre qu’un instant."
@@ -19442,7 +19445,7 @@ msgid "This channel is archived"
 msgstr "Ce canal est archivé"
 
 msgid "This chat couldn't move here. It is still in the workspace it came from."
-msgstr "Ce chat n'a pas pu être déplacé ici. Il est toujours dans le workspace d'où il vient."
+msgstr "Cette discussion n'a pas pu être déplacée ici. Elle est toujours dans l'espace de travail d'où elle vient."
 
 msgid "This chat has ended."
 msgstr "Ce chat est terminé."

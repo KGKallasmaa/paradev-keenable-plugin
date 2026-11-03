@@ -13,6 +13,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { TRPCError } from "@trpc/server";
 import { and, eq, gt, inArray, sql } from "drizzle-orm";
 import { anchorAttachments } from "../../lib/attachments";
+import { detachAll, reapOrphanFiles } from "../../lib/files";
 import { presignedPutUrl } from "../../lib/r2";
 import { protectedProcedure, userError } from "../../trpc";
 import { staleBefore } from "../chat-move/utils/findMovableChat";
@@ -71,7 +72,6 @@ export const chatHistoryRouter = {
 			const caller = await callerOf(ctx);
 			assertBoxWorkspace(caller, input.workspaceId);
 			const folded = foldEvents(input.events);
-			const sessionState = folded.session?.state;
 
 			await dbWs.transaction(async (tx) => {
 				const [existing] = await tx
@@ -110,6 +110,9 @@ export const chatHistoryRouter = {
 							)
 							.limit(1);
 						if (moving) throw stillMovingHere();
+						if (caller.sandbox && (await movedAwayFrom(tx, input))) {
+							throw movedAway();
+						}
 					}
 					if (!canAccess(caller, existing)) {
 						throw userError({
@@ -177,22 +180,29 @@ export const chatHistoryRouter = {
 				}
 
 				const sameEpoch = existing?.epoch === input.epoch;
+				const storedSeq = sameEpoch ? (existing?.lastSeq ?? 0) : 0;
+				const batchIsStale = sameEpoch && folded.lastSeq <= storedSeq;
+				const freshState =
+					folded.session && folded.session.seq > storedSeq
+						? folded.session.state
+						: null;
 				await tx
 					.update(chatSessions)
 					.set({
 						harness: input.harness,
-						harnessSessionId:
-							sessionState?.harnessSessionId ??
-							input.harnessSessionId ??
-							(sameEpoch ? existing?.harnessSessionId : null),
+						harnessSessionId: batchIsStale
+							? (existing?.harnessSessionId ?? input.harnessSessionId)
+							: (freshState?.harnessSessionId ??
+								input.harnessSessionId ??
+								(sameEpoch ? existing?.harnessSessionId : null)),
 						epoch: input.epoch,
 						lastSeq: sameEpoch
 							? sql`greatest(coalesce(${chatSessions.lastSeq}, 0), ${folded.lastSeq})`
 							: folded.lastSeq,
-						...(sessionState
+						...(freshState
 							? {
-									status: sessionState.status,
-									...(sessionState.title ? { title: sessionState.title } : {}),
+									status: freshState.status,
+									...(freshState.title ? { title: freshState.title } : {}),
 								}
 							: {}),
 						lastActiveAt: new Date(),
@@ -262,6 +272,23 @@ export const chatHistoryRouter = {
 				organizationId: transcript.organizationId,
 				fileIds: [transcript.fileId],
 			});
+			const session = await db.query.chatSessions.findFirst({
+				where: eq(chatSessions.id, transcript.sessionId),
+				columns: { id: true },
+			});
+			if (!session) {
+				await reapOrphanFiles(
+					await detachAll({
+						parentKind: "chat_session",
+						parentIds: [transcript.sessionId],
+					}),
+				);
+				throw userError({
+					code: "NOT_FOUND",
+					message: "Chat session not found",
+					i18nKey: "serverError.chat.chatSessionNotFound",
+				});
+			}
 			const file = await db.query.files.findFirst({
 				where: eq(files.id, transcript.fileId),
 				columns: { status: true },
@@ -288,6 +315,25 @@ export const chatHistoryRouter = {
 			});
 		}),
 } satisfies TRPCRouterRecord;
+
+/** The box's workspace held the chat until a move took it elsewhere. */
+async function movedAwayFrom(
+	tx: Parameters<Parameters<typeof dbWs.transaction>[0]>[0],
+	input: { sessionId: string; workspaceId: string },
+): Promise<boolean> {
+	const [moved] = await tx
+		.select({ id: chatMoves.id })
+		.from(chatMoves)
+		.where(
+			and(
+				eq(chatMoves.sessionId, input.sessionId),
+				eq(chatMoves.fromWorkspaceId, input.workspaceId),
+				eq(chatMoves.status, "ready"),
+			),
+		)
+		.limit(1);
+	return moved !== undefined;
+}
 
 async function loadTranscript(transcriptId: string) {
 	const transcript = await db.query.chatTranscripts.findFirst({

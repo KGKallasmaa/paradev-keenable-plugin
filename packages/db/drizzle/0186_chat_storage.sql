@@ -73,7 +73,6 @@ CREATE INDEX "chat_items_session_first_seq_idx" ON "chat_items" USING btree ("se
 CREATE INDEX "chat_items_created_by_idx" ON "chat_items" USING btree ("created_by");--> statement-breakpoint
 CREATE INDEX "chat_items_search_idx" ON "chat_items" USING gin ("search");--> statement-breakpoint
 CREATE INDEX "chat_transcripts_session_created_at_idx" ON "chat_transcripts" USING btree ("session_id","created_at");--> statement-breakpoint
-CREATE INDEX "chat_sessions_org_harness_session_idx" ON "chat_sessions" USING btree ("organization_id","harness_session_id");--> statement-breakpoint
 CREATE TYPE "public"."chat_move_status" AS ENUM('pending', 'copying', 'restoring', 'ready', 'failed');--> statement-breakpoint
 CREATE TABLE "chat_moves" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -101,6 +100,8 @@ ALTER TABLE "chat_moves" ADD CONSTRAINT "chat_moves_transcript_id_chat_transcrip
 CREATE INDEX "chat_moves_session_created_at_idx" ON "chat_moves" USING btree ("session_id","created_at");--> statement-breakpoint
 CREATE INDEX "chat_moves_to_workspace_idx" ON "chat_moves" USING btree ("to_workspace_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "chat_moves_one_in_flight_idx" ON "chat_moves" USING btree ("session_id") WHERE "chat_moves"."status" in ('pending', 'copying', 'restoring');--> statement-breakpoint
+CREATE INDEX "chat_transcripts_file_id_idx" ON "chat_transcripts" USING btree ("file_id");--> statement-breakpoint
+CREATE INDEX "chat_turns_session_first_seq_idx" ON "chat_turns" USING btree ("session_id","first_seq");--> statement-breakpoint
 -- BM25 ranking for chat search through Neon's lakebase_text. Only Neon
 -- projects with Lakebase Search have the extension; plain Postgres (local
 -- docker, CI) and other Neon projects skip this, and chat search falls back

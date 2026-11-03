@@ -4552,6 +4552,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "chat_transcripts_file_id_idx": {
+          "name": "chat_transcripts_file_id_idx",
+          "columns": [
+            {
+              "expression": "file_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -4674,7 +4689,29 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "chat_turns_session_first_seq_idx": {
+          "name": "chat_turns_session_first_seq_idx",
+          "columns": [
+            {
+              "expression": "session_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "first_seq",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "chat_turns_session_id_chat_sessions_id_fk": {
           "name": "chat_turns_session_id_chat_sessions_id_fk",
@@ -9213,27 +9250,6 @@
           "columns": [
             {
               "expression": "last_active_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "chat_sessions_org_harness_session_idx": {
-          "name": "chat_sessions_org_harness_session_idx",
-          "columns": [
-            {
-              "expression": "organization_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "harness_session_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

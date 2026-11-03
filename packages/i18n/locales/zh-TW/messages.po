@@ -5894,7 +5894,7 @@ msgid "Couldn't move this chat to the cloud"
 msgstr "無法將此聊天移至雲端"
 
 msgid "Couldn't move this chat to this computer"
-msgstr "無法將此對話移到此電腦"
+msgstr "無法將此聊天移到此電腦"
 
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "無法自動命名「{name}」"
@@ -5976,6 +5976,9 @@ msgstr "無法儲存 Dev"
 
 msgid "Couldn't save the routine"
 msgstr "無法儲存例行任務"
+
+msgid "Couldn't search your chats"
+msgstr "無法搜尋你的聊天"
 
 msgid "Couldn't send comment"
 msgstr "無法傳送評論"
@@ -11665,7 +11668,7 @@ msgid "Move this chat to the cloud?"
 msgstr "要將此聊天移至雲端嗎？"
 
 msgid "Move this chat to this computer?"
-msgstr "將此對話移到此電腦？"
+msgstr "將此聊天移到此電腦？"
 
 msgid "Move to background"
 msgstr "移到背景"
@@ -19025,7 +19028,7 @@ msgid "The cloud workspace should have started but didn't answer in time. The ne
 msgstr "雲端工作區應該已經啟動，但沒有及時回應。下次執行時會重試。"
 
 msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
-msgstr "雲端工作區的工作（包括未提交的變更）會推送到一個新分支。此電腦上的工作區會從該分支啟動，此對話將在那裡繼續。如果代理正在工作，會先停止。"
+msgstr "雲端工作區的工作（包括未提交的變更）會推送到一個新分支。此電腦上的工作區會從該分支啟動，此對話將在那裡繼續。如果代理程式正在工作，會先停止。"
 
 msgid "The code expired. Start again."
 msgstr "代碼已過期。請重新開始。"
@@ -21824,7 +21827,7 @@ msgid "Your code stays local by default, with explicit control over connected se
 msgstr "你的程式碼預設留在本地，連線哪些服務由你明確決定。"
 
 msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
-msgstr "你目前的工作（包括未提交的變更）會推送到遠端的一個新分支。雲端工作區會在你選擇的環境中從該分支啟動，此對話將在那裡繼續。如果代理正在工作，會先停止。"
+msgstr "你目前的工作（包括未提交的變更）會推送到遠端的一個新分支。雲端工作區會在你選擇的環境中從該分支啟動，此對話將在那裡繼續。如果代理程式正在工作，會先停止。"
 
 msgid "Your download starts automatically."
 msgstr "下載會自動開始。"

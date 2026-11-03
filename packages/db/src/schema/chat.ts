@@ -89,7 +89,13 @@ export const chatTurns = pgTable(
 			.defaultNow()
 			.$onUpdate(() => new Date()),
 	},
-	(table) => [primaryKey({ columns: [table.sessionId, table.turnId] })],
+	(table) => [
+		primaryKey({ columns: [table.sessionId, table.turnId] }),
+		index("chat_turns_session_first_seq_idx").on(
+			table.sessionId,
+			table.firstSeq,
+		),
+	],
 );
 
 export type InsertChatTurn = typeof chatTurns.$inferInsert;
@@ -126,6 +132,7 @@ export const chatTranscripts = pgTable(
 			table.sessionId,
 			table.createdAt,
 		),
+		index("chat_transcripts_file_id_idx").on(table.fileId),
 	],
 );
 

@@ -9,7 +9,7 @@ const pushedEventSchema = z.object({
 	seq: z.number().int().positive(),
 	ts: z.number(),
 	event: durableEventSchema.refine(
-		(event) => JSON.stringify(event).length <= MAX_EVENT_BYTES,
+		(event) => Buffer.byteLength(JSON.stringify(event)) <= MAX_EVENT_BYTES,
 		{ message: "A chat event is too large; cut its tool output first" },
 	),
 });

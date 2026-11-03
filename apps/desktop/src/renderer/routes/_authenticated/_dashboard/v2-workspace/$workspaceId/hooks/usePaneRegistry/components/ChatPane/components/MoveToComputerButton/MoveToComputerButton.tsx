@@ -17,6 +17,7 @@ import { useFeatureFlagEnabled } from "posthog-js/react";
 import { useState } from "react";
 import type { ChatPaneData } from "renderer/routes/_authenticated/_dashboard/v2-workspace/$workspaceId/types";
 import { useWorkspace } from "renderer/routes/_authenticated/_dashboard/v2-workspace/providers/WorkspaceProvider";
+import { useHostWorkspaces } from "renderer/routes/_authenticated/providers/HostWorkspacesProvider";
 import { useLocalHostService } from "renderer/routes/_authenticated/providers/LocalHostServiceProvider";
 import {
 	type MoveToComputerStage,
@@ -38,6 +39,7 @@ export function MoveToComputerButton({
 	const cloudEnabled = useFeatureFlagEnabled(FEATURE_FLAGS.CLOUD_WORKSPACES);
 	const { workspace } = useWorkspace();
 	const { machineId } = useLocalHostService();
+	const { cache } = useHostWorkspaces();
 	const moveChatToComputer = useMoveChatToComputer(workspaceId);
 	const chatSessionId = data.sessionId;
 
@@ -45,7 +47,8 @@ export function MoveToComputerButton({
 		!cloudEnabled ||
 		data.agent?.id !== "claude" ||
 		!chatSessionId ||
-		workspace.hostId === machineId
+		workspace.hostId === machineId ||
+		!cache.isSandboxHost(workspace.hostId)
 	) {
 		return null;
 	}

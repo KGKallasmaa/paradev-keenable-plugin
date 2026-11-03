@@ -508,7 +508,8 @@ export function createCommands(options: CommandsOptions): ChatCommands {
 			const session = options.sessions.get(input.sessionId);
 			if (!session)
 				throw new Error(`chat session ${input.sessionId} not found`);
-			if (options.live.get(input.sessionId)) {
+			const live = options.live.get(input.sessionId);
+			if (live && live.state.status !== "dead") {
 				return { sessionId: input.sessionId, epoch: session.epoch };
 			}
 			if (!options.live.supports(session.harness)) {
@@ -520,6 +521,8 @@ export function createCommands(options: CommandsOptions): ChatCommands {
 				harness: session.harness,
 				harnessSessionId: input.harnessSessionId,
 			});
+			// Removes the dead entry at once, so `create` can take its id.
+			if (live) void options.live.dispose(input.sessionId).catch(() => {});
 			options.live.create({
 				sessionId: input.sessionId,
 				scopeId: session.scopeId,

@@ -727,22 +727,60 @@ export const gitRestoreWorktreeTask = defineWorkerTask<
 });
 
 const SNAPSHOT_COMMIT_MESSAGE = "Work in progress, moved to a cloud workspace";
+/** Used only when git has no identity of the user's own. */
+const SNAPSHOT_IDENTITY = {
+	GIT_AUTHOR_NAME: "Superset",
+	GIT_AUTHOR_EMAIL: "teleport@superset.sh",
+	GIT_COMMITTER_NAME: "Superset",
+	GIT_COMMITTER_EMAIL: "teleport@superset.sh",
+};
+
+/** The remote a snapshot goes to (`origin`, else the first), and every URL `git push` uses for it. */
+export const gitSnapshotRemoteTask = defineWorkerTask<
+	{ worktreePath: string; gitEnv: GitTaskEnv },
+	{ remote: string; pushUrls: string[] } | null
+>({
+	type: "git/snapshotRemote",
+	handler: async ({ worktreePath, gitEnv }) => {
+		const git = createUserSimpleGit(worktreePath, { env: gitEnv });
+		const remotes = await git.getRemotes(false);
+		const remote =
+			remotes.find((entry) => entry.name === "origin")?.name ??
+			remotes[0]?.name;
+		if (!remote) return null;
+		const pushUrls = (
+			await git.raw(["remote", "get-url", "--push", "--all", remote])
+		)
+			.split("\n")
+			.map((url) => url.trim())
+			.filter(Boolean);
+		return { remote, pushUrls };
+	},
+});
 
 /**
  * Pushes the worktree as it is now, with uncommitted and untracked files, to
- * `branch` on its remote. The snapshot is staged in a separate index, so the
+ * `branch` on `remote`. The snapshot is staged in a separate index, so the
  * user's index, working tree and branch do not change.
  */
 export const gitPushSnapshotTask = defineWorkerTask<
-	{ worktreePath: string; branch: string; gitEnv: GitTaskEnv },
-	{ remoteUrl: string; commit: string }
+	{ worktreePath: string; remote: string; branch: string; gitEnv: GitTaskEnv },
+	{ commit: string }
 >({
 	type: "git/pushSnapshot",
-	handler: async ({ worktreePath, branch, gitEnv }) => {
+	handler: async ({ worktreePath, remote, branch, gitEnv }) => {
 		const scratch = await mkdtemp(join(tmpdir(), "superset-snapshot-"));
 		try {
+			const identity = await createUserSimpleGit(worktreePath, { env: gitEnv })
+				.raw(["var", "GIT_COMMITTER_IDENT"])
+				.then(() => ({}))
+				.catch(() => SNAPSHOT_IDENTITY);
 			const git = createUserSimpleGit(worktreePath, {
-				env: { ...gitEnv, GIT_INDEX_FILE: join(scratch, "index") },
+				env: {
+					...gitEnv,
+					...identity,
+					GIT_INDEX_FILE: join(scratch, "index"),
+				},
 			});
 			const head = (await git.revparse(["HEAD"])).trim();
 			await git.raw(["read-tree", head]);
@@ -762,15 +800,8 @@ export const gitPushSnapshotTask = defineWorkerTask<
 								SNAPSHOT_COMMIT_MESSAGE,
 							])
 						).trim();
-			const remotes = await git.getRemotes(false);
-			const remote =
-				remotes.find((entry) => entry.name === "origin")?.name ??
-				remotes[0]?.name;
-			if (!remote)
-				throw new Error("This worktree has no git remote to push to");
-			const remoteUrl = (await git.raw(["remote", "get-url", remote])).trim();
 			await git.raw(["push", remote, `${commit}:refs/heads/${branch}`]);
-			return { remoteUrl, commit };
+			return { commit };
 		} finally {
 			await rm(scratch, { recursive: true, force: true });
 		}
@@ -796,6 +827,7 @@ export const gitTasks = [
 	gitStagePathsTask,
 	gitCommitTask,
 	gitPushTask,
+	gitSnapshotRemoteTask,
 	gitPushSnapshotTask,
 	gitPrHeadBaseTask,
 	gitRestoreWorktreeTask,

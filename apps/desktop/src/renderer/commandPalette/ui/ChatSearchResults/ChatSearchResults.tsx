@@ -1,5 +1,6 @@
 import { useLingui } from "@lingui/react/macro";
 import { CommandGroup, CommandItem } from "@superset/ui/command";
+import { keepPreviousData } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { LuMessagesSquare } from "react-icons/lu";
@@ -27,9 +28,26 @@ export function ChatSearchResults({ query }: { query: string }) {
 			enabled: debounced.length >= MIN_QUERY_CHARS,
 			staleTime: 30_000,
 			retry: false,
+			placeholderData: keepPreviousData,
 		},
 	);
-	const results = debounced.length >= MIN_QUERY_CHARS ? search.data : undefined;
+	const trimmed = query.trim();
+	if (trimmed.length < MIN_QUERY_CHARS) return null;
+	if (search.isError && trimmed === debounced) {
+		return (
+			<CommandGroup heading={t({ message: "Chats" })}>
+				<CommandItem value="chat-search-error" disabled>
+					<span className="text-muted-foreground">
+						{t({ message: "Couldn't search your chats" })}
+					</span>
+				</CommandItem>
+			</CommandGroup>
+		);
+	}
+	const stale = trimmed !== debounced || search.isPlaceholderData;
+	const results = search.data?.flatMap((result) =>
+		result.workspaceId ? [{ ...result, workspaceId: result.workspaceId }] : [],
+	);
 	if (!results?.length) return null;
 
 	return (
@@ -38,9 +56,9 @@ export function ChatSearchResults({ query }: { query: string }) {
 				<CommandItem
 					key={result.sessionId}
 					value={`chat-${result.sessionId}`}
-					disabled={!result.workspaceId}
+					disabled={stale}
 					onSelect={() => {
-						if (!result.workspaceId) return;
+						if (stale) return;
 						setOpen(false);
 						void navigate({
 							to: "/v2-workspace/$workspaceId",

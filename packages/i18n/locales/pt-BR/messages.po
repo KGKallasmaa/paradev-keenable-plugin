@@ -5977,6 +5977,9 @@ msgstr "Não foi possível salvar o Dev"
 msgid "Couldn't save the routine"
 msgstr "Não foi possível salvar a rotina"
 
+msgid "Couldn't search your chats"
+msgstr "Não foi possível pesquisar seus chats"
+
 msgid "Couldn't send comment"
 msgstr "Não foi possível enviar o comentário"
 
@@ -6311,7 +6314,7 @@ msgid "Creating a workspace"
 msgstr "Criando uma área de trabalho"
 
 msgid "Creating a workspace on this computer…"
-msgstr "Criando um workspace neste computador…"
+msgstr "Criando uma área de trabalho neste computador…"
 
 msgid "Creating PR..."
 msgstr "Criando PR…"
@@ -16517,7 +16520,7 @@ msgid "Saving as an environment..."
 msgstr "Salvando como ambiente..."
 
 msgid "Saving the cloud workspace's work and this conversation…"
-msgstr "Salvando o trabalho do workspace na nuvem e esta conversa…"
+msgstr "Salvando o trabalho da área de trabalho na nuvem e esta conversa…"
 
 msgid "Saving your work and this conversation…"
 msgstr "Salvando seu trabalho e esta conversa…"
@@ -18221,13 +18224,13 @@ msgid "Starting the agent…"
 msgstr "Iniciando o agente…"
 
 msgid "Starting the cloud workspace…"
-msgstr "Iniciando o workspace na nuvem…"
+msgstr "Iniciando a área de trabalho na nuvem…"
 
 msgid "Starting the simulator…"
 msgstr "Iniciando o simulador…"
 
 msgid "Starting the workspace"
-msgstr "Iniciando o workspace"
+msgstr "Iniciando a área de trabalho"
 
 msgid "Starting up. This should only take a moment."
 msgstr "Iniciando. Deve levar só um instante."
@@ -19025,7 +19028,7 @@ msgid "The cloud workspace should have started but didn't answer in time. The ne
 msgstr "A área de trabalho na nuvem deveria ter iniciado, mas não respondeu a tempo. A próxima execução tentará novamente."
 
 msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
-msgstr "O trabalho do workspace na nuvem, incluindo alterações não confirmadas, é enviado para um novo branch. Um workspace neste computador é iniciado a partir desse branch, e esta conversa continua lá. Se o agente estiver trabalhando, ele para primeiro."
+msgstr "O trabalho da área de trabalho na nuvem, incluindo alterações não confirmadas, é enviado para um novo branch. Uma área de trabalho neste computador é iniciada a partir desse branch, e esta conversa continua lá. Se o agente estiver trabalhando, ele para primeiro."
 
 msgid "The code expired. Start again."
 msgstr "O código expirou. Comece de novo."
@@ -19442,7 +19445,7 @@ msgid "This channel is archived"
 msgstr "Este canal está arquivado"
 
 msgid "This chat couldn't move here. It is still in the workspace it came from."
-msgstr "Não foi possível mover este chat para cá. Ele continua no workspace de onde veio."
+msgstr "Não foi possível mover este chat para cá. Ele continua na área de trabalho de onde veio."
 
 msgid "This chat has ended."
 msgstr "Este chat terminou."
@@ -21824,7 +21827,7 @@ msgid "Your code stays local by default, with explicit control over connected se
 msgstr "Seu código fica local por padrão, com controle explícito sobre os serviços conectados."
 
 msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
-msgstr "Seu trabalho atual, incluindo alterações não confirmadas, é enviado para um novo branch no remoto. Um workspace na nuvem é iniciado a partir desse branch no ambiente que você escolher, e esta conversa continua lá. Se o agente estiver trabalhando, ele para primeiro."
+msgstr "Seu trabalho atual, incluindo alterações não confirmadas, é enviado para um novo branch no remoto. Uma área de trabalho na nuvem é iniciada a partir desse branch no ambiente que você escolher, e esta conversa continua lá. Se o agente estiver trabalhando, ele para primeiro."
 
 msgid "Your download starts automatically."
 msgstr "Seu download começa automaticamente."

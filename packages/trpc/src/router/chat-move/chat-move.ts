@@ -155,6 +155,7 @@ export const chatMoveRouter = {
 					...mover,
 					chatSessionId: failed.sessionId,
 					toWorkspaceId: failed.toWorkspaceId,
+					retryOf: failed,
 					...(failed.toHostId ? { toHostId: failed.toHostId } : {}),
 					...(sameSource && failed.fromHostId
 						? { fromHostId: failed.fromHostId }

@@ -5977,6 +5977,9 @@ msgstr "Tidak dapat menyimpan Dev"
 msgid "Couldn't save the routine"
 msgstr "Tidak dapat menyimpan rutinitas"
 
+msgid "Couldn't search your chats"
+msgstr "Tidak dapat mencari chat Anda"
+
 msgid "Couldn't send comment"
 msgstr "Tidak bisa mengirim komentar"
 
@@ -6311,7 +6314,7 @@ msgid "Creating a workspace"
 msgstr "Membuat workspace"
 
 msgid "Creating a workspace on this computer…"
-msgstr "Membuat ruang kerja di komputer ini…"
+msgstr "Membuat workspace di komputer ini…"
 
 msgid "Creating PR..."
 msgstr "Membuat PR…"
@@ -16517,7 +16520,7 @@ msgid "Saving as an environment..."
 msgstr "Menyimpan sebagai lingkungan..."
 
 msgid "Saving the cloud workspace's work and this conversation…"
-msgstr "Menyimpan pekerjaan ruang kerja cloud dan percakapan ini…"
+msgstr "Menyimpan pekerjaan workspace cloud dan percakapan ini…"
 
 msgid "Saving your work and this conversation…"
 msgstr "Menyimpan pekerjaan Anda dan percakapan ini…"
@@ -18221,7 +18224,7 @@ msgid "Starting the agent…"
 msgstr "Memulai agen…"
 
 msgid "Starting the cloud workspace…"
-msgstr "Memulai ruang kerja cloud…"
+msgstr "Memulai workspace cloud…"
 
 msgid "Starting the simulator…"
 msgstr "Memulai simulator…"
@@ -19025,7 +19028,7 @@ msgid "The cloud workspace should have started but didn't answer in time. The ne
 msgstr "Workspace cloud seharusnya sudah berjalan, tetapi tidak merespons tepat waktu. Run berikutnya akan mencoba lagi."
 
 msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
-msgstr "Pekerjaan ruang kerja cloud, termasuk perubahan yang belum di-commit, didorong ke branch baru. Ruang kerja di komputer ini dimulai dari branch tersebut, dan percakapan ini berlanjut di sana. Jika agen sedang bekerja, agen dihentikan terlebih dahulu."
+msgstr "Pekerjaan workspace cloud, termasuk perubahan yang belum di-commit, didorong ke branch baru. Workspace di komputer ini dimulai dari branch tersebut, dan percakapan ini berlanjut di sana. Jika agen sedang bekerja, agen dihentikan terlebih dahulu."
 
 msgid "The code expired. Start again."
 msgstr "Kode kedaluwarsa. Mulai lagi."
@@ -21824,7 +21827,7 @@ msgid "Your code stays local by default, with explicit control over connected se
 msgstr "Kode Anda tetap lokal secara bawaan, dengan kendali eksplisit atas layanan yang terhubung."
 
 msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
-msgstr "Pekerjaan Anda saat ini, termasuk perubahan yang belum di-commit, didorong ke branch baru di remote. Ruang kerja cloud dimulai dari branch tersebut di lingkungan yang Anda pilih, dan percakapan ini berlanjut di sana. Jika agen sedang bekerja, agen dihentikan terlebih dahulu."
+msgstr "Pekerjaan Anda saat ini, termasuk perubahan yang belum di-commit, didorong ke branch baru di remote. Workspace cloud dimulai dari branch tersebut di lingkungan yang Anda pilih, dan percakapan ini berlanjut di sana. Jika agen sedang bekerja, agen dihentikan terlebih dahulu."
 
 msgid "Your download starts automatically."
 msgstr "Unduhan Anda dimulai secara otomatis."

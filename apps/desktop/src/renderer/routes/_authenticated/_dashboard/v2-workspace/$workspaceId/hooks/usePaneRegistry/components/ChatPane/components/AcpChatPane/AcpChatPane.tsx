@@ -471,12 +471,15 @@ export function AcpChatPane({
 	// This host may still hold an older copy of the chat, so only the move
 	// reaching `ready` means it arrived.
 	const waitingForMove = awaitingMove === true;
-	const moveArrived = useCallback(() => {
+	const checkSession = useCallback(() => {
 		void queryClient.invalidateQueries({
 			queryKey: ["acp-chat-session", sessionId],
 		});
+	}, [queryClient, sessionId]);
+	const moveArrived = useCallback(() => {
+		checkSession();
 		onMoveArrived?.();
-	}, [queryClient, sessionId, onMoveArrived]);
+	}, [checkSession, onMoveArrived]);
 	const recoverable = Boolean(
 		(sessionStopped || sessionDead) &&
 			harness &&
@@ -722,6 +725,8 @@ export function AcpChatPane({
 			<MoveProgress
 				chatSessionId={sessionId}
 				workspaceId={workspaceId}
+				sessionLive={stored?.live === true}
+				onCheckSession={checkSession}
 				onArrived={moveArrived}
 			/>
 		);
