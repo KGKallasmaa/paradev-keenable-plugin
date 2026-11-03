@@ -1,3 +1,16 @@
+-- Search text for chat_items.search. The default tokenizer keeps paths and
+-- dotted or camelCase names as one word, so code names never match a search.
+-- This adds a copy split on / . _ : and on camelCase. Written by hand,
+-- above the generated statements: chat_items.search is generated from it.
+
+CREATE OR REPLACE FUNCTION chat_search_text(t text) RETURNS text
+LANGUAGE sql IMMUTABLE PARALLEL SAFE AS $$
+	SELECT t || ' ' || regexp_replace(
+		regexp_replace(t, '([a-z0-9])([A-Z])', '\1 \2', 'g'),
+		'[/._:()\[\]{}<>`#=-]+', ' ', 'g'
+	)
+$$;
+--> statement-breakpoint
 CREATE TABLE "chat_items" (
 	"session_id" uuid NOT NULL,
 	"item_id" text NOT NULL,
@@ -60,4 +73,17 @@ CREATE INDEX "chat_items_session_first_seq_idx" ON "chat_items" USING btree ("se
 CREATE INDEX "chat_items_created_by_idx" ON "chat_items" USING btree ("created_by");--> statement-breakpoint
 CREATE INDEX "chat_items_search_idx" ON "chat_items" USING gin ("search");--> statement-breakpoint
 CREATE INDEX "chat_transcripts_session_created_at_idx" ON "chat_transcripts" USING btree ("session_id","created_at");--> statement-breakpoint
-CREATE INDEX "chat_sessions_org_harness_session_idx" ON "chat_sessions" USING btree ("organization_id","harness_session_id");
+CREATE INDEX "chat_sessions_org_harness_session_idx" ON "chat_sessions" USING btree ("organization_id","harness_session_id");--> statement-breakpoint
+-- BM25 ranking for chat search through Neon's lakebase_text. Only Neon
+-- projects with Lakebase Search have the extension; plain Postgres (local
+-- docker, CI) and other Neon projects skip this, and chat search falls back
+-- to the GIN index. Written by hand: Drizzle cannot express the condition.
+
+DO $$
+BEGIN
+	IF EXISTS (SELECT 1 FROM pg_available_extensions WHERE name = 'lakebase_text') THEN
+		CREATE EXTENSION IF NOT EXISTS lakebase_text;
+		CREATE INDEX IF NOT EXISTS chat_items_search_bm25 ON chat_items USING lakebase_bm25 (search);
+	END IF;
+END
+$$;

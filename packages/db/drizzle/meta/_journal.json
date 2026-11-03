@@ -1307,22 +1307,8 @@
     {
       "idx": 186,
       "version": "7",
-      "when": 1793666446937,
-      "tag": "0186_chat_search_text",
-      "breakpoints": true
-    },
-    {
-      "idx": 187,
-      "version": "7",
-      "when": 1793666447681,
-      "tag": "0187_chat_storage",
-      "breakpoints": true
-    },
-    {
-      "idx": 188,
-      "version": "7",
-      "when": 1793666448409,
-      "tag": "0188_chat_items_bm25",
+      "when": 1793670281105,
+      "tag": "0186_chat_storage",
       "breakpoints": true
     }
   ]
