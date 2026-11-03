@@ -4,7 +4,6 @@ import { existsSync, openSync, readFileSync, writeFileSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import type { DurableEvent } from "@superset/chat/protocol";
 import {
 	type CloudAgentLaunch,
 	type CloudAgentResume,
@@ -21,8 +20,7 @@ import {
 import { eq } from "drizzle-orm";
 import type { HostDb } from "../../db";
 import { projects, workspaces } from "../../db/schema";
-import { downloadBundle, withStage } from "../../teleport/bundle";
-import { teleportProviderFor } from "../../teleport/providers";
+import { continueMovedChat } from "../../teleport/continueMovedChat";
 import {
 	chatLaunchTarget,
 	runAgentInWorkspace,
@@ -30,7 +28,6 @@ import {
 import { importCloudAttachments } from "../../trpc/router/attachments/attachments";
 import { createChatSessionInWorkspace } from "../../trpc/router/sessions/session-service";
 import { ensurePresetRow } from "../../trpc/router/settings/agent-configs";
-import { resolveDefaultAccountTerminalEnv } from "../../trpc/router/usage/default-account";
 import type { HostServiceContext } from "../../types";
 import {
 	getManagedEnv,
@@ -378,7 +375,7 @@ export async function launchSandboxAgentOnce(
 			}
 		}
 		const moved = resume
-			? await continueMovedChat(ctx, identity.workspaceId, resume)
+			? await continueMovedChatOnBox(ctx, identity.workspaceId, resume)
 			: null;
 		if (moved) {
 			console.log(
@@ -439,13 +436,11 @@ export async function launchSandboxAgentOnce(
 }
 
 /**
- * Continues a chat moved from another host under its own id: its history
- * goes into this box's journal, its agent's session files where the agent
- * looks, and the agent resumes without replaying the history again. Returns
- * null when any step fails, and the launch starts a new chat instead:
- * losing the history must not cost the launch.
+ * The moved chat, continued under its own id, or null when that fails and
+ * the launch starts a new chat instead: losing the history must not cost the
+ * launch.
  */
-async function continueMovedChat(
+async function continueMovedChatOnBox(
 	ctx: HostServiceContext,
 	workspaceId: string,
 	resume: CloudAgentResume,
@@ -453,80 +448,18 @@ async function continueMovedChat(
 	const workspace = ctx.db.query.workspaces
 		.findFirst({ where: eq(workspaces.id, workspaceId) })
 		.sync();
-	const chat = ctx.runtime.chat?.();
-	if (!workspace?.worktreePath || !chat) return null;
+	if (!workspace?.worktreePath) return null;
 	try {
-		const history = await pullChatHistory(ctx, resume.chatSessionId);
-		const provider = teleportProviderFor(history.session.harness ?? "");
-		if (!provider || !history.session.epoch) {
-			throw new Error("The moved chat has no agent this box can resume");
-		}
-		const worktreePath = workspace.worktreePath;
-		await withStage(async (stageDir) => {
-			const manifest = await downloadBundle({
-				api: ctx.api,
-				chatSessionId: resume.chatSessionId,
-				stageDir,
-			});
-			if (!manifest) throw new Error("The moved chat has no session files");
-			await provider.place({
-				manifest,
-				worktreePath,
-				env: resolveDefaultAccountTerminalEnv(ctx.db),
-				stageDir,
-			});
-		});
-		chat.journal.importSession({
-			session: {
-				sessionId: resume.chatSessionId,
-				scopeId: workspaceId,
-				harness: history.session.harness ?? "",
-				harnessSessionId: resume.harnessSessionId,
-				title: history.session.title ?? undefined,
-				status: "idle",
-				epoch: history.session.epoch,
-				lastSeq: history.session.lastSeq,
-			},
-			events: history.events,
-		});
-		ctx.runtime.chatSync?.markPushed(
-			resume.chatSessionId,
-			history.session.epoch,
-			history.session.lastSeq,
-		);
-		const terminalId = crypto.randomUUID();
-		chat.commands.continueSession({
-			sessionId: resume.chatSessionId,
-			cwd: worktreePath,
+		const continued = await continueMovedChat(ctx, {
+			workspaceId,
+			worktreePath: workspace.worktreePath,
+			chatSessionId: resume.chatSessionId,
 			harnessSessionId: resume.harnessSessionId,
-			terminalId,
 		});
-		return {
-			kind: "chat",
-			sessionId: resume.chatSessionId,
-			terminalId: chat.live.get(resume.chatSessionId)?.terminalId ?? terminalId,
-		};
+		return { kind: "chat", ...continued };
 	} catch (error) {
 		console.error("[sandbox] could not continue the moved chat", error);
 		return null;
-	}
-}
-
-async function pullChatHistory(ctx: HostServiceContext, sessionId: string) {
-	const events: { seq: number; event: DurableEvent }[] = [];
-	let afterFirstSeq = 0;
-	for (;;) {
-		const page = await ctx.api.chatHistory.pull.mutate({
-			sessionId,
-			afterFirstSeq,
-		});
-		events.push(
-			...page.events.map((row) => ({ seq: row.firstSeq, event: row.event })),
-		);
-		if (page.nextAfterFirstSeq === null) {
-			return { session: page.session, events };
-		}
-		afterFirstSeq = page.nextAfterFirstSeq;
 	}
 }
 

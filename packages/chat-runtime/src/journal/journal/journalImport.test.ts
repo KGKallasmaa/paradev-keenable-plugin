@@ -141,3 +141,39 @@ describe("commands.continueSession", () => {
 		await runtime.dispose();
 	});
 });
+
+describe("ChatJournal.importSession with replace", () => {
+	test("overwrites the journal a host already had, as when a chat moves back", () => {
+		const runtime = createTestRuntime();
+		runtime.journal.importSession(moved());
+		const back = moved(12);
+		expect(
+			runtime.journal.importSession({
+				...back,
+				session: { ...back.session, epoch: "newer-epoch" },
+				events: [
+					...back.events,
+					{
+						seq: 11,
+						event: {
+							type: "item",
+							turnId: "t2",
+							item: agentMessage("from-cloud", "Done in the cloud"),
+						},
+					},
+				],
+				replace: true,
+			}),
+		).toBe(true);
+		expect(runtime.journal.cursor(SESSION)).toEqual({
+			epoch: "newer-epoch",
+			seq: 12,
+		});
+		const outline = runtime.commands.getOutline({ sessionId: SESSION });
+		expect(outline.ok && outline.outline.items.map((s) => s.item.id)).toEqual([
+			"tool",
+			"reply",
+			"from-cloud",
+		]);
+	});
+});

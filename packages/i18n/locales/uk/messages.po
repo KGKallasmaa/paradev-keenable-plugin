@@ -1934,6 +1934,9 @@ msgstr "Додати обліковий запис {0}"
 msgid "Add {0} to workspace"
 msgstr "Додати {0} до робочого простору"
 
+msgid "Add {repositoryName} as a project on this computer first"
+msgstr "Спочатку додайте {repositoryName} як проєкт на цьому комп'ютері"
+
 msgid "Add a comment…"
 msgstr "Додайте коментар…"
 
@@ -5872,6 +5875,9 @@ msgstr "Не вдалося перевести субагента у фонов�
 msgid "Couldn't move this chat to the cloud"
 msgstr "Не вдалося перемістити цей чат у хмару"
 
+msgid "Couldn't move this chat to this computer"
+msgstr "Не вдалося перемістити цей чат на цей комп'ютер"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Не вдалося автоматично назвати «{name}»"
 
@@ -6282,6 +6288,9 @@ msgstr "Створення завдання"
 
 msgid "Creating a workspace"
 msgstr "Створення робочого простору"
+
+msgid "Creating a workspace on this computer…"
+msgstr "Створення робочого простору на цьому комп'ютері…"
 
 msgid "Creating PR..."
 msgstr "Створення PR..."
@@ -11625,6 +11634,9 @@ msgstr "Перевести {name} у фоновий режим"
 msgid "Move this chat to the cloud?"
 msgstr "Перемістити цей чат у хмару?"
 
+msgid "Move this chat to this computer?"
+msgstr "Перемістити цей чат на цей комп'ютер?"
+
 msgid "Move to background"
 msgstr "Перевести у фоновий режим"
 
@@ -11642,6 +11654,9 @@ msgstr "Перемістити праворуч"
 
 msgid "Move to Tab"
 msgstr "Перемістити у вкладку"
+
+msgid "Move to this computer"
+msgstr "Перемістити на цей комп'ютер"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "«{name}» переміщено до {group}"
@@ -15979,6 +15994,9 @@ msgstr "Відновлено «{workspaceName}»"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Відновлення «{workspaceName}»…"
 
+msgid "Restoring the conversation…"
+msgstr "Відновлення розмови…"
+
 msgid "Restoring your session"
 msgstr "Відновлення вашого сеансу"
 
@@ -16461,6 +16479,12 @@ msgstr "Збережено в «Завантаження»"
 
 msgid "Saving as an environment..."
 msgstr "Збереження як середовища..."
+
+msgid "Saving the cloud workspace's work and this conversation…"
+msgstr "Збереження роботи хмарного робочого простору та цієї розмови…"
+
+msgid "Saving your work and this conversation…"
+msgstr "Збереження вашої роботи та цієї розмови…"
 
 msgid "Saving..."
 msgstr "Збереження..."
@@ -18157,6 +18181,9 @@ msgstr "Запуск хмарного робочого простору"
 msgid "Starting the agent…"
 msgstr "Запускаємо агента…"
 
+msgid "Starting the cloud workspace…"
+msgstr "Запуск хмарного робочого простору…"
+
 msgid "Starting the simulator…"
 msgstr "Запускаємо симулятор…"
 
@@ -18952,6 +18979,9 @@ msgstr "Чат залишиться без змін. Файли, які будь
 msgid "The cloud workspace should have started but didn't answer in time. The next run tries again."
 msgstr "Хмарний робочий простір мав запуститися, але не відповів вчасно. Наступний запуск спробує знову."
 
+msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Робота хмарного робочого простору, включно з незакомітованими змінами, надсилається до нової гілки. Робочий простір на цьому комп'ютері запускається з цієї гілки, і ця розмова продовжується там. Якщо агент працює, спочатку він зупиниться."
+
 msgid "The code expired. Start again."
 msgstr "Термін дії коду минув. Почніть знову."
 
@@ -19398,6 +19428,9 @@ msgstr "Цей хмарний робочий простір не може зап
 
 msgid "This cloud workspace is waking up, which can take up to 30 seconds after it has been idle."
 msgstr "Цей хмарний робочий простір прокидається; після простою це може тривати до 30 секунд."
+
+msgid "This computer's host is not running"
+msgstr "Хост цього комп'ютера не запущено"
 
 msgid "This conversation is too long for the model"
 msgstr "Ця розмова задовга для моделі"
@@ -21742,8 +21775,8 @@ msgstr "Якщо не зберегти зміни, їх буде втрачен�
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "За замовчуванням ваш код залишається локально, а підключеними сервісами ви керуєте явно."
 
-msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
-msgstr "Ваша поточна робота, включно з незакомітованими змінами, надсилається до нової гілки у віддаленому репозиторії. Хмарний робочий простір запускається з цієї гілки у вибраному вами середовищі, і ця розмова продовжується там."
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Ваша поточна робота, включно з незакомітованими змінами, надсилається до нової гілки у віддаленому репозиторії. Хмарний робочий простір запускається з цієї гілки у вибраному вами середовищі, і ця розмова продовжується там. Якщо агент працює, спочатку він зупиниться."
 
 msgid "Your download starts automatically."
 msgstr "Завантаження почнеться автоматично."

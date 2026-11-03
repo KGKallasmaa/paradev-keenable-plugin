@@ -1940,6 +1940,9 @@ msgstr "{0}-Konto hinzufügen"
 msgid "Add {0} to workspace"
 msgstr "{0} zum Arbeitsbereich hinzufügen"
 
+msgid "Add {repositoryName} as a project on this computer first"
+msgstr "Füge {repositoryName} zuerst als Projekt auf diesem Computer hinzu"
+
 msgid "Add a comment…"
 msgstr "Kommentar hinzufügen…"
 
@@ -5878,6 +5881,9 @@ msgstr "Der Subagent konnte nicht in den Hintergrund verschoben werden"
 msgid "Couldn't move this chat to the cloud"
 msgstr "Dieser Chat konnte nicht in die Cloud verschoben werden"
 
+msgid "Couldn't move this chat to this computer"
+msgstr "Dieser Chat konnte nicht auf diesen Computer verschoben werden"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "„{name}“ konnte nicht automatisch benannt werden"
 
@@ -6288,6 +6294,9 @@ msgstr "Aufgabe wird erstellt"
 
 msgid "Creating a workspace"
 msgstr "Arbeitsbereich wird erstellt"
+
+msgid "Creating a workspace on this computer…"
+msgstr "Workspace auf diesem Computer wird erstellt…"
 
 msgid "Creating PR..."
 msgstr "PR wird erstellt…"
@@ -11631,6 +11640,9 @@ msgstr "{name} in den Hintergrund verschieben"
 msgid "Move this chat to the cloud?"
 msgstr "Diesen Chat in die Cloud verschieben?"
 
+msgid "Move this chat to this computer?"
+msgstr "Diesen Chat auf diesen Computer verschieben?"
+
 msgid "Move to background"
 msgstr "In den Hintergrund"
 
@@ -11648,6 +11660,9 @@ msgstr "Nach rechts verschieben"
 
 msgid "Move to Tab"
 msgstr "In Tab verschieben"
+
+msgid "Move to this computer"
+msgstr "Auf diesen Computer verschieben"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "„{name}“ nach {group} verschoben"
@@ -15985,6 +16000,9 @@ msgstr "„{workspaceName}“ wiederhergestellt"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "„{workspaceName}“ wird wiederhergestellt…"
 
+msgid "Restoring the conversation…"
+msgstr "Unterhaltung wird wiederhergestellt…"
+
 msgid "Restoring your session"
 msgstr "Sitzung wird wiederhergestellt"
 
@@ -16467,6 +16485,12 @@ msgstr "In Downloads gespeichert"
 
 msgid "Saving as an environment..."
 msgstr "Wird als Umgebung gespeichert..."
+
+msgid "Saving the cloud workspace's work and this conversation…"
+msgstr "Arbeit des Cloud-Workspace und diese Unterhaltung werden gespeichert…"
+
+msgid "Saving your work and this conversation…"
+msgstr "Deine Arbeit und diese Unterhaltung werden gespeichert…"
 
 msgid "Saving..."
 msgstr "Wird gespeichert..."
@@ -18163,6 +18187,9 @@ msgstr "Cloud-Arbeitsbereich wird gestartet"
 msgid "Starting the agent…"
 msgstr "Agent wird gestartet…"
 
+msgid "Starting the cloud workspace…"
+msgstr "Cloud-Workspace wird gestartet…"
+
 msgid "Starting the simulator…"
 msgstr "Simulator wird gestartet…"
 
@@ -18958,6 +18985,9 @@ msgstr "Der Chat bleibt, wie er ist. Dateien, die seit diesem Durchlauf jemand b
 msgid "The cloud workspace should have started but didn't answer in time. The next run tries again."
 msgstr "Der Cloud-Arbeitsbereich hätte starten sollen, hat aber nicht rechtzeitig geantwortet. Der nächste Lauf versucht es erneut."
 
+msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Die Arbeit des Cloud-Workspace, einschließlich nicht committeter Änderungen, wird auf einen neuen Branch gepusht. Ein Workspace auf diesem Computer startet von diesem Branch, und diese Unterhaltung wird dort fortgesetzt. Wenn der Agent arbeitet, wird er zuerst gestoppt."
+
 msgid "The code expired. Start again."
 msgstr "Der Code ist abgelaufen. Starte erneut."
 
@@ -19404,6 +19434,9 @@ msgstr "Dieser Cloud-Arbeitsbereich kann nicht starten"
 
 msgid "This cloud workspace is waking up, which can take up to 30 seconds after it has been idle."
 msgstr "Dieser Cloud-Workspace wird gerade aufgeweckt. Nach Inaktivität kann das bis zu 30 Sekunden dauern."
+
+msgid "This computer's host is not running"
+msgstr "Der Host dieses Computers läuft nicht"
 
 msgid "This conversation is too long for the model"
 msgstr "Diese Unterhaltung ist zu lang für das Modell"
@@ -21748,8 +21781,8 @@ msgstr "Deine Änderungen gehen verloren, wenn du sie nicht speicherst."
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Dein Code bleibt standardmäßig lokal, mit ausdrücklicher Kontrolle über verbundene Dienste."
 
-msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
-msgstr "Deine aktuelle Arbeit, einschließlich nicht committeter Änderungen, wird auf einen neuen Branch im Remote gepusht. Ein Cloud-Workspace startet von diesem Branch in der Umgebung, die du auswählst, und diese Unterhaltung wird dort fortgesetzt."
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Deine aktuelle Arbeit, einschließlich nicht committeter Änderungen, wird auf einen neuen Branch im Remote gepusht. Ein Cloud-Workspace startet von diesem Branch in der Umgebung, die du auswählst, und diese Unterhaltung wird dort fortgesetzt. Wenn der Agent arbeitet, wird er zuerst gestoppt."
 
 msgid "Your download starts automatically."
 msgstr "Dein Download startet automatisch."

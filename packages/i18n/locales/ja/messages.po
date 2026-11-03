@@ -1940,6 +1940,9 @@ msgstr "{0}アカウントを追加"
 msgid "Add {0} to workspace"
 msgstr "{0} をワークスペースに追加"
 
+msgid "Add {repositoryName} as a project on this computer first"
+msgstr "まず {repositoryName} をこのコンピューターのプロジェクトとして追加してください"
+
 msgid "Add a comment…"
 msgstr "コメントを追加…"
 
@@ -5878,6 +5881,9 @@ msgstr "サブエージェントをバックグラウンドに移動できませ
 msgid "Couldn't move this chat to the cloud"
 msgstr "このチャットをクラウドに移動できませんでした"
 
+msgid "Couldn't move this chat to this computer"
+msgstr "このチャットをこのコンピューターに移動できませんでした"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "「{name}」に自動で名前を付けられませんでした"
 
@@ -6288,6 +6294,9 @@ msgstr "タスクを作成中"
 
 msgid "Creating a workspace"
 msgstr "ワークスペースを作成中"
+
+msgid "Creating a workspace on this computer…"
+msgstr "このコンピューターにワークスペースを作成しています…"
 
 msgid "Creating PR..."
 msgstr "PRを作成中…"
@@ -11631,6 +11640,9 @@ msgstr "{name} をバックグラウンドに移動"
 msgid "Move this chat to the cloud?"
 msgstr "このチャットをクラウドに移動しますか？"
 
+msgid "Move this chat to this computer?"
+msgstr "このチャットをこのコンピューターに移動しますか？"
+
 msgid "Move to background"
 msgstr "バックグラウンドに移動"
 
@@ -11648,6 +11660,9 @@ msgstr "右側に移動"
 
 msgid "Move to Tab"
 msgstr "タブに移動"
+
+msgid "Move to this computer"
+msgstr "このコンピューターに移動"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "「{name}」を {group} へ移動しました"
@@ -15985,6 +16000,9 @@ msgstr "「{workspaceName}」を復元しました"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "「{workspaceName}」を復元中…"
 
+msgid "Restoring the conversation…"
+msgstr "会話を復元しています…"
+
 msgid "Restoring your session"
 msgstr "セッションを復元中"
 
@@ -16467,6 +16485,12 @@ msgstr "ダウンロードフォルダに保存しました"
 
 msgid "Saving as an environment..."
 msgstr "環境として保存しています..."
+
+msgid "Saving the cloud workspace's work and this conversation…"
+msgstr "クラウドワークスペースの作業とこの会話を保存しています…"
+
+msgid "Saving your work and this conversation…"
+msgstr "作業とこの会話を保存しています…"
 
 msgid "Saving..."
 msgstr "保存中..."
@@ -18163,6 +18187,9 @@ msgstr "クラウドワークスペースを開始中"
 msgid "Starting the agent…"
 msgstr "エージェントを起動しています…"
 
+msgid "Starting the cloud workspace…"
+msgstr "クラウドワークスペースを起動しています…"
+
 msgid "Starting the simulator…"
 msgstr "シミュレーターを起動しています…"
 
@@ -18958,6 +18985,9 @@ msgstr "チャットはそのまま残ります。このターンの後に誰か
 msgid "The cloud workspace should have started but didn't answer in time. The next run tries again."
 msgstr "クラウドワークスペースは起動しているはずですが、時間内に応答がありませんでした。次回の実行で再試行します。"
 
+msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
+msgstr "コミットされていない変更を含むクラウドワークスペースの作業は、新しいブランチにプッシュされます。そのブランチからこのコンピューターのワークスペースが起動し、この会話はそこで続きます。エージェントが作業中の場合は、先に停止します。"
+
 msgid "The code expired. Start again."
 msgstr "コードの有効期限が切れました。やり直してください。"
 
@@ -19404,6 +19434,9 @@ msgstr "このクラウドワークスペースを起動できません"
 
 msgid "This cloud workspace is waking up, which can take up to 30 seconds after it has been idle."
 msgstr "このクラウドワークスペースを起動しています。しばらく使われていなかった場合は、最大30秒かかることがあります。"
+
+msgid "This computer's host is not running"
+msgstr "このコンピューターのホストが実行されていません"
 
 msgid "This conversation is too long for the model"
 msgstr "この会話はモデルには長すぎます"
@@ -21748,8 +21781,8 @@ msgstr "保存しないと変更は失われます。"
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "コードは既定でローカルに留まり、連携するサービスは明示的に制御できます。"
 
-msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
-msgstr "コミットされていない変更を含む現在の作業は、リモートの新しいブランチにプッシュされます。選択した環境でそのブランチからクラウドワークスペースが起動し、この会話はそこで続きます。"
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
+msgstr "コミットされていない変更を含む現在の作業は、リモートの新しいブランチにプッシュされます。選択した環境でそのブランチからクラウドワークスペースが起動し、この会話はそこで続きます。エージェントが作業中の場合は、先に停止します。"
 
 msgid "Your download starts automatically."
 msgstr "ダウンロードは自動的に始まります。"

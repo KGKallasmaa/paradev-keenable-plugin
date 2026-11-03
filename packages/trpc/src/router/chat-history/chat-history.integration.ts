@@ -231,3 +231,25 @@ describe("chatHistory.search", () => {
 		);
 	});
 });
+
+describe("chatHistory.moveTo", () => {
+	test("moves a chat back to the owner's computer, and the cloud copy can no longer write it", async () => {
+		const sessionId = newSession();
+		const box = callerFor(USER, CLOUD_WORKSPACE);
+		await push(sessionId, [{ seq: 1, event: agentMessage("a", "a") }], {
+			as: box,
+			workspaceId: CLOUD_WORKSPACE,
+		});
+		await owner.moveTo({ sessionId, workspaceId: WORKSPACE });
+		await push(sessionId, [{ seq: 2, event: agentMessage("b", "b") }]);
+		await expect(
+			push(sessionId, [{ seq: 3, event: agentMessage("c", "c") }], {
+				as: box,
+				workspaceId: CLOUD_WORKSPACE,
+			}),
+		).rejects.toThrow();
+		await expect(
+			callerFor(OTHER_USER).moveTo({ sessionId, workspaceId: WORKSPACE }),
+		).rejects.toThrow();
+	});
+});

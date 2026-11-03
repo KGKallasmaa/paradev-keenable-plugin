@@ -47,6 +47,12 @@ export const sessionInputSchema = z.object({
 	sessionId: z.string().uuid(),
 });
 
+export const moveToInputSchema = z.object({
+	sessionId: z.string().uuid(),
+	/** The workspace on this computer that continues the chat. */
+	workspaceId: z.string().uuid(),
+});
+
 export const searchInputSchema = z.object({
 	query: z.string().trim().min(1).max(200),
 	limit: z.number().int().min(1).max(50).default(20),

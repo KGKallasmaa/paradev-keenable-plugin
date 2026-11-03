@@ -1940,6 +1940,9 @@ msgstr "Tambah akun {0}"
 msgid "Add {0} to workspace"
 msgstr "Tambahkan {0} ke workspace"
 
+msgid "Add {repositoryName} as a project on this computer first"
+msgstr "Tambahkan {repositoryName} sebagai proyek di komputer ini terlebih dahulu"
+
 msgid "Add a comment…"
 msgstr "Tambahkan komentar…"
 
@@ -5878,6 +5881,9 @@ msgstr "Tidak dapat memindahkan subagen ke latar belakang"
 msgid "Couldn't move this chat to the cloud"
 msgstr "Tidak dapat memindahkan chat ini ke cloud"
 
+msgid "Couldn't move this chat to this computer"
+msgstr "Tidak dapat memindahkan chat ini ke komputer ini"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Tidak dapat menamai \"{name}\" secara otomatis"
 
@@ -6288,6 +6294,9 @@ msgstr "Membuat tugas"
 
 msgid "Creating a workspace"
 msgstr "Membuat workspace"
+
+msgid "Creating a workspace on this computer…"
+msgstr "Membuat ruang kerja di komputer ini…"
 
 msgid "Creating PR..."
 msgstr "Membuat PR…"
@@ -11631,6 +11640,9 @@ msgstr "Pindahkan {name} ke latar belakang"
 msgid "Move this chat to the cloud?"
 msgstr "Pindahkan chat ini ke cloud?"
 
+msgid "Move this chat to this computer?"
+msgstr "Pindahkan chat ini ke komputer ini?"
+
 msgid "Move to background"
 msgstr "Pindahkan ke latar belakang"
 
@@ -11648,6 +11660,9 @@ msgstr "Pindahkan ke kanan"
 
 msgid "Move to Tab"
 msgstr "Pindahkan ke Tab"
+
+msgid "Move to this computer"
+msgstr "Pindahkan ke komputer ini"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\" dipindahkan ke {group}"
@@ -15985,6 +16000,9 @@ msgstr "\"{workspaceName}\" dipulihkan"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Memulihkan \"{workspaceName}\"…"
 
+msgid "Restoring the conversation…"
+msgstr "Memulihkan percakapan…"
+
 msgid "Restoring your session"
 msgstr "Memulihkan sesi Anda"
 
@@ -16467,6 +16485,12 @@ msgstr "Disimpan ke Downloads"
 
 msgid "Saving as an environment..."
 msgstr "Menyimpan sebagai lingkungan..."
+
+msgid "Saving the cloud workspace's work and this conversation…"
+msgstr "Menyimpan pekerjaan ruang kerja cloud dan percakapan ini…"
+
+msgid "Saving your work and this conversation…"
+msgstr "Menyimpan pekerjaan Anda dan percakapan ini…"
 
 msgid "Saving..."
 msgstr "Menyimpan..."
@@ -18163,6 +18187,9 @@ msgstr "Memulai workspace cloud"
 msgid "Starting the agent…"
 msgstr "Memulai agen…"
 
+msgid "Starting the cloud workspace…"
+msgstr "Memulai ruang kerja cloud…"
+
 msgid "Starting the simulator…"
 msgstr "Memulai simulator…"
 
@@ -18958,6 +18985,9 @@ msgstr "Chat tetap seperti adanya. File yang diedit sejak giliran ini, oleh siap
 msgid "The cloud workspace should have started but didn't answer in time. The next run tries again."
 msgstr "Workspace cloud seharusnya sudah berjalan, tetapi tidak merespons tepat waktu. Run berikutnya akan mencoba lagi."
 
+msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Pekerjaan ruang kerja cloud, termasuk perubahan yang belum di-commit, didorong ke branch baru. Ruang kerja di komputer ini dimulai dari branch tersebut, dan percakapan ini berlanjut di sana. Jika agen sedang bekerja, agen dihentikan terlebih dahulu."
+
 msgid "The code expired. Start again."
 msgstr "Kode kedaluwarsa. Mulai lagi."
 
@@ -19404,6 +19434,9 @@ msgstr "Workspace cloud ini tidak dapat dimulai"
 
 msgid "This cloud workspace is waking up, which can take up to 30 seconds after it has been idle."
 msgstr "Workspace cloud ini sedang dibangunkan, yang bisa memakan waktu hingga 30 detik setelah tidak aktif."
+
+msgid "This computer's host is not running"
+msgstr "Host komputer ini tidak berjalan"
 
 msgid "This conversation is too long for the model"
 msgstr "Percakapan ini terlalu panjang untuk model"
@@ -21748,8 +21781,8 @@ msgstr "Perubahan Anda akan hilang kalau tidak disimpan."
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Kode Anda tetap lokal secara bawaan, dengan kendali eksplisit atas layanan yang terhubung."
 
-msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
-msgstr "Pekerjaan Anda saat ini, termasuk perubahan yang belum di-commit, didorong ke branch baru di remote. Ruang kerja cloud dimulai dari branch tersebut di lingkungan yang Anda pilih, dan percakapan ini berlanjut di sana."
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Pekerjaan Anda saat ini, termasuk perubahan yang belum di-commit, didorong ke branch baru di remote. Ruang kerja cloud dimulai dari branch tersebut di lingkungan yang Anda pilih, dan percakapan ini berlanjut di sana. Jika agen sedang bekerja, agen dihentikan terlebih dahulu."
 
 msgid "Your download starts automatically."
 msgstr "Unduhan Anda dimulai secara otomatis."

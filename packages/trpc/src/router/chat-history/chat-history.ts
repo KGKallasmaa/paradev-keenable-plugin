@@ -17,6 +17,7 @@ import { protectedProcedure, userError } from "../../trpc";
 import { requireActiveOrgMembership } from "../utils/active-org";
 import {
 	createTranscriptUploadInputSchema,
+	moveToInputSchema,
 	pullInputSchema,
 	pushInputSchema,
 	searchInputSchema,
@@ -30,6 +31,7 @@ import {
 	loadAccessibleSession,
 } from "./utils/access";
 import { foldEvents } from "./utils/foldEvents";
+import { moveChat } from "./utils/moveChat";
 import { searchChats } from "./utils/searchChats";
 
 type ProtectedCtx = Parameters<typeof requireActiveOrgMembership>[0] & {
@@ -359,6 +361,19 @@ export const chatHistoryRouter = {
 				...transcript,
 				url: await presignedGetUrl(fileOriginalKey(fileId), 60 * 60),
 			};
+		}),
+
+	/**
+	 * Moves a chat to a workspace on the caller's own computer. A box cannot:
+	 * a chat moves to a cloud workspace when that workspace is created.
+	 */
+	moveTo: protectedProcedure
+		.input(moveToInputSchema)
+		.mutation(async ({ ctx, input }) => {
+			const caller = await callerOf(ctx);
+			await loadAccessibleSession(caller, input.sessionId);
+			await moveChat(input.sessionId, input.workspaceId);
+			return { sessionId: input.sessionId, workspaceId: input.workspaceId };
 		}),
 
 	search: protectedProcedure

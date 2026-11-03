@@ -26,7 +26,10 @@ import {
 	NO_PROJECT_KEY,
 	useV2WorkspaceCreateDefaultsStore,
 } from "renderer/stores/v2-workspace-create-defaults";
-import { useMoveChatToCloud } from "../../../../hooks/useMoveChatToCloud";
+import {
+	type MoveToCloudStage,
+	useMoveChatToCloud,
+} from "../../../../hooks/useMoveChatToCloud";
 
 interface MoveChatToCloudDialogProps {
 	open: boolean;
@@ -48,7 +51,8 @@ export function MoveChatToCloudDialog({
 	const { t } = useLingui();
 	const navigate = useNavigate();
 	const organizationId = useActiveOrganizationId();
-	const [isMoving, setIsMoving] = useState(false);
+	const [stage, setStage] = useState<MoveToCloudStage | null>(null);
+	const isMoving = stage !== null;
 	const [isCreatingEnvironment, setIsCreatingEnvironment] = useState(false);
 	const moveChatToCloud = useMoveChatToCloud(workspaceId);
 
@@ -92,7 +96,7 @@ export function MoveChatToCloudDialog({
 
 	const move = async () => {
 		if (!environment) return;
-		setIsMoving(true);
+		setStage("saving");
 		try {
 			await moveChatToCloud({
 				chatSessionId,
@@ -102,6 +106,7 @@ export function MoveChatToCloudDialog({
 					repositoryFullName: environment.repositories?.[0]?.fullName ?? null,
 				},
 				machineSize: selection.machineSize,
+				onStage: setStage,
 			});
 			onOpenChange(false);
 		} catch (error) {
@@ -113,7 +118,7 @@ export function MoveChatToCloudDialog({
 					: errorMessage(error, t({ message: "Unknown error" })),
 			});
 		} finally {
-			setIsMoving(false);
+			setStage(null);
 		}
 	};
 
@@ -135,7 +140,7 @@ export function MoveChatToCloudDialog({
 								Your current work, including uncommitted changes, is pushed to a
 								new branch on the remote. A cloud workspace starts from that
 								branch in the environment you pick, and this conversation
-								continues there.
+								continues there. If the agent is working, it stops first.
 							</Trans>
 						</DialogDescription>
 					</DialogHeader>
@@ -162,6 +167,15 @@ export function MoveChatToCloudDialog({
 							}
 						/>
 					</div>
+					{stage && (
+						<p className="text-sm text-muted-foreground" aria-live="polite">
+							{stage === "saving" ? (
+								<Trans>Saving your work and this conversation…</Trans>
+							) : (
+								<Trans>Starting the cloud workspace…</Trans>
+							)}
+						</p>
+					)}
 					<DialogFooter>
 						<Button
 							variant="outline"

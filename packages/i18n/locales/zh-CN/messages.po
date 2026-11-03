@@ -1940,6 +1940,9 @@ msgstr "添加{0}账户"
 msgid "Add {0} to workspace"
 msgstr "将{0}添加到工作区"
 
+msgid "Add {repositoryName} as a project on this computer first"
+msgstr "请先将 {repositoryName} 添加为此电脑上的项目"
+
 msgid "Add a comment…"
 msgstr "添加评论…"
 
@@ -5878,6 +5881,9 @@ msgstr "无法将子智能体移到后台"
 msgid "Couldn't move this chat to the cloud"
 msgstr "无法将此聊天移至云端"
 
+msgid "Couldn't move this chat to this computer"
+msgstr "无法将此对话移到此电脑"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "无法自动命名“{name}”"
 
@@ -6288,6 +6294,9 @@ msgstr "正在创建任务"
 
 msgid "Creating a workspace"
 msgstr "正在创建工作区"
+
+msgid "Creating a workspace on this computer…"
+msgstr "正在此电脑上创建工作区…"
 
 msgid "Creating PR..."
 msgstr "正在创建PR…"
@@ -11631,6 +11640,9 @@ msgstr "将 {name} 移到后台"
 msgid "Move this chat to the cloud?"
 msgstr "将此聊天移至云端？"
 
+msgid "Move this chat to this computer?"
+msgstr "将此对话移到此电脑？"
+
 msgid "Move to background"
 msgstr "移到后台"
 
@@ -11648,6 +11660,9 @@ msgstr "移到右侧"
 
 msgid "Move to Tab"
 msgstr "移动到标签页"
+
+msgid "Move to this computer"
+msgstr "移到此电脑"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "已将“{name}”移动到 {group}"
@@ -15985,6 +16000,9 @@ msgstr "已恢复“{workspaceName}”"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "正在恢复“{workspaceName}”…"
 
+msgid "Restoring the conversation…"
+msgstr "正在恢复对话…"
+
 msgid "Restoring your session"
 msgstr "正在恢复你的会话"
 
@@ -16467,6 +16485,12 @@ msgstr "已保存到“下载”文件夹"
 
 msgid "Saving as an environment..."
 msgstr "正在保存为环境..."
+
+msgid "Saving the cloud workspace's work and this conversation…"
+msgstr "正在保存云工作区的工作和此对话…"
+
+msgid "Saving your work and this conversation…"
+msgstr "正在保存你的工作和此对话…"
 
 msgid "Saving..."
 msgstr "正在保存..."
@@ -18163,6 +18187,9 @@ msgstr "正在启动云端工作区"
 msgid "Starting the agent…"
 msgstr "正在启动智能体…"
 
+msgid "Starting the cloud workspace…"
+msgstr "正在启动云工作区…"
+
 msgid "Starting the simulator…"
 msgstr "正在启动模拟器…"
 
@@ -18958,6 +18985,9 @@ msgstr "聊天保持不变。自本轮以来被任何人编辑过的文件将保
 msgid "The cloud workspace should have started but didn't answer in time. The next run tries again."
 msgstr "云端工作区本应已启动，但没有及时响应。下次运行时会重试。"
 
+msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
+msgstr "云工作区的工作（包括未提交的更改）会推送到一个新分支。此电脑上的工作区会从该分支启动，此对话将在那里继续。如果代理正在工作，会先停止。"
+
 msgid "The code expired. Start again."
 msgstr "代码已过期。请重新开始。"
 
@@ -19404,6 +19434,9 @@ msgstr "无法启动此云端工作区"
 
 msgid "This cloud workspace is waking up, which can take up to 30 seconds after it has been idle."
 msgstr "正在唤醒此云工作区。如果它已闲置一段时间，可能需要最多 30 秒。"
+
+msgid "This computer's host is not running"
+msgstr "此电脑的主机服务未运行"
 
 msgid "This conversation is too long for the model"
 msgstr "此对话对模型来说太长了"
@@ -21748,8 +21781,8 @@ msgstr "如果不保存，你的更改将会丢失。"
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "你的代码默认留在本地，连接哪些服务由你明确决定。"
 
-msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
-msgstr "你当前的工作（包括未提交的更改）会推送到远程的一个新分支。云工作区会在你选择的环境中从该分支启动，此对话将在那里继续。"
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
+msgstr "你当前的工作（包括未提交的更改）会推送到远程的一个新分支。云工作区会在你选择的环境中从该分支启动，此对话将在那里继续。如果代理正在工作，会先停止。"
 
 msgid "Your download starts automatically."
 msgstr "下载会自动开始。"

@@ -1,1 +1,4 @@
-export { useMoveChatToCloud } from "./useMoveChatToCloud";
+export {
+	type MoveToCloudStage,
+	useMoveChatToCloud,
+} from "./useMoveChatToCloud";

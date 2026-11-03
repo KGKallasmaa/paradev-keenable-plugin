@@ -42,6 +42,8 @@ export type ChatJournalOptions = {
 export type ImportedSession = {
 	session: ChatSessionInit & { epoch: string; lastSeq: number };
 	events: readonly { seq: number; event: DurableEvent }[];
+	/** Overwrites a journal this host already has, as when a chat moves back. */
+	replace?: boolean;
 };
 
 function reportListenerFailure(error: unknown): void {
@@ -150,11 +152,15 @@ export class ChatJournal {
 	 * it first appeared at, which keeps the order a chat shows; the session
 	 * state goes at the source's last seq, so the next append continues
 	 * after it. Returns false, writing nothing, when the session already has
-	 * a journal.
+	 * a journal and `replace` is not set.
 	 */
-	importSession({ session, events }: ImportedSession): boolean {
+	importSession({ session, events, replace }: ImportedSession): boolean {
 		const existing = readSessionRow(this.db, session.sessionId);
-		if (existing && this.hasJournal(session.sessionId, existing.epoch)) {
+		if (
+			!replace &&
+			existing &&
+			this.hasJournal(session.sessionId, existing.epoch)
+		) {
 			return false;
 		}
 

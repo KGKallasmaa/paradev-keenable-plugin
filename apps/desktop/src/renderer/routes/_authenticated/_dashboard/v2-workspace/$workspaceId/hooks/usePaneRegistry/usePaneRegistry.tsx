@@ -93,6 +93,7 @@ import { ChatPane } from "./components/ChatPane";
 import { ChatHistoryPicker } from "./components/ChatPane/components/ChatHistoryPicker";
 import { ChatModeMenu } from "./components/ChatPane/components/ChatModeMenu";
 import { MoveToCloudButton } from "./components/ChatPane/components/MoveToCloudButton";
+import { MoveToComputerButton } from "./components/ChatPane/components/MoveToComputerButton";
 import { ChatPaneTitle } from "./components/ChatPaneTitle";
 import { CommentPane } from "./components/CommentPane";
 import { CommentPaneHeaderExtras } from "./components/CommentPane/components/CommentPaneHeaderExtras";
@@ -942,6 +943,7 @@ export function usePaneRegistry({
 					return (
 						<div className="flex items-center gap-1">
 							<MoveToCloudButton data={data} workspaceId={workspaceId} />
+							<MoveToComputerButton data={data} workspaceId={workspaceId} />
 							<ChatHistoryPicker
 								context={ctx}
 								workspaceId={workspaceId}

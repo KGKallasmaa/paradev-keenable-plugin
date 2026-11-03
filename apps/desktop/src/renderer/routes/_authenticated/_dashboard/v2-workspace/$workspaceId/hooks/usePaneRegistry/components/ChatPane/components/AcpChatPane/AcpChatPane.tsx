@@ -65,6 +65,8 @@ export interface AgentSwitchTarget {
 
 export function AcpChatPane({
 	agent,
+	awaitingMove,
+	onMoveArrived,
 	draftId,
 	isActive,
 	onSessionInfo,
@@ -97,6 +99,9 @@ export function AcpChatPane({
 	draftId?: string;
 	/** `sessionId` is absent until the agent has run a turn to report one. */
 	agent: { id: string; sessionId?: string } | undefined;
+	/** The chat is moving here and the host may not have it yet: wait, do not recover. */
+	awaitingMove?: boolean;
+	onMoveArrived?: () => void;
 	isActive: boolean;
 	sessionId: string | null;
 	pendingPrompts: UserContent[][];
@@ -460,8 +465,25 @@ export function AcpChatPane({
 				!binding.chatSessionId &&
 				binding.endedAt === undefined,
 		);
+	const waitingForMove =
+		awaitingMove === true && stored !== undefined && !stored?.session;
+	useEffect(() => {
+		if (awaitingMove && stored?.session) onMoveArrived?.();
+	}, [awaitingMove, stored?.session, onMoveArrived]);
+	useEffect(() => {
+		if (!waitingForMove) return;
+		const timer = setInterval(() => {
+			void queryClient.invalidateQueries({
+				queryKey: ["acp-chat-session", sessionId],
+			});
+		}, 2_000);
+		return () => clearInterval(timer);
+	}, [waitingForMove, queryClient, sessionId]);
 	const recoverable = Boolean(
-		(sessionStopped || sessionDead) && harness && !continuedInTerminal,
+		(sessionStopped || sessionDead) &&
+			harness &&
+			!continuedInTerminal &&
+			!waitingForMove,
 	);
 	const recoveries = useRef(0);
 	if (stored?.live && !sessionDead) recoveries.current = 0;

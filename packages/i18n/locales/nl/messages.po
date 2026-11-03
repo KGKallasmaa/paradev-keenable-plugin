@@ -1940,6 +1940,9 @@ msgstr "{0}-account toevoegen"
 msgid "Add {0} to workspace"
 msgstr "{0} toevoegen aan werkruimte"
 
+msgid "Add {repositoryName} as a project on this computer first"
+msgstr "Voeg {repositoryName} eerst toe als project op deze computer"
+
 msgid "Add a comment…"
 msgstr "Voeg een reactie toe…"
 
@@ -5878,6 +5881,9 @@ msgstr "Kan de subagent niet naar de achtergrond verplaatsen"
 msgid "Couldn't move this chat to the cloud"
 msgstr "Kon deze chat niet naar de cloud verplaatsen"
 
+msgid "Couldn't move this chat to this computer"
+msgstr "Kan deze chat niet naar deze computer verplaatsen"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Kon \"{name}\" niet automatisch een naam geven"
 
@@ -6288,6 +6294,9 @@ msgstr "Taak wordt aangemaakt"
 
 msgid "Creating a workspace"
 msgstr "Werkruimte wordt aangemaakt"
+
+msgid "Creating a workspace on this computer…"
+msgstr "Werkruimte op deze computer wordt gemaakt…"
 
 msgid "Creating PR..."
 msgstr "PR wordt aangemaakt…"
@@ -11631,6 +11640,9 @@ msgstr "{name} naar de achtergrond verplaatsen"
 msgid "Move this chat to the cloud?"
 msgstr "Deze chat naar de cloud verplaatsen?"
 
+msgid "Move this chat to this computer?"
+msgstr "Deze chat naar deze computer verplaatsen?"
+
 msgid "Move to background"
 msgstr "Naar de achtergrond"
 
@@ -11648,6 +11660,9 @@ msgstr "Naar rechts verplaatsen"
 
 msgid "Move to Tab"
 msgstr "Verplaatsen naar tabblad"
+
+msgid "Move to this computer"
+msgstr "Naar deze computer verplaatsen"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\" verplaatst naar {group}"
@@ -15985,6 +16000,9 @@ msgstr "\"{workspaceName}\" hersteld"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "\"{workspaceName}\" wordt hersteld…"
 
+msgid "Restoring the conversation…"
+msgstr "Gesprek wordt hersteld…"
+
 msgid "Restoring your session"
 msgstr "Je sessie wordt hersteld"
 
@@ -16467,6 +16485,12 @@ msgstr "Opgeslagen in Downloads"
 
 msgid "Saving as an environment..."
 msgstr "Opslaan als omgeving..."
+
+msgid "Saving the cloud workspace's work and this conversation…"
+msgstr "Werk van de cloudwerkruimte en dit gesprek worden opgeslagen…"
+
+msgid "Saving your work and this conversation…"
+msgstr "Je werk en dit gesprek worden opgeslagen…"
 
 msgid "Saving..."
 msgstr "Opslaan..."
@@ -18163,6 +18187,9 @@ msgstr "Cloudwerkruimte starten"
 msgid "Starting the agent…"
 msgstr "Agent starten…"
 
+msgid "Starting the cloud workspace…"
+msgstr "Cloudwerkruimte wordt gestart…"
+
 msgid "Starting the simulator…"
 msgstr "Simulator wordt gestart…"
 
@@ -18958,6 +18985,9 @@ msgstr "De chat blijft zoals hij is. Bestanden die sinds deze beurt door wie dan
 msgid "The cloud workspace should have started but didn't answer in time. The next run tries again."
 msgstr "De cloudwerkruimte had gestart moeten zijn, maar reageerde niet op tijd. De volgende run probeert het opnieuw."
 
+msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Het werk van de cloudwerkruimte, inclusief niet-gecommitte wijzigingen, wordt naar een nieuwe branch gepusht. Een werkruimte op deze computer start vanaf die branch, en dit gesprek gaat daar verder. Als de agent bezig is, stopt die eerst."
+
 msgid "The code expired. Start again."
 msgstr "De code is verlopen. Begin opnieuw."
 
@@ -19404,6 +19434,9 @@ msgstr "Deze cloudwerkruimte kan niet starten"
 
 msgid "This cloud workspace is waking up, which can take up to 30 seconds after it has been idle."
 msgstr "Deze cloudwerkruimte wordt gewekt. Na inactiviteit kan dat tot 30 seconden duren."
+
+msgid "This computer's host is not running"
+msgstr "De host van deze computer draait niet"
 
 msgid "This conversation is too long for the model"
 msgstr "Dit gesprek is te lang voor het model"
@@ -21748,8 +21781,8 @@ msgstr "Je wijzigingen gaan verloren als je ze niet opslaat."
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Je code blijft standaard lokaal, met expliciete controle over gekoppelde diensten."
 
-msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
-msgstr "Je huidige werk, inclusief niet-gecommitte wijzigingen, wordt naar een nieuwe branch op de remote gepusht. Een cloudwerkruimte start vanaf die branch in de omgeving die je kiest, en dit gesprek gaat daar verder."
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Je huidige werk, inclusief niet-gecommitte wijzigingen, wordt naar een nieuwe branch op de remote gepusht. Een cloudwerkruimte start vanaf die branch in de omgeving die je kiest, en dit gesprek gaat daar verder. Als de agent bezig is, stopt die eerst."
 
 msgid "Your download starts automatically."
 msgstr "Je download start automatisch."

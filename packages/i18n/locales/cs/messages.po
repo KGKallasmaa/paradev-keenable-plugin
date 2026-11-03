@@ -1940,6 +1940,9 @@ msgstr "Přidat účet {0}"
 msgid "Add {0} to workspace"
 msgstr "Přidat {0} do pracovního prostoru"
 
+msgid "Add {repositoryName} as a project on this computer first"
+msgstr "Nejprve přidejte {repositoryName} jako projekt na tomto počítači"
+
 msgid "Add a comment…"
 msgstr "Přidat komentář…"
 
@@ -5878,6 +5881,9 @@ msgstr "Subagenta se nepodařilo přesunout na pozadí"
 msgid "Couldn't move this chat to the cloud"
 msgstr "Tento chat se nepodařilo přesunout do cloudu"
 
+msgid "Couldn't move this chat to this computer"
+msgstr "Tento chat se nepodařilo přesunout na tento počítač"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Nepodařilo se automaticky pojmenovat „{name}“"
 
@@ -6288,6 +6294,9 @@ msgstr "Vytváří se úkol"
 
 msgid "Creating a workspace"
 msgstr "Vytváří se pracovní prostor"
+
+msgid "Creating a workspace on this computer…"
+msgstr "Vytváří se pracovní prostor na tomto počítači…"
 
 msgid "Creating PR..."
 msgstr "Vytváření PR…"
@@ -11631,6 +11640,9 @@ msgstr "Přesunout {name} na pozadí"
 msgid "Move this chat to the cloud?"
 msgstr "Přesunout tento chat do cloudu?"
 
+msgid "Move this chat to this computer?"
+msgstr "Přesunout tento chat na tento počítač?"
+
 msgid "Move to background"
 msgstr "Přesunout na pozadí"
 
@@ -11648,6 +11660,9 @@ msgstr "Přesunout doprava"
 
 msgid "Move to Tab"
 msgstr "Přesunout na kartu"
+
+msgid "Move to this computer"
+msgstr "Přesunout na tento počítač"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "„{name}“ přesunuto do skupiny {group}"
@@ -15985,6 +16000,9 @@ msgstr "„{workspaceName}“ obnoven"
 msgid "Restoring \"{workspaceName}\"…"
 msgstr "Obnovuji „{workspaceName}“…"
 
+msgid "Restoring the conversation…"
+msgstr "Obnovuje se konverzace…"
+
 msgid "Restoring your session"
 msgstr "Obnovuji vaši relaci"
 
@@ -16467,6 +16485,12 @@ msgstr "Uloženo do Stažených souborů"
 
 msgid "Saving as an environment..."
 msgstr "Ukládání jako prostředí..."
+
+msgid "Saving the cloud workspace's work and this conversation…"
+msgstr "Ukládá se práce cloudového pracovního prostoru a tato konverzace…"
+
+msgid "Saving your work and this conversation…"
+msgstr "Ukládá se vaše práce a tato konverzace…"
 
 msgid "Saving..."
 msgstr "Ukládání…"
@@ -18163,6 +18187,9 @@ msgstr "Spouštím cloudový pracovní prostor"
 msgid "Starting the agent…"
 msgstr "Spouštění agenta…"
 
+msgid "Starting the cloud workspace…"
+msgstr "Spouští se cloudový pracovní prostor…"
+
 msgid "Starting the simulator…"
 msgstr "Spouštění simulátoru…"
 
@@ -18958,6 +18985,9 @@ msgstr "Chat zůstane, jak je. Soubory, které kdokoli upravil od tohoto tahu, z
 msgid "The cloud workspace should have started but didn't answer in time. The next run tries again."
 msgstr "Cloudový pracovní prostor se měl spustit, ale neodpověděl včas. Další běh to zkusí znovu."
 
+msgid "The cloud workspace's work, including uncommitted changes, is pushed to a new branch. A workspace on this computer starts from that branch, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Práce cloudového pracovního prostoru, včetně nepotvrzených změn, se odešle do nové větve. Z této větve se spustí pracovní prostor na tomto počítači a tato konverzace tam bude pokračovat. Pokud agent pracuje, nejprve se zastaví."
+
 msgid "The code expired. Start again."
 msgstr "Platnost kódu vypršela. Začněte znovu."
 
@@ -19404,6 +19434,9 @@ msgstr "Tento cloudový pracovní prostor nelze spustit"
 
 msgid "This cloud workspace is waking up, which can take up to 30 seconds after it has been idle."
 msgstr "Tento cloudový workspace se probouzí, což může po nečinnosti trvat až 30 sekund."
+
+msgid "This computer's host is not running"
+msgstr "Hostitel tohoto počítače neběží"
 
 msgid "This conversation is too long for the model"
 msgstr "Tato konverzace je pro model příliš dlouhá"
@@ -21748,8 +21781,8 @@ msgstr "Pokud změny neuložíte, budou ztraceny."
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Váš kód zůstává ve výchozím stavu lokálně a připojené služby máte výslovně pod kontrolou."
 
-msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
-msgstr "Vaše aktuální práce, včetně nepotvrzených změn, se odešle do nové větve na vzdáleném repozitáři. Z této větve se v prostředí, které vyberete, spustí cloudový pracovní prostor a tato konverzace tam bude pokračovat."
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there. If the agent is working, it stops first."
+msgstr "Vaše aktuální práce, včetně nepotvrzených změn, se odešle do nové větve ve vzdáleném repozitáři. Z této větve se v prostředí, které vyberete, spustí cloudový pracovní prostor a tato konverzace tam bude pokračovat. Pokud agent pracuje, nejprve se zastaví."
 
 msgid "Your download starts automatically."
 msgstr "Stahování začne automaticky."
