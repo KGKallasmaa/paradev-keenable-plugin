@@ -1650,6 +1650,11 @@ export const chatSessions = pgTable(
 		}),
 		v2WorkspaceId: uuid("v2_workspace_id"),
 		title: text(),
+		harness: text(),
+		harnessSessionId: text("harness_session_id"),
+		epoch: text(),
+		lastSeq: integer("last_seq"),
+		status: text(),
 		lastActiveAt: timestamp("last_active_at").notNull().defaultNow(),
 		createdAt: timestamp("created_at").notNull().defaultNow(),
 		updatedAt: timestamp("updated_at")
@@ -1661,6 +1666,10 @@ export const chatSessions = pgTable(
 		index("chat_sessions_org_idx").on(table.organizationId),
 		index("chat_sessions_created_by_idx").on(table.createdBy),
 		index("chat_sessions_last_active_idx").on(table.lastActiveAt),
+		index("chat_sessions_org_harness_session_idx").on(
+			table.organizationId,
+			table.harnessSessionId,
+		),
 	],
 );
 

@@ -230,10 +230,7 @@ async function start(args: StartCloudWorkspaceInput) {
 		parentKind: "cloud_workspace",
 		parentId: row.id,
 		organizationId: args.organizationId,
-		fileIds: [
-			...(args.attachmentFileIds ?? []),
-			...(args.launch?.resume ? [args.launch.resume.transcriptFileId] : []),
-		],
+		fileIds: args.attachmentFileIds ?? [],
 	}).catch((error) => {
 		console.error(
 			`[cloud-workspace] could not keep the prompt's files for ${row.id}`,
