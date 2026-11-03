@@ -5875,6 +5875,9 @@ msgstr "無法合併拉取請求"
 msgid "Couldn't move the subagent to the background"
 msgstr "無法將子代理程式移到背景"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "無法將此聊天移至雲端"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "無法自動命名「{name}」"
 
@@ -11625,8 +11628,14 @@ msgstr "將{count}個移動到群組"
 msgid "Move {name} to background"
 msgstr "將 {name} 移到背景"
 
+msgid "Move this chat to the cloud?"
+msgstr "要將此聊天移至雲端嗎？"
+
 msgid "Move to background"
 msgstr "移到背景"
+
+msgid "Move to cloud"
+msgstr "移至雲端"
 
 msgid "Move to group"
 msgstr "移動到群組"
@@ -11642,6 +11651,9 @@ msgstr "移動到分頁"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "已將「{name}」移動到 {group}"
+
+msgid "Moving..."
+msgstr "正在移動..."
 
 msgid "Multi-select"
 msgstr "多選"
@@ -19423,6 +19435,9 @@ msgstr "此電子郵件已透過其他登入方式註冊，且提供者未將其
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "此環境沒有儲存庫。請先在設定中建立包含儲存庫的環境，再從該環境啟動工作區"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "此環境開啟的是 {environmentRepository}，而不是 {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "此環境的儲存庫已固定；請再次提升一個工作區以變更它們"
 
@@ -20474,6 +20489,9 @@ msgstr "需要更新"
 
 msgid "update the branch prefix"
 msgstr "更新分支字首"
+
+msgid "Update the host service on this device and try again."
+msgstr "請更新此裝置上的主機服務，然後再試一次。"
 
 msgid "Update this host to message subagents"
 msgstr "請更新此主機以傳送訊息給子代理程式"
@@ -21729,6 +21747,9 @@ msgstr "如果不儲存，你的更改將會丟失。"
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "你的程式碼預設留在本地，連線哪些服務由你明確決定。"
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "你目前的工作（包括未提交的變更）會推送到遠端的一個新分支。雲端工作區會在你選擇的環境中從該分支啟動，此對話將在那裡繼續。"
 
 msgid "Your download starts automatically."
 msgstr "下載會自動開始。"

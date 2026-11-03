@@ -167,7 +167,9 @@ describe("chatHistory.push and pull", () => {
 		});
 		const pulled = await owner.pull({ sessionId });
 		expect(
-			pulled.events.map((row) => row.event.type === "item" && row.event.item.id),
+			pulled.events.map(
+				(row) => row.event.type === "item" && row.event.item.id,
+			),
 		).toEqual(["new"]);
 		expect(pulled.session.epoch).toBe("epoch-2");
 	});

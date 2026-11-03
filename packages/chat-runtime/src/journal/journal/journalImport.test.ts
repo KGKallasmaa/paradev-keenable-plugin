@@ -58,9 +58,7 @@ describe("ChatJournal.importSession", () => {
 			"tool",
 			"reply",
 		]);
-		expect(outline.ok && outline.outline.session?.title).toBe(
-			"Fix the upload",
-		);
+		expect(outline.ok && outline.outline.session?.title).toBe("Fix the upload");
 
 		const atHead = readSince(runtime.db, SESSION, { epoch: EPOCH, seq: 9 });
 		expect(atHead).toEqual({ ok: true, envelopes: [] });

@@ -76,4 +76,3 @@ async function listFiles(root: string, prefix = ""): Promise<string[]> {
 	}
 	return files;
 }
-

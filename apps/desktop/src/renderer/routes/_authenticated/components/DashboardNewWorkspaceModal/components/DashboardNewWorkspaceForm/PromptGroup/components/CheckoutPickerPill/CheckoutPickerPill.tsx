@@ -8,11 +8,11 @@ import {
 import { CgLaptop } from "react-icons/cg";
 import { HiCheck, HiChevronUpDown } from "react-icons/hi2";
 import { LuGitFork } from "react-icons/lu";
-import type { WorkspaceCheckout } from "renderer/stores/new-workspace-draft";
 import {
 	FORM_PICKER_MENU_CLASS,
 	FormPickerTrigger,
-} from "../FormPickerTrigger";
+} from "renderer/routes/_authenticated/components/FormPickerTrigger";
+import type { WorkspaceCheckout } from "renderer/stores/new-workspace-draft";
 
 interface CheckoutPickerPillProps {
 	checkout: WorkspaceCheckout;

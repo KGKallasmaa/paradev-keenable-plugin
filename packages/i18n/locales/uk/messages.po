@@ -5869,6 +5869,9 @@ msgstr "Не вдалося злити пул-реквест"
 msgid "Couldn't move the subagent to the background"
 msgstr "Не вдалося перевести субагента у фоновий режим"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "Не вдалося перемістити цей чат у хмару"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Не вдалося автоматично назвати «{name}»"
 
@@ -11619,8 +11622,14 @@ msgstr "Перемістити {count} до групи"
 msgid "Move {name} to background"
 msgstr "Перевести {name} у фоновий режим"
 
+msgid "Move this chat to the cloud?"
+msgstr "Перемістити цей чат у хмару?"
+
 msgid "Move to background"
 msgstr "Перевести у фоновий режим"
+
+msgid "Move to cloud"
+msgstr "Перемістити в хмару"
 
 msgid "Move to group"
 msgstr "Перемістити до групи"
@@ -11636,6 +11645,9 @@ msgstr "Перемістити у вкладку"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "«{name}» переміщено до {group}"
+
+msgid "Moving..."
+msgstr "Переміщення..."
 
 msgid "Multi-select"
 msgstr "Множинний вибір"
@@ -19417,6 +19429,9 @@ msgstr "Цю електронну адресу вже зареєстровано
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "У цьому середовищі немає репозиторіїв. Створіть середовище з репозиторіями в налаштуваннях, а потім запустіть робочий простір із нього"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "Це середовище відкриває {environmentRepository}, а не {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "Репозиторії цього середовища фіксовані; щоб змінити їх, ще раз створіть середовище з робочого простору"
 
@@ -20468,6 +20483,9 @@ msgstr "Потрібне оновлення"
 
 msgid "update the branch prefix"
 msgstr "оновити префікс гілки"
+
+msgid "Update the host service on this device and try again."
+msgstr "Оновіть хост-службу на цьому пристрої та спробуйте ще раз."
 
 msgid "Update this host to message subagents"
 msgstr "Оновіть цей хост, щоб надсилати повідомлення субагентам"
@@ -21723,6 +21741,9 @@ msgstr "Якщо не зберегти зміни, їх буде втрачен�
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "За замовчуванням ваш код залишається локально, а підключеними сервісами ви керуєте явно."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "Ваша поточна робота, включно з незакомітованими змінами, надсилається до нової гілки у віддаленому репозиторії. Хмарний робочий простір запускається з цієї гілки у вибраному вами середовищі, і ця розмова продовжується там."
 
 msgid "Your download starts automatically."
 msgstr "Завантаження почнеться автоматично."

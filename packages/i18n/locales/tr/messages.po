@@ -5875,6 +5875,9 @@ msgstr "Pull request birleştirilemedi"
 msgid "Couldn't move the subagent to the background"
 msgstr "Alt ajan arka plana taşınamadı"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "Bu sohbet buluta taşınamadı"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "\"{name}\" otomatik olarak adlandırılamadı"
 
@@ -11625,8 +11628,14 @@ msgstr "{count} öğeyi gruba taşı"
 msgid "Move {name} to background"
 msgstr "{name} öğesini arka plana taşı"
 
+msgid "Move this chat to the cloud?"
+msgstr "Bu sohbet buluta taşınsın mı?"
+
 msgid "Move to background"
 msgstr "Arka plana taşı"
+
+msgid "Move to cloud"
+msgstr "Buluta taşı"
 
 msgid "Move to group"
 msgstr "Gruba taşı"
@@ -11642,6 +11651,9 @@ msgstr "Sekmeye taşı"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\", {group} grubuna taşındı"
+
+msgid "Moving..."
+msgstr "Taşınıyor..."
 
 msgid "Multi-select"
 msgstr "Çoklu seçim"
@@ -19423,6 +19435,9 @@ msgstr "Bu e-posta zaten başka bir oturum açma yöntemiyle kayıtlı ve sağla
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "Bu ortamda depo yok. Ayarlar'da depoları olan bir ortam oluşturun, ardından çalışma alanını o ortamdan başlatın"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "Bu ortam {chatRepository} değil, {environmentRepository} açar"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "Bu ortamın depoları sabittir; değiştirmek için bir çalışma alanını yeniden yükseltin"
 
@@ -20474,6 +20489,9 @@ msgstr "Güncelleme gerekli"
 
 msgid "update the branch prefix"
 msgstr "dal ön ekini güncelleme"
+
+msgid "Update the host service on this device and try again."
+msgstr "Bu cihazdaki host hizmetini güncelleyip yeniden deneyin."
 
 msgid "Update this host to message subagents"
 msgstr "Alt ajanlara mesaj göndermek için bu ana makineyi güncelleyin"
@@ -21729,6 +21747,9 @@ msgstr "Kaydetmezseniz değişiklikleriniz kaybolur."
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Kodunuz varsayılan olarak yerelde kalır; bağlı hizmetler üzerinde açık denetiminiz olur."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "Commit edilmemiş değişiklikler dahil mevcut çalışmanız uzak depoda yeni bir dala gönderilir. Seçtiğiniz ortamda bu daldan bir bulut çalışma alanı başlar ve bu konuşma orada devam eder."
 
 msgid "Your download starts automatically."
 msgstr "İndirmen otomatik olarak başlar."

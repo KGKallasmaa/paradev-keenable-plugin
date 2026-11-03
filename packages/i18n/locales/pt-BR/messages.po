@@ -5875,6 +5875,9 @@ msgstr "Não foi possível fazer o merge do pull request"
 msgid "Couldn't move the subagent to the background"
 msgstr "Não foi possível mover o subagente para segundo plano"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "Não foi possível mover este chat para a nuvem"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Não foi possível nomear \"{name}\" automaticamente"
 
@@ -11625,8 +11628,14 @@ msgstr "Mover {count} para um grupo"
 msgid "Move {name} to background"
 msgstr "Mover {name} para segundo plano"
 
+msgid "Move this chat to the cloud?"
+msgstr "Mover este chat para a nuvem?"
+
 msgid "Move to background"
 msgstr "Mover para segundo plano"
+
+msgid "Move to cloud"
+msgstr "Mover para a nuvem"
 
 msgid "Move to group"
 msgstr "Mover para grupo"
@@ -11642,6 +11651,9 @@ msgstr "Mover para a aba"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\" movida para {group}"
+
+msgid "Moving..."
+msgstr "Movendo..."
 
 msgid "Multi-select"
 msgstr "Múltipla escolha"
@@ -19423,6 +19435,9 @@ msgstr "Este e-mail já está registrado com outro método de login, e o provedo
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "Este ambiente não tem repositórios. Crie um ambiente com repositórios em Configurações e inicie a área de trabalho a partir dele"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "Este ambiente abre {environmentRepository}, não {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "Os repositórios deste ambiente são fixos; promova uma área de trabalho novamente para alterá-los"
 
@@ -20474,6 +20489,9 @@ msgstr "Atualização necessária"
 
 msgid "update the branch prefix"
 msgstr "atualizar o prefixo da branch"
+
+msgid "Update the host service on this device and try again."
+msgstr "Atualize o serviço de host neste dispositivo e tente novamente."
 
 msgid "Update this host to message subagents"
 msgstr "Atualize este host para enviar mensagens aos subagentes"
@@ -21729,6 +21747,9 @@ msgstr "Suas alterações serão perdidas se você não salvar."
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Seu código fica local por padrão, com controle explícito sobre os serviços conectados."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "Seu trabalho atual, incluindo alterações não confirmadas, é enviado para um novo branch no remoto. Um workspace na nuvem é iniciado a partir desse branch no ambiente que você escolher, e esta conversa continua lá."
 
 msgid "Your download starts automatically."
 msgstr "Seu download começa automaticamente."

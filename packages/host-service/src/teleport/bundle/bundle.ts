@@ -33,10 +33,7 @@ export async function uploadBundle(args: {
 	manifest: BundleManifest;
 	stageDir: string;
 }): Promise<string> {
-	await writeFile(
-		join(args.stageDir, MANIFEST),
-		JSON.stringify(args.manifest),
-	);
+	await writeFile(join(args.stageDir, MANIFEST), JSON.stringify(args.manifest));
 	const archive = `${args.stageDir}.tar.gz`;
 	try {
 		await execFileAsync("tar", ["-czf", archive, "-C", args.stageDir, "."]);

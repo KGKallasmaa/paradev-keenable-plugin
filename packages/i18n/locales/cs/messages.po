@@ -5875,6 +5875,9 @@ msgstr "Pull request se nepodařilo sloučit"
 msgid "Couldn't move the subagent to the background"
 msgstr "Subagenta se nepodařilo přesunout na pozadí"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "Tento chat se nepodařilo přesunout do cloudu"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Nepodařilo se automaticky pojmenovat „{name}“"
 
@@ -11625,8 +11628,14 @@ msgstr "Přesunout {count} do skupiny"
 msgid "Move {name} to background"
 msgstr "Přesunout {name} na pozadí"
 
+msgid "Move this chat to the cloud?"
+msgstr "Přesunout tento chat do cloudu?"
+
 msgid "Move to background"
 msgstr "Přesunout na pozadí"
+
+msgid "Move to cloud"
+msgstr "Přesunout do cloudu"
 
 msgid "Move to group"
 msgstr "Přesunout do skupiny"
@@ -11642,6 +11651,9 @@ msgstr "Přesunout na kartu"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "„{name}“ přesunuto do skupiny {group}"
+
+msgid "Moving..."
+msgstr "Přesouvání..."
 
 msgid "Multi-select"
 msgstr "Výběr více možností"
@@ -19423,6 +19435,9 @@ msgstr "Tento e-mail je již zaregistrován jiným způsobem přihlášení a po
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "Toto prostředí nemá žádné repozitáře. V Nastavení vytvořte prostředí s repozitáři a pracovní prostor spusťte z něj"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "Toto prostředí otevírá {environmentRepository}, ne {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "Repozitáře tohoto prostředí jsou pevně dané; pro jejich změnu znovu povyšte pracovní prostor"
 
@@ -20474,6 +20489,9 @@ msgstr "Vyžadována aktualizace"
 
 msgid "update the branch prefix"
 msgstr "aktualizovat prefix větve"
+
+msgid "Update the host service on this device and try again."
+msgstr "Aktualizujte službu hostitele na tomto zařízení a zkuste to znovu."
 
 msgid "Update this host to message subagents"
 msgstr "Aktualizujte tohoto hostitele, abyste mohli psát subagentům"
@@ -21729,6 +21747,9 @@ msgstr "Pokud změny neuložíte, budou ztraceny."
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Váš kód zůstává ve výchozím stavu lokálně a připojené služby máte výslovně pod kontrolou."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "Vaše aktuální práce, včetně nepotvrzených změn, se odešle do nové větve na vzdáleném repozitáři. Z této větve se v prostředí, které vyberete, spustí cloudový pracovní prostor a tato konverzace tam bude pokračovat."
 
 msgid "Your download starts automatically."
 msgstr "Stahování začne automaticky."

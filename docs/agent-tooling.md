@@ -132,7 +132,12 @@ superset sessions open --local --workspace WORKSPACE_ID --session CHAT_SESSION_I
 superset sessions close --local --workspace WORKSPACE_ID --session CHAT_SESSION_ID
 superset sessions resume --local --workspace WORKSPACE_ID --session CHAT_SESSION_ID
 superset sessions import --local --workspace WORKSPACE_ID --agent claude --native-session PROVIDER_SESSION_ID
+superset sessions search "acpAdapter upload" --limit 10
 ```
+
+`sessions search` asks the cloud API, not a host: it finds your chats that are stored in the cloud,
+which are every chat on a cloud workspace and every chat moved there, one row per conversation.
+It takes no `--workspace`.
 
 The host resolves the selected agent to an installed ACP harness. It does not check the `acp-chat`
 rollout flag: the desktop gates the chat UI and the API gates automation dispatch. Unsupported

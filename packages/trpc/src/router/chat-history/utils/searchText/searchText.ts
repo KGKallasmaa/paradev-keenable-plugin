@@ -1,7 +1,7 @@
 import {
 	type AgentMessage,
-	isHiddenText,
 	type Item,
+	isHiddenText,
 	type ToolCall,
 	type UserMessage,
 } from "@superset/chat/protocol";

@@ -504,8 +504,7 @@ async function continueMovedChat(
 		return {
 			kind: "chat",
 			sessionId: resume.chatSessionId,
-			terminalId:
-				chat.live.get(resume.chatSessionId)?.terminalId ?? terminalId,
+			terminalId: chat.live.get(resume.chatSessionId)?.terminalId ?? terminalId,
 		};
 	} catch (error) {
 		console.error("[sandbox] could not continue the moved chat", error);

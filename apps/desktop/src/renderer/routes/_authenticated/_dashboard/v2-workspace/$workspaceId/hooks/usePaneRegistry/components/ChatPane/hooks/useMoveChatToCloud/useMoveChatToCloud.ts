@@ -1,4 +1,5 @@
 import { useLingui } from "@lingui/react/macro";
+import type { MachineSize } from "@superset/shared/billing";
 import { useWorkspaceClient } from "@superset/workspace-client";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
@@ -14,39 +15,41 @@ export function useMoveChatToCloud(workspaceId: string) {
 
 	return useCallback(
 		async ({
-			harnessSessionId,
+			chatSessionId,
 			name,
+			environment,
+			machineSize,
 		}: {
-			harnessSessionId: string;
+			chatSessionId: string;
 			name: string;
+			environment: { id: string; repositoryFullName: string | null };
+			machineSize: MachineSize;
 		}) => {
 			if (!organizationId) throw new Error(t`No active organization`);
-			const prepared = await trpcClient.teleport.prepareClaudeSession.mutate({
+			const prepared = await trpcClient.teleport.prepare.mutate({
 				workspaceId,
-				harnessSessionId,
+				chatSessionId,
 			});
-			const repositories =
-				await cloudTrpcClient.integration.github.listRepositories.query({
-					organizationId,
-				});
-			const repositoryName = prepared.repositoryFullName;
-			const repository = repositories.find(
-				(row) => row.fullName.toLowerCase() === repositoryName.toLowerCase(),
-			);
-			if (!repository) {
+			const environmentRepository = environment.repositoryFullName;
+			const chatRepository = prepared.repositoryFullName;
+			if (
+				environmentRepository &&
+				environmentRepository.toLowerCase() !== chatRepository.toLowerCase()
+			) {
 				throw new Error(
-					t`The Superset GitHub App cannot see ${repositoryName}`,
+					t`This environment opens ${environmentRepository}, not ${chatRepository}`,
 				);
 			}
 			const created = await cloudTrpcClient.cloudWorkspace.create.mutate({
 				organizationId,
-				repositoryId: repository.id,
+				environmentId: environment.id,
+				machineSize,
 				name,
 				branch: prepared.branch,
 				agent: "claude",
 				resume: {
-					harnessSessionId,
-					transcriptFileId: prepared.transcriptFileId,
+					chatSessionId,
+					harnessSessionId: prepared.harnessSessionId,
 				},
 			});
 			const listInput = { organizationId };
@@ -55,7 +58,6 @@ export function useMoveChatToCloud(workspaceId: string) {
 				rows ? [created, ...rows] : [created],
 			);
 			void utils.cloudWorkspace.list.invalidate();
-			void utils.environment.list.invalidate();
 			await navigate({
 				to: "/v2-workspace/$workspaceId",
 				params: { workspaceId: created.id },

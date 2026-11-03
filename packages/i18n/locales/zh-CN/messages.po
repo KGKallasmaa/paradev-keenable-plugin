@@ -5875,6 +5875,9 @@ msgstr "无法合并拉取请求"
 msgid "Couldn't move the subagent to the background"
 msgstr "无法将子智能体移到后台"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "无法将此聊天移至云端"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "无法自动命名“{name}”"
 
@@ -11625,8 +11628,14 @@ msgstr "将{count}个移动到分组"
 msgid "Move {name} to background"
 msgstr "将 {name} 移到后台"
 
+msgid "Move this chat to the cloud?"
+msgstr "将此聊天移至云端？"
+
 msgid "Move to background"
 msgstr "移到后台"
+
+msgid "Move to cloud"
+msgstr "移至云端"
 
 msgid "Move to group"
 msgstr "移动到分组"
@@ -11642,6 +11651,9 @@ msgstr "移动到标签页"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "已将“{name}”移动到 {group}"
+
+msgid "Moving..."
+msgstr "正在移动..."
 
 msgid "Multi-select"
 msgstr "多选"
@@ -19423,6 +19435,9 @@ msgstr "此邮箱已通过其他登录方式注册，且提供方未将其确认
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "此环境没有仓库。请先在设置中创建包含仓库的环境，再从该环境启动工作区"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "此环境打开的是 {environmentRepository}，而不是 {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "此环境的仓库已固定；请再次提升一个工作区以更改它们"
 
@@ -20474,6 +20489,9 @@ msgstr "需要更新"
 
 msgid "update the branch prefix"
 msgstr "更新分支前缀"
+
+msgid "Update the host service on this device and try again."
+msgstr "请更新此设备上的主机服务，然后重试。"
 
 msgid "Update this host to message subagents"
 msgstr "请更新此主机以向子智能体发送消息"
@@ -21729,6 +21747,9 @@ msgstr "如果不保存，你的更改将会丢失。"
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "你的代码默认留在本地，连接哪些服务由你明确决定。"
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "你当前的工作（包括未提交的更改）会推送到远程的一个新分支。云工作区会在你选择的环境中从该分支启动，此对话将在那里继续。"
 
 msgid "Your download starts automatically."
 msgstr "下载会自动开始。"

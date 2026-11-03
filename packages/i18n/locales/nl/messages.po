@@ -5875,6 +5875,9 @@ msgstr "Kan pull request niet mergen"
 msgid "Couldn't move the subagent to the background"
 msgstr "Kan de subagent niet naar de achtergrond verplaatsen"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "Kon deze chat niet naar de cloud verplaatsen"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Kon \"{name}\" niet automatisch een naam geven"
 
@@ -11625,8 +11628,14 @@ msgstr "{count} naar groep verplaatsen"
 msgid "Move {name} to background"
 msgstr "{name} naar de achtergrond verplaatsen"
 
+msgid "Move this chat to the cloud?"
+msgstr "Deze chat naar de cloud verplaatsen?"
+
 msgid "Move to background"
 msgstr "Naar de achtergrond"
+
+msgid "Move to cloud"
+msgstr "Naar cloud verplaatsen"
 
 msgid "Move to group"
 msgstr "Naar groep verplaatsen"
@@ -11642,6 +11651,9 @@ msgstr "Verplaatsen naar tabblad"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\" verplaatst naar {group}"
+
+msgid "Moving..."
+msgstr "Verplaatsen..."
 
 msgid "Multi-select"
 msgstr "Meerdere keuzes"
@@ -19423,6 +19435,9 @@ msgstr "Dit e-mailadres is al geregistreerd met een andere inlogmethode en de pr
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "Deze omgeving heeft geen repository's. Maak in Instellingen een omgeving met repository's en start de werkruimte daarvandaan"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "Deze omgeving opent {environmentRepository}, niet {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "De repositories van deze omgeving liggen vast; promoveer opnieuw een werkruimte om ze te wijzigen"
 
@@ -20474,6 +20489,9 @@ msgstr "Update vereist"
 
 msgid "update the branch prefix"
 msgstr "de branchprefix bijwerken"
+
+msgid "Update the host service on this device and try again."
+msgstr "Werk de hostservice op dit apparaat bij en probeer het opnieuw."
 
 msgid "Update this host to message subagents"
 msgstr "Werk deze host bij om subagents berichten te sturen"
@@ -21729,6 +21747,9 @@ msgstr "Je wijzigingen gaan verloren als je ze niet opslaat."
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Je code blijft standaard lokaal, met expliciete controle over gekoppelde diensten."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "Je huidige werk, inclusief niet-gecommitte wijzigingen, wordt naar een nieuwe branch op de remote gepusht. Een cloudwerkruimte start vanaf die branch in de omgeving die je kiest, en dit gesprek gaat daar verder."
 
 msgid "Your download starts automatically."
 msgstr "Je download start automatisch."

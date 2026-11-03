@@ -5875,6 +5875,9 @@ msgstr "Không thể merge pull request"
 msgid "Couldn't move the subagent to the background"
 msgstr "Không thể chuyển agent con sang chạy nền"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "Không thể chuyển cuộc trò chuyện này lên cloud"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Không thể tự động đặt tên cho \"{name}\""
 
@@ -11625,8 +11628,14 @@ msgstr "Chuyển {count} vào nhóm"
 msgid "Move {name} to background"
 msgstr "Chuyển {name} sang chạy nền"
 
+msgid "Move this chat to the cloud?"
+msgstr "Chuyển cuộc trò chuyện này lên cloud?"
+
 msgid "Move to background"
 msgstr "Chuyển sang chạy nền"
+
+msgid "Move to cloud"
+msgstr "Chuyển lên cloud"
 
 msgid "Move to group"
 msgstr "Chuyển vào nhóm"
@@ -11642,6 +11651,9 @@ msgstr "Chuyển sang tab"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "Đã chuyển \"{name}\" vào {group}"
+
+msgid "Moving..."
+msgstr "Đang chuyển..."
 
 msgid "Multi-select"
 msgstr "Chọn nhiều"
@@ -19423,6 +19435,9 @@ msgstr "Email này đã được đăng ký bằng phương thức đăng nhập
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "Environment này không có repository nào. Hãy tạo một environment có repository trong Settings, rồi khởi động workspace từ environment đó"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "Môi trường này mở {environmentRepository}, không phải {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "Các repository của environment này đã cố định; hãy promote lại một workspace để thay đổi"
 
@@ -20474,6 +20489,9 @@ msgstr "Cần cập nhật"
 
 msgid "update the branch prefix"
 msgstr "cập nhật tiền tố nhánh"
+
+msgid "Update the host service on this device and try again."
+msgstr "Hãy cập nhật dịch vụ host trên thiết bị này rồi thử lại."
 
 msgid "Update this host to message subagents"
 msgstr "Cập nhật máy chủ này để nhắn tin cho agent con"
@@ -21729,6 +21747,9 @@ msgstr "Thay đổi của bạn sẽ mất nếu không lưu."
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Code của bạn mặc định ở lại cục bộ, với quyền kiểm soát rõ ràng đối với các dịch vụ đã kết nối."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "Công việc hiện tại của bạn, bao gồm các thay đổi chưa commit, được đẩy lên một nhánh mới trên remote. Một không gian làm việc đám mây khởi động từ nhánh đó trong môi trường bạn chọn, và cuộc trò chuyện này tiếp tục ở đó."
 
 msgid "Your download starts automatically."
 msgstr "Bản tải xuống sẽ tự động bắt đầu."

@@ -506,7 +506,8 @@ export function createCommands(options: CommandsOptions): ChatCommands {
 
 		continueSession(input) {
 			const session = options.sessions.get(input.sessionId);
-			if (!session) throw new Error(`chat session ${input.sessionId} not found`);
+			if (!session)
+				throw new Error(`chat session ${input.sessionId} not found`);
 			if (options.live.get(input.sessionId)) {
 				return { sessionId: input.sessionId, epoch: session.epoch };
 			}

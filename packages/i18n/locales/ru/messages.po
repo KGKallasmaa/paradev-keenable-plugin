@@ -5875,6 +5875,9 @@ msgstr "Не удалось объединить пул-реквест"
 msgid "Couldn't move the subagent to the background"
 msgstr "Не удалось перевести субагента в фон"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "Не удалось перенести этот чат в облако"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Не удалось автоматически назвать «{name}»"
 
@@ -11625,8 +11628,14 @@ msgstr "Переместить {count} в группу"
 msgid "Move {name} to background"
 msgstr "Перевести {name} в фон"
 
+msgid "Move this chat to the cloud?"
+msgstr "Перенести этот чат в облако?"
+
 msgid "Move to background"
 msgstr "Перевести в фон"
+
+msgid "Move to cloud"
+msgstr "Перенести в облако"
 
 msgid "Move to group"
 msgstr "Переместить в группу"
@@ -11642,6 +11651,9 @@ msgstr "Переместить во вкладку"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "«{name}» перемещена в {group}"
+
+msgid "Moving..."
+msgstr "Перенос..."
 
 msgid "Multi-select"
 msgstr "Множественный выбор"
@@ -19423,6 +19435,9 @@ msgstr "Этот адрес электронной почты уже зарег�
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "В этом окружении нет репозиториев. Создайте окружение с репозиториями в Настройках и запустите рабочую область из него"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "Это окружение открывает {environmentRepository}, а не {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "Репозитории этого окружения зафиксированы; чтобы изменить их, снова повысьте рабочую область"
 
@@ -20474,6 +20489,9 @@ msgstr "Требуется обновление"
 
 msgid "update the branch prefix"
 msgstr "обновить префикс ветки"
+
+msgid "Update the host service on this device and try again."
+msgstr "Обновите службу хоста на этом устройстве и повторите попытку."
 
 msgid "Update this host to message subagents"
 msgstr "Обновите этот хост, чтобы писать субагентам"
@@ -21729,6 +21747,9 @@ msgstr "Изменения будут потеряны, если их не со�
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Ваш код по умолчанию остаётся локальным, с явным контролем над подключёнными сервисами."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "Ваша текущая работа, включая незакоммиченные изменения, отправляется в новую ветку на удалённом репозитории. Облачное рабочее пространство запускается из этой ветки в выбранном вами окружении, и этот разговор продолжается там."
 
 msgid "Your download starts automatically."
 msgstr "Загрузка начнётся автоматически."

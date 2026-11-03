@@ -26,7 +26,6 @@ import { z } from "zod";
 import { organizationMachineSizes } from "../../lib/billing/plan";
 import { assertCloudAccess, assertMember } from "../../lib/cloud-guards";
 import { nudge } from "../../lib/realtime";
-import { assertChatCanMove, moveChat } from "../chat-history/utils/moveChat";
 import {
 	deleteSandbox,
 	describeSandbox,
@@ -44,6 +43,7 @@ import { acpChatEnabled } from "../../lib/user-settings";
 import { pushWorkspaceAccess } from "../../lib/workspace-access";
 import { jwtProcedure, userError } from "../../trpc";
 import { hostServiceMutation } from "../automation/relay-client";
+import { assertChatCanMove, moveChat } from "../chat-history/utils/moveChat";
 import {
 	canOpenWorkspace,
 	isListed,

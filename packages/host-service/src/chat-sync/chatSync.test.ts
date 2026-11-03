@@ -4,7 +4,11 @@ import { createTestRuntime } from "@superset/chat-runtime/testing";
 import type { ApiClient } from "../types";
 import { createChatSync } from "./chatSync";
 
-type PushInput = { sessionId: string; workspaceId: string; events: { seq: number }[] };
+type PushInput = {
+	sessionId: string;
+	workspaceId: string;
+	events: { seq: number }[];
+};
 
 function setup() {
 	const appended: DurableEnvelope[] = [];
@@ -29,7 +33,11 @@ function setup() {
 			return () => {};
 		},
 	});
-	runtime.journal.open({ sessionId: "s", scopeId: "workspace-1", harness: "fake" });
+	runtime.journal.open({
+		sessionId: "s",
+		scopeId: "workspace-1",
+		harness: "fake",
+	});
 	const say = (id: string) =>
 		runtime.journal.append("s", {
 			type: "item",
@@ -62,6 +70,8 @@ describe("createChatSync", () => {
 		expect(pushes).toHaveLength(0);
 		await timers.shift()?.();
 		await Promise.resolve();
-		expect(pushes.flatMap((push) => push.events.map((e) => e.seq))).toEqual([1]);
+		expect(pushes.flatMap((push) => push.events.map((e) => e.seq))).toEqual([
+			1,
+		]);
 	});
 });

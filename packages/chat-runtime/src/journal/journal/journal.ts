@@ -225,7 +225,10 @@ export class ChatJournal {
 				.select({ seq: chatJournal.seq })
 				.from(chatJournal)
 				.where(
-					and(eq(chatJournal.sessionId, sessionId), eq(chatJournal.epoch, epoch)),
+					and(
+						eq(chatJournal.sessionId, sessionId),
+						eq(chatJournal.epoch, epoch),
+					),
 				)
 				.limit(1)
 				.get() !== undefined

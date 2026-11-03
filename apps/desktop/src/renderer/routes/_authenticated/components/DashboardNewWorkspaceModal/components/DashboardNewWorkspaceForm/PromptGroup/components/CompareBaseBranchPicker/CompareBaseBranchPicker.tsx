@@ -14,11 +14,11 @@ import { HiCheck, HiChevronUpDown } from "react-icons/hi2";
 import { LuFolderOpen } from "react-icons/lu";
 import { PLATFORM } from "renderer/hotkeys";
 import { formatRelativeTime } from "renderer/lib/formatRelativeTime";
-import type { BranchFilter, BranchRow } from "../../../hooks/useBranchContext";
 import {
 	FORM_PICKER_MENU_CLASS,
 	FormPickerTrigger,
-} from "../FormPickerTrigger";
+} from "renderer/routes/_authenticated/components/FormPickerTrigger";
+import type { BranchFilter, BranchRow } from "../../../hooks/useBranchContext";
 import { BranchLoadFailure } from "./components/BranchLoadFailure";
 import {
 	type OpenWorkspaceTarget,

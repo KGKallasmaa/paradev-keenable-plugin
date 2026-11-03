@@ -9,7 +9,8 @@ function cutStrings(value: unknown, limit: number): unknown {
 	if (typeof value === "string") {
 		return value.length > limit ? value.slice(0, limit) + CUT_MARKER : value;
 	}
-	if (Array.isArray(value)) return value.map((entry) => cutStrings(entry, limit));
+	if (Array.isArray(value))
+		return value.map((entry) => cutStrings(entry, limit));
 	if (value && typeof value === "object") {
 		return Object.fromEntries(
 			Object.entries(value).map(([key, entry]) => [

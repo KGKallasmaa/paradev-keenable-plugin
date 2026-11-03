@@ -5875,6 +5875,9 @@ msgstr "풀 리퀘스트를 머지하지 못했습니다"
 msgid "Couldn't move the subagent to the background"
 msgstr "서브 에이전트를 백그라운드로 옮기지 못했습니다"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "이 채팅을 클라우드로 옮길 수 없습니다"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "\"{name}\"의 이름을 자동으로 지정하지 못했습니다"
 
@@ -11625,8 +11628,14 @@ msgstr "{count}개를 그룹으로 이동"
 msgid "Move {name} to background"
 msgstr "{name}을(를) 백그라운드로 이동"
 
+msgid "Move this chat to the cloud?"
+msgstr "이 채팅을 클라우드로 옮길까요?"
+
 msgid "Move to background"
 msgstr "백그라운드로 이동"
+
+msgid "Move to cloud"
+msgstr "클라우드로 옮기기"
 
 msgid "Move to group"
 msgstr "그룹으로 이동"
@@ -11642,6 +11651,9 @@ msgstr "탭으로 이동"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "\"{name}\"을(를) {group}(으)로 이동했습니다"
+
+msgid "Moving..."
+msgstr "옮기는 중..."
 
 msgid "Multi-select"
 msgstr "다중 선택"
@@ -19423,6 +19435,9 @@ msgstr "이 이메일은 이미 다른 로그인 방법으로 등록되어 있�
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "이 환경에는 저장소가 없습니다. 설정에서 저장소가 있는 환경을 만든 다음 그 환경에서 워크스페이스를 시작하세요"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "이 환경은 {chatRepository}이(가) 아니라 {environmentRepository}을(를) 엽니다"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "이 환경의 리포지토리는 고정되어 있습니다. 변경하려면 워크스페이스를 다시 승격하세요"
 
@@ -20474,6 +20489,9 @@ msgstr "업데이트 필요"
 
 msgid "update the branch prefix"
 msgstr "브랜치 접두사를 업데이트할"
+
+msgid "Update the host service on this device and try again."
+msgstr "이 기기의 호스트 서비스를 업데이트한 후 다시 시도하세요."
 
 msgid "Update this host to message subagents"
 msgstr "서브 에이전트에게 메시지를 보내려면 이 호스트를 업데이트하세요"
@@ -21729,6 +21747,9 @@ msgstr "저장하지 않으면 변경 사항이 사라집니다."
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "코드는 기본적으로 로컬에 머물고, 연결된 서비스는 명시적으로 통제합니다."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "커밋하지 않은 변경 사항을 포함한 현재 작업이 원격의 새 브랜치로 푸시됩니다. 선택한 환경에서 해당 브랜치로 클라우드 워크스페이스가 시작되고, 이 대화는 그곳에서 이어집니다."
 
 msgid "Your download starts automatically."
 msgstr "다운로드가 자동으로 시작됩니다."

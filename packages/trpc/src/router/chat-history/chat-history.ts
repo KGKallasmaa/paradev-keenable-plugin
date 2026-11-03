@@ -109,7 +109,8 @@ export const chatHistoryRouter = {
 						.values(
 							folded.items.map((item) => ({
 								sessionId: input.sessionId,
-								organizationId: existing?.organizationId ?? caller.organizationId,
+								organizationId:
+									existing?.organizationId ?? caller.organizationId,
 								createdBy: existing?.createdBy ?? caller.userId,
 								epoch: input.epoch,
 								...item,
@@ -410,5 +411,7 @@ function newerWins(
 }
 
 function toCamel(column: string): string {
-	return column.replace(/_([a-z])/g, (_, letter: string) => letter.toUpperCase());
+	return column.replace(/_([a-z])/g, (_, letter: string) =>
+		letter.toUpperCase(),
+	);
 }

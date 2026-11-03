@@ -5875,6 +5875,9 @@ msgstr "Couldn't merge pull request"
 msgid "Couldn't move the subagent to the background"
 msgstr "Couldn't move the subagent to the background"
 
+msgid "Couldn't move this chat to the cloud"
+msgstr "Couldn't move this chat to the cloud"
+
 msgid "Couldn't name \"{name}\" automatically"
 msgstr "Couldn't name \"{name}\" automatically"
 
@@ -11625,8 +11628,14 @@ msgstr "Move {count} to Group"
 msgid "Move {name} to background"
 msgstr "Move {name} to background"
 
+msgid "Move this chat to the cloud?"
+msgstr "Move this chat to the cloud?"
+
 msgid "Move to background"
 msgstr "Move to background"
+
+msgid "Move to cloud"
+msgstr "Move to cloud"
 
 msgid "Move to group"
 msgstr "Move to group"
@@ -11642,6 +11651,9 @@ msgstr "Move to Tab"
 
 msgid "Moved \"{name}\" to {group}"
 msgstr "Moved \"{name}\" to {group}"
+
+msgid "Moving..."
+msgstr "Moving..."
 
 msgid "Multi-select"
 msgstr "Multi-select"
@@ -19423,6 +19435,9 @@ msgstr "This email is already registered with another sign-in method, and the pr
 msgid "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 msgstr "This environment has no repositories. Create an environment with repositories in Settings, then start the workspace from it"
 
+msgid "This environment opens {environmentRepository}, not {chatRepository}"
+msgstr "This environment opens {environmentRepository}, not {chatRepository}"
+
 msgid "This environment's repositories are fixed; promote a workspace again to change them"
 msgstr "This environment's repositories are fixed; promote a workspace again to change them"
 
@@ -20474,6 +20489,9 @@ msgstr "Update Required"
 
 msgid "update the branch prefix"
 msgstr "update the branch prefix"
+
+msgid "Update the host service on this device and try again."
+msgstr "Update the host service on this device and try again."
 
 msgid "Update this host to message subagents"
 msgstr "Update this host to message subagents"
@@ -21729,6 +21747,9 @@ msgstr "Your changes will be lost if you don't save them."
 
 msgid "Your code stays local by default, with explicit control over connected services."
 msgstr "Your code stays local by default, with explicit control over connected services."
+
+msgid "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
+msgstr "Your current work, including uncommitted changes, is pushed to a new branch on the remote. A cloud workspace starts from that branch in the environment you pick, and this conversation continues there."
 
 msgid "Your download starts automatically."
 msgstr "Your download starts automatically."
